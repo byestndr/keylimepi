@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:spotimmich/homepage.dart';
 import 'package:spotimmich/playbackbar.dart';
-import 'package:spotimmich/settings/immich/immichtokendialog.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'package:spotimmich/weatherwidget.dart';
 import 'dart:convert';
@@ -99,31 +99,7 @@ class MusicPage extends StatefulWidget {
 }
 
 class _MusicPageState extends State<MusicPage> {
-  Timer? timer;
-  dynamic backgroundImage = AssetImage('assets/imagePlaceholder.png');
-
-  @override
-  void initState() {
-    super.initState();
-
-    timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
-      RefreshLoop();
-    });
-  }
-
-  void RefreshLoop() {
-    setState(() {
-      getBackgroundImage().then((value) {
-        backgroundImage = value;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +109,11 @@ class _MusicPageState extends State<MusicPage> {
       body: Row(
         children: [
           NavigationRail(
+            onDestinationSelected: (int newPageIndex) {
+              setState(() {
+                currentPageIndex = newPageIndex;
+              });
+            },
             backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
             groupAlignment: 0,
             labelType: NavigationRailLabelType.all,
@@ -146,36 +127,15 @@ class _MusicPageState extends State<MusicPage> {
                 label: Text('Settings'),
               ),
             ],
-            selectedIndex: 0,
+            selectedIndex: currentPageIndex,
           ),
 
           Expanded(
-            child: Stack(
+            child: IndexedStack(
+              index: currentPageIndex,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: SizedBox.expand(
-                    child: CarouselView.weighted(
-                      scrollDirection: Axis.horizontal,
-                      flexWeights: [10, 1, 1],
-                      children: [
-                        FittedBox(
-                          fit: BoxFit.cover,
-                          child: Image(image: backgroundImage),
-                        ),
-                        FittedBox(
-                          fit: BoxFit.cover,
-                          child: Image(image: backgroundImage),
-                        ),
-                        FittedBox(
-                          fit: BoxFit.cover,
-                          child: Image(image: backgroundImage),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                MediaWidget(),
+                ImmichCarousel(),
+                SettingsPage()
               ],
             ),
           ),
@@ -187,21 +147,4 @@ class _MusicPageState extends State<MusicPage> {
   }
 }
 
-class MediaWidget extends StatelessWidget {
-  const MediaWidget({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        SongImage(),
-        Padding(
-          padding: EdgeInsetsGeometry.directional(bottom: 16),
-          child: SongInfo(),
-        ),
-      ],
-    );
-  }
-}
