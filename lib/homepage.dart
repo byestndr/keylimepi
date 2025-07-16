@@ -8,17 +8,21 @@ import 'package:spotimmich/settings/immich/immichtokendialog.dart';
 
 class MediaWidget extends StatelessWidget {
   const MediaWidget({super.key});
+  static const int imageBreakpoint = 600;
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        SongImage(),
-        Padding(
-          padding: EdgeInsetsGeometry.directional(bottom: 16),
-          child: SongInfo(),
+        MediaQuery.of(context).size.width >= imageBreakpoint ?
+          SongImage() : Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsetsGeometry.directional(bottom: 16),
+            child: SongInfo(),
+          ),
         ),
       ],
     );

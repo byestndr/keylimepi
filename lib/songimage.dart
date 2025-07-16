@@ -71,7 +71,7 @@ class _SongImageState extends State<SongImage> {
 
           child: ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(imageRadius),
-            child: Image(image: ResizeImage(songArt, width: MediaQuery.sizeOf(context).width ~/ 3.5)),
+            child: Image(image: ResizeImage(songArt, width: MediaQuery.sizeOf(context).width ~/ 6)),
           ),
         ),
       ),

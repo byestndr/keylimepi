@@ -8,7 +8,7 @@ class BottomPlaybar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double currentScreenSize = MediaQuery.of(context).size.width;
-    final double playbarWidthBreakpoint = 550;
+    final double playbarWidthBreakpoint = 600;
 
     return BottomAppBar(
       
