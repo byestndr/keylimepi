@@ -128,39 +128,60 @@ class _MusicPageState extends State<MusicPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
-              );
-            },
-            icon: Icon(Icons.settings),
-            tooltip: 'Settings',
-          ),
-        ],
-      ),
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       bottomNavigationBar: BottomPlaybar(),
-      body: Stack(
+      body: Row(
         children: [
-          AnimatedContainer(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: backgroundImage,
-                colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
-                fit: BoxFit.cover,
+          NavigationRail(
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+            groupAlignment: 0,
+            labelType: NavigationRailLabelType.all,
+            destinations: [
+              NavigationRailDestination(
+                icon: Icon(Icons.music_note),
+                label: Text('Home'),
               ),
-            ),
-            duration: Duration(seconds: 5),
-            curve: Curves.fastOutSlowIn,
+              NavigationRailDestination(
+                icon: Icon(Icons.settings),
+                label: Text('Settings'),
+              ),
+            ],
+            selectedIndex: 0,
           ),
-          MediaWidget(),
+
+          Expanded(
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: SizedBox.expand(
+                    child: CarouselView.weighted(
+                      scrollDirection: Axis.horizontal,
+                      flexWeights: [10, 1, 1],
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.cover,
+                          child: Image(image: backgroundImage),
+                        ),
+                        FittedBox(
+                          fit: BoxFit.cover,
+                          child: Image(image: backgroundImage),
+                        ),
+                        FittedBox(
+                          fit: BoxFit.cover,
+                          child: Image(image: backgroundImage),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                MediaWidget(),
+              ],
+            ),
+          ),
         ],
       ),
+
       extendBodyBehindAppBar: true,
     );
   }
@@ -171,20 +192,16 @@ class MediaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.expand(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          SongImage(),
-          Flexible(
-            child: Padding(
-              padding: EdgeInsetsGeometry.directional(bottom: 16),
-              child: SongInfo(),
-            ),
-          ),
-        ],
-      ),
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        SongImage(),
+        Padding(
+          padding: EdgeInsetsGeometry.directional(bottom: 16),
+          child: SongInfo(),
+        ),
+      ],
     );
   }
 }

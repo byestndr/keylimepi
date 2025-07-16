@@ -14,6 +14,7 @@ class SongImage extends StatefulWidget {
 class _SongImageState extends State<SongImage> {
   Timer? timer;
   dynamic songArt = AssetImage('assets/imagePlaceholder.png');
+  static const double imageRadius = 28;
 
   @override
   void initState() {
@@ -57,7 +58,7 @@ class _SongImageState extends State<SongImage> {
         child: Container(
           
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: BorderRadius.all(Radius.circular(imageRadius)),
             color: Colors.transparent,
             boxShadow: [
               BoxShadow(
@@ -69,7 +70,7 @@ class _SongImageState extends State<SongImage> {
           ),
 
           child: ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(20),
+            borderRadius: BorderRadiusGeometry.circular(imageRadius),
             child: Image(image: ResizeImage(songArt, width: MediaQuery.sizeOf(context).width ~/ 3.5)),
           ),
         ),
