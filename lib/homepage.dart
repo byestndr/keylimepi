@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'songinfo.dart';
 import 'songimage.dart';
 import 'package:spotimmich/settings/immich/immichtokendialog.dart';
-
 
 class MediaWidget extends StatelessWidget {
   const MediaWidget({super.key});
@@ -33,23 +34,52 @@ class ImmichCarousel extends StatefulWidget {
 
 class _ImmichCarouselState extends State<ImmichCarousel> {
   Timer? timer;
-  dynamic backgroundImage = AssetImage('assets/imagePlaceholder.png');
+  dynamic backgroundImage0 = AssetImage('assets/imagePlaceholder.png');
+  dynamic backgroundImage1 = AssetImage('assets/imagePlaceholder.png');
+  dynamic backgroundImage2 = AssetImage('assets/imagePlaceholder.png');
+
+  CarouselController carouselController = CarouselController(initialItem: 0);
+  int currentCarouselItem = 0;
+
+  void changeCarouselItem() {
+    switch (currentCarouselItem) {
+      case 0 || 1:
+        currentCarouselItem++;
+      default:
+        currentCarouselItem = 0;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-
-    timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
-      RefreshLoop();
+  
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) async {
+      await RefreshLoop();
+      changeCarouselItem();
+      carouselController.animateToItem(
+        currentCarouselItem,
+        curve: Curves.ease,
+        duration: Duration(seconds: 2),
+      );
     });
   }
 
-  void RefreshLoop() {
+  Future<void> RefreshLoop() async {
+    dynamic image = await getBackgroundImage();
+
     setState(() {
-      getBackgroundImage().then((value) {
-        backgroundImage = value;
-      });
+      switch (currentCarouselItem) {
+        case 0:
+          backgroundImage1 = image;
+        case 1:
+          backgroundImage2 = image;
+        case 2:
+          backgroundImage0 = image;
+      }
     });
+
+    await Future.delayed(Duration(seconds: 1));
   }
 
   @override
@@ -57,7 +87,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
     timer?.cancel();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -66,20 +96,23 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
           padding: const EdgeInsets.all(2.0),
           child: SizedBox.expand(
             child: CarouselView.weighted(
+              controller: carouselController,
               scrollDirection: Axis.horizontal,
-              flexWeights: [10, 1, 1],
+              itemSnapping: true,
+              consumeMaxWeight: false,
+              flexWeights: [1],
               children: [
                 FittedBox(
                   fit: BoxFit.cover,
-                  child: Image(image: backgroundImage),
+                  child: Image(image: backgroundImage0),
                 ),
                 FittedBox(
                   fit: BoxFit.cover,
-                  child: Image(image: backgroundImage),
+                  child: Image(image: backgroundImage1),
                 ),
                 FittedBox(
                   fit: BoxFit.cover,
-                  child: Image(image: backgroundImage),
+                  child: Image(image: backgroundImage2),
                 ),
               ],
             ),

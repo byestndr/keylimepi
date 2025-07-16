@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:spotimmich/homepage.dart';
 import 'package:spotimmich/playbackbar.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
-import 'package:spotimmich/weatherwidget.dart';
 import 'dart:convert';
 import 'settings/spotify/spotifyapi.dart';
-import 'songinfo.dart';
 import 'settings/settings.dart';
-import 'songimage.dart';
-import 'controls.dart';
 import 'dart:async';
 
 void main() {
@@ -133,10 +129,7 @@ class _MusicPageState extends State<MusicPage> {
           Expanded(
             child: IndexedStack(
               index: currentPageIndex,
-              children: [
-                ImmichCarousel(),
-                SettingsPage()
-              ],
+              children: const [ImmichCarousel(), SettingsPage()],
             ),
           ),
         ],
@@ -146,5 +139,3 @@ class _MusicPageState extends State<MusicPage> {
     );
   }
 }
-
-
