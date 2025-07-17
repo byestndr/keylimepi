@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'songinfo.dart';
@@ -103,7 +101,6 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
               controller: carouselController,
               scrollDirection: Axis.horizontal,
               itemSnapping: true,
-              consumeMaxWeight: false,
               flexWeights: [1],
               children: [
                 FittedBox(

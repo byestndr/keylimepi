@@ -11,7 +11,7 @@ void main() {
   runApp(App());
   preferences().removeIntValue('playback_state_counter');
   isLoggedIn();
-  Timer timer = Timer.periodic(const Duration(minutes: 15), (Timer timer) {
+  Timer.periodic(const Duration(minutes: 15), (Timer timer) {
     isLoggedIn();
   });
 }
