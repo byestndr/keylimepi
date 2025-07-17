@@ -1,9 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:spotimmich/settings/immich/immichpreferences.dart';
 
 class ImmichToken extends StatefulWidget {
   const ImmichToken({super.key});
@@ -13,7 +9,7 @@ class ImmichToken extends StatefulWidget {
 }
 
 class _ImmichTokenState extends State<ImmichToken> {
-  final APIkeyField = TextEditingController();
+  final TextEditingController APIkeyField = TextEditingController();
   String? errorText;
 
   @override
@@ -34,12 +30,12 @@ class _ImmichTokenState extends State<ImmichToken> {
           context: context,
           builder: (BuildContext context) {
             return StatefulBuilder(
-              builder: (context, setState) {
+              builder: (BuildContext context, setState) {
                 return SizedBox.expand(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: AlertDialog(
-                      actions: [
+                      actions: <Widget>[
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -48,8 +44,8 @@ class _ImmichTokenState extends State<ImmichToken> {
                         ),
                         TextButton(
                           onPressed: () {
-                            immichPreferences().SetAPIkey(APIkeyField.text).then((
-                              value,
+                            ImmichPreferences().SetAPIkey(APIkeyField.text).then((
+                              int value,
                             ) {
                               if (value == 200) {
                                 Navigator.of(context).pop();
@@ -74,7 +70,7 @@ class _ImmichTokenState extends State<ImmichToken> {
                       ),
                       content: SizedBox.square(
                         child: Column(
-                          children: [
+                          children: <Widget>[
                             Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 15.0,
@@ -120,118 +116,4 @@ class _ImmichTokenState extends State<ImmichToken> {
   }
 }
 
-class immichPreferences {
-  final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-  Future<int> SetAPIkey(String key) async {
-    final String? serverURL = await GetURL();
 
-    if (serverURL == null) {
-      return 404;
-    }
-
-    final Uri uri = Uri.https(serverURL, 'api/search/random');
-
-    final data = jsonEncode({
-      "albumIds": ["f39a6a14-82d9-4c49-9c35-6c09603d46aa"],
-      "size": 1,
-      "type": "IMAGE",
-    });
-
-    final response = await http.post(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'x-api-key': key,
-      },
-      body: data,
-    );
-
-    if (response.statusCode == 200) {
-      await prefs.remove('immich_key');
-      await prefs.setString('immich_key', key);
-      return 200;
-    } else {
-      return 401;
-    }
-  }
-
-  Future<String?> GetAPIkey() async {
-    final String? key = await prefs.getString('immich_key');
-    return key;
-  }
-
-  void SetServerURL(String url) async {
-    final String noHttps = url.replaceAll('https://', '');
-    String cleanURL = noHttps.replaceAll(RegExp(r'\/.*'), '');
-    await prefs.remove('immich_url');
-    await prefs.setString('immich_url', cleanURL);
-  }
-
-  Future<String?> GetURL() async {
-    final String? url = await prefs.getString('immich_url');
-    return url;
-  }
-
-  void SetAlbumID(id) async {
-    await prefs.remove('immich_album');
-    await prefs.setString('immich_album', id);
-  }
-
-  Future<String?> GetAlbumID() async {
-    final String? album = await prefs.getString('immich_album');
-    return album;
-  }
-}
-
-Future<dynamic> getBackgroundImage() async {
-  final apikey = await immichPreferences().GetAPIkey();
-  if (apikey == null) {
-    return AssetImage('assets/imagePlaceholder.png');
-  }
-
-  String? serverURL = await immichPreferences().GetURL();
-
-  if (serverURL == null) {
-    return AssetImage('assets/imagePlaceholder.png');
-  }
-
-  String? albumID = await immichPreferences().GetAlbumID();
-
-  final Uri uri = Uri.https(serverURL, 'api/search/random');
-  var data = jsonEncode({"size": 1, "type": "IMAGE"});
-
-  if (albumID != null) {
-    data = jsonEncode({
-      "albumIds": ["$albumID"],
-      "size": 1,
-      "type": "IMAGE",
-    });
-  }
-
-  try {
-    final response = await http.post(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'x-api-key': apikey,
-      },
-      body: data,
-    );
-    final body = jsonDecode(response.body);
-    final String id = body[0]["id"];
-
-    final String backgroundImage = "https://$serverURL/api/assets/$id/original";
-    return NetworkImage(
-        backgroundImage,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'x-api-key': apikey,
-        },
-      );
-  } on HandshakeException {
-    return AssetImage('assets/imagePlaceholder.png');
-  }
-}

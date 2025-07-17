@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
-import 'settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 
 class SongInfo extends StatefulWidget {
   const SongInfo({super.key});
@@ -29,9 +29,9 @@ class _SongInfoState extends State<SongInfo> {
   void RefreshLoop() {
     setState(() {
       Interactions().cachedPlaybackStateResponse(functionName: 'SongInfo').then(
-        (value) {
+        (String value) {
           try {
-            final body = jsonDecode(value);
+            final dynamic body = jsonDecode(value);
             artist = body['item']['album']['artists'][0]['name'];
             title = body['item']['name'];
           } on FormatException {
@@ -59,7 +59,7 @@ class _SongInfoState extends State<SongInfo> {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 0.0,
-      children: [
+      children: <Widget>[
         Text(
           title,
           style: TextStyle(

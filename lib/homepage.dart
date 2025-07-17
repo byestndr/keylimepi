@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:spotimmich/settings/immich/immichpreferences.dart';
 import 'dart:async';
-import 'songinfo.dart';
-import 'songimage.dart';
-import 'package:spotimmich/settings/immich/immichtokendialog.dart';
+import 'package:spotimmich/songinfo.dart';
+import 'package:spotimmich/songimage.dart';
 
 class MediaWidget extends StatelessWidget {
   const MediaWidget({super.key});
@@ -13,7 +13,7 @@ class MediaWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
+      children: <Widget>[
         MediaQuery.of(context).size.width >= imageBreakpoint ?
           SongImage() : Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
         Expanded(
@@ -59,7 +59,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) async {
       await RefreshLoop();
       changeCarouselItem();
-      carouselController.animateToItem(
+      await carouselController.animateToItem(
         currentCarouselItem,
         curve: Curves.ease,
         duration: Duration(seconds: 2),
@@ -93,7 +93,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(2.0),
           child: SizedBox.expand(
@@ -101,8 +101,8 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
               controller: carouselController,
               scrollDirection: Axis.horizontal,
               itemSnapping: true,
-              flexWeights: [1],
-              children: [
+              flexWeights: const <int> [1],
+              children: <Widget>[
                 FittedBox(
                   fit: BoxFit.cover,
                   child: Image(image: backgroundImage0),

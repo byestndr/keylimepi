@@ -1,4 +1,4 @@
-import 'immichtokendialog.dart';
+import 'package:spotimmich/settings/immich/immichpreferences.dart';
 import 'package:flutter/material.dart';
 
 class AlbumID extends StatefulWidget {
@@ -9,7 +9,7 @@ class AlbumID extends StatefulWidget {
 }
 
 class _AlbumIDState extends State<AlbumID> {
-  final AlbumField = TextEditingController();
+  final TextEditingController AlbumField = TextEditingController();
   String? errorText;
 
   @override
@@ -35,7 +35,7 @@ class _AlbumIDState extends State<AlbumID> {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: AlertDialog(
-                      actions: [
+                      actions: <Widget>[
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -44,7 +44,7 @@ class _AlbumIDState extends State<AlbumID> {
                         ),
                         TextButton(
                           onPressed: () {
-                            immichPreferences().SetAlbumID(AlbumField.text);
+                            ImmichPreferences().SetAlbumID(AlbumField.text);
                             Navigator.of(context).pop();
                           },
                           child: Text('Next'),
@@ -55,7 +55,7 @@ class _AlbumIDState extends State<AlbumID> {
                       ),
                       content: SizedBox.square(
                         child: Column(
-                          children: [
+                          children: <Widget>[
                             Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 15.0,

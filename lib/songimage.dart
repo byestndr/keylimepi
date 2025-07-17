@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 
 class SongImage extends StatefulWidget {
   const SongImage({super.key});
@@ -29,9 +29,9 @@ class _SongImageState extends State<SongImage> {
     setState(() {
       Interactions()
           .cachedPlaybackStateResponse(functionName: 'SongImage')
-          .then((value) {
+          .then((String value) {
             try {
-              final body = jsonDecode(value);
+              final dynamic body = jsonDecode(value);
               final String imageURL = body['item']['album']['images'][0]['url'];
               songArt = NetworkImage(imageURL);
             } on FormatException {
@@ -56,11 +56,10 @@ class _SongImageState extends State<SongImage> {
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Container(
-          
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(imageRadius)),
             color: Colors.transparent,
-            boxShadow: [
+            boxShadow: <BoxShadow>[
               BoxShadow(
                 color: Colors.black38,
                 blurRadius: 2,
@@ -71,7 +70,12 @@ class _SongImageState extends State<SongImage> {
 
           child: ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(imageRadius),
-            child: Image(image: ResizeImage(songArt, width: MediaQuery.sizeOf(context).width ~/ 6)),
+            child: Image(
+              image: ResizeImage(
+                songArt,
+                width: MediaQuery.sizeOf(context).width ~/ 6,
+              ),
+            ),
           ),
         ),
       ),

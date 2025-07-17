@@ -1,4 +1,4 @@
-import 'immichtokendialog.dart';
+import 'package:spotimmich/settings/immich/immichpreferences.dart';
 import 'package:flutter/material.dart';
 
 class ImmichServer extends StatefulWidget {
@@ -9,7 +9,7 @@ class ImmichServer extends StatefulWidget {
 }
 
 class _ImmichServerState extends State<ImmichServer> {
-  final URLField = TextEditingController();
+  final TextEditingController URLField = TextEditingController();
   String? errorText;
 
   @override
@@ -35,7 +35,7 @@ class _ImmichServerState extends State<ImmichServer> {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: AlertDialog(
-                      actions: [
+                      actions: <Widget>[
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -44,7 +44,7 @@ class _ImmichServerState extends State<ImmichServer> {
                         ),
                         TextButton(
                           onPressed: () {
-                            immichPreferences().SetServerURL(URLField.text);
+                            ImmichPreferences().SetServerURL(URLField.text);
                             Navigator.of(context).pop();
                           },
                           child: Text('Next'),
@@ -55,7 +55,7 @@ class _ImmichServerState extends State<ImmichServer> {
                       ),
                       content: SizedBox.square(
                         child: Column(
-                          children: [
+                          children: <Widget>[
                             Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 15.0,

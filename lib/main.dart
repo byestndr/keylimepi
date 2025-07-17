@@ -3,8 +3,8 @@ import 'package:spotimmich/homepage.dart';
 import 'package:spotimmich/playbackbar.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'dart:convert';
-import 'settings/spotify/spotifyapi.dart';
-import 'settings/settings.dart';
+import 'package:spotimmich/settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/settings/settings.dart';
 import 'dart:async';
 
 void main() {
@@ -34,13 +34,13 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
-      RefreshLoop();
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
+      await RefreshLoop();
     });
   }
 
-  void RefreshLoop() async {
-    final playstate = await Interactions().cachedPlaybackStateResponse(
+  Future<void> RefreshLoop() async {
+    final String playstate = await Interactions().cachedPlaybackStateResponse(
       functionName: 'ColorScheme',
     );
     ColorScheme newcs = ColorScheme.fromSeed(
@@ -49,8 +49,8 @@ class _AppState extends State<App> {
     );
 
     try {
-      final body = jsonDecode(playstate);
-      var imageURL = body['item']['album']['images'][0]['url'];
+      final dynamic body = jsonDecode(playstate);
+      final String imageURL = body['item']['album']['images'][0]['url'];
       newcs = await ColorScheme.fromImageProvider(
         brightness: Brightness.dark,
         provider: NetworkImage(imageURL),
@@ -103,7 +103,7 @@ class _MusicPageState extends State<MusicPage> {
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       bottomNavigationBar: BottomPlaybar(),
       body: Row(
-        children: [
+        children: <Widget>[
           NavigationRail(
             onDestinationSelected: (int newPageIndex) {
               setState(() {
@@ -113,7 +113,7 @@ class _MusicPageState extends State<MusicPage> {
             backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
             groupAlignment: 0,
             labelType: NavigationRailLabelType.all,
-            destinations: [
+            destinations: <NavigationRailDestination>[
               NavigationRailDestination(
                 icon: Icon(Icons.music_note),
                 label: Text('Home'),
@@ -129,7 +129,7 @@ class _MusicPageState extends State<MusicPage> {
           Expanded(
             child: IndexedStack(
               index: currentPageIndex,
-              children: const [ImmichCarousel(), SettingsPage()],
+              children: const <Widget>[ImmichCarousel(), SettingsPage()],
             ),
           ),
         ],

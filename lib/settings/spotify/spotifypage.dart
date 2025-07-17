@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'spotifyauth.dart';
-import 'spotifytokendialog.dart';
+import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/settings/spotify/spotifytokendialog.dart';
 
 class SpotifyPage extends StatelessWidget {
   const SpotifyPage({super.key});
@@ -21,7 +21,7 @@ class SettingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         ListTile(
           leading: Icon(Icons.person),
           trailing: Icon(Icons.open_in_new),
@@ -39,8 +39,8 @@ class SettingsList extends StatelessWidget {
 
 void launchURL() async {
   final String url = AuthFlow();
-  final Uri _url = Uri.parse(url);
-  if (!await launchUrl(_url)) {
+  final Uri parsedUrl = Uri.parse(url);
+  if (!await launchUrl(parsedUrl)) {
     throw 'Unable to open authorization page';
   }
 }

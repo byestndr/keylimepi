@@ -13,7 +13,7 @@ class BottomPlaybar extends StatelessWidget {
     return BottomAppBar(
       
       child: Row(
-        children: [
+        children: <Widget>[
           PlaybackControls(),
           currentScreenSize > playbarWidthBreakpoint
               ? Expanded(child: ProgressSlider())

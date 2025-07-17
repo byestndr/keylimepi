@@ -1,46 +1,46 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'spotifyauth.dart';
+import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 
 class Interactions {
   final String base = 'api.spotify.com';
   final String path = 'v1/me/player';
 
   Future<Map<String, String>> _getHeaders() async {
-    final token = await preferences().getStringValue('token');
-    final headers = {'Authorization': 'Bearer $token'};
+    final String? token = await preferences().getStringValue('token');
+    final Map<String, String> headers = <String, String>{'Authorization': 'Bearer $token'};
 
     return headers;
   }
 
-  void _putRequest(String endpoint, {Map<String, dynamic>? params}) async {
-    final uri = Uri.https(base, '$path/$endpoint', params);
-    final headers = await _getHeaders();
+  Future<void> _putRequest(String endpoint, {Map<String, dynamic>? params}) async {
+    final Uri uri = Uri.https(base, '$path/$endpoint', params);
+    final Map<String, String> headers = await _getHeaders();
 
-    http.put(uri, headers: headers);
+    await http.put(uri, headers: headers);
   }
 
   Future<http.Response> _getRequest(String endpoint) async {
-    final uri = Uri.https(base, '$path/$endpoint');
-    final headers = await _getHeaders();
+    final Uri uri = Uri.https(base, '$path/$endpoint');
+    final Map<String, String> headers = await _getHeaders();
 
-    final response = await http.get(uri, headers: headers);
+    final http.Response response = await http.get(uri, headers: headers);
     return response;
   }
 
-  void _postRequest(endpoint) async {
-    final uri = Uri.https(base, '$path/$endpoint');
-    final headers = await _getHeaders();
+  Future<void> _postRequest(String endpoint) async {
+    final Uri uri = Uri.https(base, '$path/$endpoint');
+    final Map<String, String> headers = await _getHeaders();
 
-    http.post(uri, headers: headers);
+    await http.post(uri, headers: headers);
   }
 
   Future<String> cachedPlaybackStateResponse({
     required String functionName,
   }) async {
     // Rankings, 0 -> New Response only, 1 -> Pull responses sometimes, 2 -> Only use old responses
-    const Map<String, int> functionImportance = {
+    const Map<String, int> functionImportance = <String, int>{
       'ProgressSlider': 0,
       'SongImage': 1,
       'SongInfo': 1,
@@ -95,31 +95,31 @@ class Interactions {
     return response.body;
   }
 
-  void pausePlayback() async {
-    _putRequest('pause');
+  Future<void> pausePlayback() async {
+    await _putRequest('pause');
   }
 
-  void resumePlayback() async {
-    _putRequest('play');
+  Future<void> resumePlayback() async {
+    await _putRequest('play');
   }
 
-  void skipPrevious() async {
-    _postRequest('previous');
+  Future<void> skipPrevious() async {
+    await _postRequest('previous');
   }
 
-  void skipNext() async {
-    _postRequest('next');
+  Future<void> skipNext() async {
+    await _postRequest('next');
   }
 
-  void seekSong(position) async {
-    final parameters = {'position_ms': '$position'};
-    _putRequest('seek', params: parameters);
+  Future<void> seekSong(int position) async {
+    final Map<String, String> parameters = <String, String>{'position_ms': '$position'};
+    await _putRequest('seek', params: parameters);
   }
 
   Future<bool> shuffleToggle() async {
     final String response = await getPlaybackState();
-    final body = jsonDecode(response);
-    final currentState = body['shuffle_state'];
+    final dynamic body = jsonDecode(response);
+    final bool currentState = body['shuffle_state'];
     bool newState = false;
 
     if (currentState == false) {
@@ -128,31 +128,31 @@ class Interactions {
       newState = false;
     }
 
-    final parameters = {'state': '$newState'};
-    _putRequest('shuffle', params: parameters);
+    final Map<String, String> parameters = <String, String>{'state': '$newState'};
+    await _putRequest('shuffle', params: parameters);
 
     return newState;
   }
 
   Future<bool> pauseToggle() async {
     final String response = await getPlaybackState();
-    final body = jsonDecode(response);
-    final isPlaying = body['is_playing'];
+    final dynamic body = jsonDecode(response);
+    final bool isPlaying = body['is_playing'];
     bool newState = false;
     if (isPlaying == true) {
       newState = false;
-      pausePlayback();
+      await pausePlayback();
     } else {
       newState = true;
-      resumePlayback();
+      await resumePlayback();
     }
     return newState;
   }
 
   Future<String> repeatState() async {
     final String response = await getPlaybackState();
-    final body = jsonDecode(response);
-    final currentState = body['repeat_state'];
+    final dynamic body = jsonDecode(response);
+    final String currentState = body['repeat_state'];
     String newState = 'off';
 
     switch (currentState) {
@@ -170,8 +170,8 @@ class Interactions {
         break;
     }
 
-    final parameters = {'state': '$newState'};
-    _putRequest('repeat', params: parameters);
+    final Map<String, String> parameters = <String, String>{'state': '$newState'};
+    await _putRequest('repeat', params: parameters);
 
     return newState;
   }

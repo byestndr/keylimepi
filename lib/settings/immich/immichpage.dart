@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/immich/immichalbumdialog.dart';
 import 'package:spotimmich/settings/immich/immichtokendialog.dart';
-import 'immichserverdialog.dart';
+import 'package:spotimmich/settings/immich/immichserverdialog.dart';
 
 class ImmichPage extends StatelessWidget {
   const ImmichPage({super.key});
@@ -20,8 +20,8 @@ class SettingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
+    return const Column(
+      children: <Widget>[
         ImmichServer(),
         ImmichToken(),
         AlbumID(),

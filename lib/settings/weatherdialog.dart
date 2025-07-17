@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/weatherrequest.dart';
@@ -12,7 +11,7 @@ class WeatherLocation extends StatefulWidget {
 }
 
 class _WeatherLocationState extends State<WeatherLocation> {
-  final LocationField = TextEditingController();
+  final TextEditingController LocationField = TextEditingController();
 
   List items = [
     {'name': '', 'admin1': '', 'country': ''},
@@ -21,11 +20,11 @@ class _WeatherLocationState extends State<WeatherLocation> {
   SnackBar confirmationSnackbar(String location) =>
       SnackBar(content: Text('Set current location to $location'));
 
-  void GetLocations(String location) async {
-    final response = await geocode(location);
-    final body = jsonDecode(response);
+  Future<void> GetLocations(String location) async {
+    final String response = await geocode(location);
+    final dynamic body = jsonDecode(response);
 
-    final result = body['results'];
+    final dynamic result = body['results'];
     setState(() {
       items = result;
     });
@@ -51,7 +50,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
                     content: Text(
                       'The chosen location is ${items[index]['name']}, ${items[index]['country']}',
                     ),
-                    actions: [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -92,7 +91,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
               icon: Icon(Icons.search),
             ),
           ),
-          onSubmitted: (value) {
+          onSubmitted: (String value) {
             GetLocations(LocationField.text);
           },
         ),
@@ -103,7 +102,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
 
 class WeatherPreferences {
   final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-  void SaveLocation(double latitude, double longitude) async {
+  Future<void> SaveLocation(double latitude, double longitude) async {
     await prefs.remove('latitude');
     await prefs.remove('longitude');
     await prefs.setDouble('latitude', latitude);

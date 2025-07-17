@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'spotifyauth.dart';
+import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 
 class AccessToken extends StatefulWidget {
   const AccessToken({super.key});
@@ -9,8 +9,8 @@ class AccessToken extends StatefulWidget {
 }
 
 class _AccessTokenState extends State<AccessToken> {
-  final URLtextField = TextEditingController();
-  String? errorTextField = null;
+  final TextEditingController URLtextField = TextEditingController();
+  String? errorTextField;
 
   @override
   void dispose() {
@@ -36,7 +36,7 @@ class _AccessTokenState extends State<AccessToken> {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: AlertDialog(
-                      actions: [
+                      actions: <Widget>[
                         TextButton(
                           onPressed: () {
                             setState(() {
@@ -48,7 +48,7 @@ class _AccessTokenState extends State<AccessToken> {
                         ),
                         TextButton(
                           onPressed: () {
-                            GetAccessToken(URLtextField.text).then((value) {
+                            GetAccessToken(URLtextField.text).then((int? value) {
                               if (value == 200) {
                                 Navigator.of(context).pop();
                               } else {
@@ -68,7 +68,7 @@ class _AccessTokenState extends State<AccessToken> {
                       content: SizedBox.square(
 
                         child: Column(
-                          children: [
+                          children: <Widget>[
                             Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 15.0,

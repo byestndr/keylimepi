@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/immich/immichpage.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/spotify/spotifypage.dart';
-import 'weatherdialog.dart';
+import 'package:spotimmich/settings/weatherdialog.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -18,12 +18,12 @@ class SettingsPage extends StatelessWidget {
 
 class SettingsList extends StatelessWidget {
   const SettingsList({super.key});
-  static const resetSnackBar = SnackBar(content: Text('Reseted all settings'));
+  static const SnackBar resetSnackBar = SnackBar(content: Text('Reseted all settings'));
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         ListTile(
           leading: Icon(Icons.music_note_rounded),
           title: Text('Spotify Settings'),
@@ -31,7 +31,7 @@ class SettingsList extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SpotifyPage()),
+              MaterialPageRoute(builder: (BuildContext context) => const SpotifyPage()),
             );
           },
         ),
@@ -42,7 +42,7 @@ class SettingsList extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ImmichPage()),
+              MaterialPageRoute(builder: (BuildContext context) => const ImmichPage()),
             );
           },
         ),
@@ -53,7 +53,7 @@ class SettingsList extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const WeatherLocation()),
+              MaterialPageRoute(builder: (BuildContext context) => const WeatherLocation()),
             );
           },
         ),
@@ -72,7 +72,7 @@ class SettingsList extends StatelessWidget {
                   content: Text(
                     'Are you sure you want reset all data? This includes all authorizations and settings saved.'
                   ),
-                  actions: [
+                  actions: <Widget>[
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/weatherdialog.dart';
@@ -79,15 +78,19 @@ class _WeatherwidgetState extends State<Weatherwidget> {
     });
   }
 
-  void RefreshLoop() async {
+  Future<void> RefreshLoop() async {
     final double? latitude = await WeatherPreferences().GetLatitude();
     final double? longitude = await WeatherPreferences().GetLongitude();
 
-    final response = await weather(latitude, longitude);
-    final body = jsonDecode(response);
+    if (latitude == null || longitude == null) {
+      return;
+    }
+
+    final String response = await weather(latitude, longitude);
+    final dynamic body = jsonDecode(response);
 
     try {
-      final nonRounded = body['current']['temperature_2m'];
+      final double nonRounded = body['current']['temperature_2m'];
       roundedTemperature = nonRounded.round();
     } on NoSuchMethodError {
       roundedTemperature = 0;
@@ -120,16 +123,15 @@ class _WeatherwidgetState extends State<Weatherwidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
+    return Row(
         spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Icon(conditionIcon, size: 50, color: Colors.white70),
           Column(
             spacing: 0,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Transform.translate(
                 offset: Offset(0, 4),
                 child: Text(
@@ -147,7 +149,6 @@ class _WeatherwidgetState extends State<Weatherwidget> {
             ],
           ),
         ],
-      ),
-    );
+      );
   }
 }

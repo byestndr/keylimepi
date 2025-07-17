@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 
 class PlaybackControls extends StatefulWidget {
   const PlaybackControls({super.key});
@@ -12,10 +12,10 @@ class PlaybackControls extends StatefulWidget {
 }
 
 class _PlaybackControlsState extends State<PlaybackControls> {
-  var pauseStatus = Icons.pause;
+  IconData pauseStatus = Icons.pause;
   Timer? timer;
-  var shuffleStatus = Icons.shuffle;
-  var repeatStatus = Icons.repeat;
+  IconData shuffleStatus = Icons.shuffle;
+  IconData repeatStatus = Icons.repeat;
   static const double iconButtonDensityHorizontal = 1;
   static const double iconButtonDensityVertical = 1;
 
@@ -31,9 +31,9 @@ class _PlaybackControlsState extends State<PlaybackControls> {
   void RefreshLoop() {
     setState(() {
       Interactions().cachedPlaybackStateResponse(functionName: 'Controls').then(
-        (value) {
+        (String value) {
           try {
-            final body = jsonDecode(value);
+            final dynamic body = jsonDecode(value);
             final bool paused = body['is_playing'];
             final bool shuffled = body['shuffle_state'];
             final String repeatstate = body['repeat_state'];
@@ -75,10 +75,10 @@ class _PlaybackControlsState extends State<PlaybackControls> {
     return Row(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
+      children: <Widget> [
         FloatingActionButton.large(
           onPressed: () {
-            Interactions().pauseToggle().then((value) {
+            Interactions().pauseToggle().then((bool value) {
               setState(() {
                 if (value == true) {
                   pauseStatus = Icons.pause;
@@ -127,7 +127,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
         // Repeat button
         IconButton.filled(
           onPressed: () {
-            Interactions().repeatState().then((value) {
+            Interactions().repeatState().then((String value) {
               setState(() {
                 if (value == 'context') {
                   repeatStatus = Icons.repeat_on_rounded;
@@ -154,7 +154,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
         // Shuffle button
         IconButton.filled(
           onPressed: () {
-            Interactions().shuffleToggle().then((value) {
+            Interactions().shuffleToggle().then((bool value) {
               setState(() {
                 if (value == false) {
                   shuffleStatus = Icons.shuffle;
@@ -198,12 +198,12 @@ class _ProgressSliderState extends State<ProgressSlider> {
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(const Duration(milliseconds: 200), (Timer timer) {
-      RefreshLoop();
+    timer = Timer.periodic(const Duration(milliseconds: 200), (Timer timer) async {
+      await RefreshLoop();
     });
   }
 
-  void RefreshLoop() async {
+  Future<void> RefreshLoop() async {
     if (refreshCount < 30) {
       refreshCount++;
       setState(() {
@@ -215,7 +215,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
     }
 
     try {
-      final body = jsonDecode(await Interactions().cachedPlaybackStateResponse(functionName: 'ProgressSlider'));
+      final dynamic body = jsonDecode(await Interactions().cachedPlaybackStateResponse(functionName: 'ProgressSlider'));
 
       if (body['is_playing'] == false) {
         return;
@@ -259,7 +259,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
             sliderPos = value;
           });
         },
-        onChangeEnd: (value) {
+        onChangeEnd: (double value) {
           int currentPosition = value.toInt();
           Interactions().seekSong(currentPosition);
         },
