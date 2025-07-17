@@ -97,7 +97,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
           },
           icon: const Icon(Icons.skip_previous),
           iconSize: 30,
-          visualDensity: VisualDensity(
+          visualDensity: const VisualDensity(
             horizontal: iconButtonDensityHorizontal,
             vertical: iconButtonDensityVertical,
           ),
@@ -114,7 +114,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
           },
           icon: const Icon(Icons.skip_next),
           iconSize: 30,
-          visualDensity: VisualDensity(
+          visualDensity: const VisualDensity(
             horizontal: iconButtonDensityHorizontal,
             vertical: iconButtonDensityVertical,
           ),
@@ -141,7 +141,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
           },
           icon: Icon(repeatStatus),
           iconSize: 30,
-          visualDensity: VisualDensity(
+          visualDensity: const VisualDensity(
             horizontal: iconButtonDensityHorizontal,
             vertical: iconButtonDensityVertical,
           ),
@@ -166,7 +166,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
           },
           icon: Icon(shuffleStatus),
           iconSize: 30,
-          visualDensity: VisualDensity(
+          visualDensity: const VisualDensity(
             horizontal: iconButtonDensityHorizontal,
             vertical: iconButtonDensityVertical,
           ),
@@ -249,7 +249,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
   @override
   Widget build(BuildContext context) {
     return SliderTheme(
-      data: SliderThemeData(year2023: false),
+      data: const SliderThemeData(year2023: false),
       child: Slider(
         value: sliderPos,
         min: 0,

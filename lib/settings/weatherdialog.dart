@@ -46,7 +46,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Confirm location'),
+                    title: const Text('Confirm location'),
                     content: Text(
                       'The chosen location is ${items[index]['name']}, ${items[index]['country']}',
                     ),
@@ -55,7 +55,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text('Cancel'),
+                        child: const Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () {
@@ -68,7 +68,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
                             confirmationSnackbar(items[index]['name']),
                           );
                         },
-                        child: Text('Confirm'),
+                        child: const Text('Confirm'),
                       ),
                     ],
                   );
@@ -88,7 +88,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
               onPressed: () {
                 GetLocations(LocationField.text);
               },
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
             ),
           ),
           onSubmitted: (String value) {

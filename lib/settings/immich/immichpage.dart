@@ -9,8 +9,8 @@ class ImmichPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SettingsList(),
-      appBar: AppBar(title: Text('Immich Settings')),
+      body: const SettingsList(),
+      appBar: AppBar(title: const Text('Immich Settings')),
     );
   }
 }

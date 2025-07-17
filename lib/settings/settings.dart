@@ -10,7 +10,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SettingsList(),
+      body: const SettingsList(),
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
     );
   }
@@ -25,9 +25,9 @@ class SettingsList extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-          leading: Icon(Icons.music_note_rounded),
-          title: Text('Spotify Settings'),
-          subtitle: Text('Authorize Spotify and configure settings.'),
+          leading: const Icon(Icons.music_note_rounded),
+          title: const Text('Spotify Settings'),
+          subtitle: const Text('Authorize Spotify and configure settings.'),
           onTap: () {
             Navigator.push(
               context,
@@ -36,9 +36,9 @@ class SettingsList extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: Icon(Icons.image),
-          title: Text('Immich Settings'),
-          subtitle: Text('Authorize and configure Immich settings.'),
+          leading: const Icon(Icons.image),
+          title: const Text('Immich Settings'),
+          subtitle: const Text('Authorize and configure Immich settings.'),
           onTap: () {
             Navigator.push(
               context,
@@ -47,9 +47,9 @@ class SettingsList extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: Icon(Icons.sunny),
-          title: Text('Weather Location'),
-          subtitle: Text('Choose a weather location to show in the player'),
+          leading: const Icon(Icons.sunny),
+          title: const Text('Weather Location'),
+          subtitle: const Text('Choose a weather location to show in the player'),
           onTap: () {
             Navigator.push(
               context,
@@ -58,9 +58,9 @@ class SettingsList extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: Icon(Icons.delete),
-          title: Text('Reset Settings'),
-          subtitle: Text(
+          leading: const Icon(Icons.delete),
+          title: const Text('Reset Settings'),
+          subtitle: const Text(
             'Delete all data from shared preferences. Includes authorizations.',
           ),
           onTap: () {
@@ -68,8 +68,8 @@ class SettingsList extends StatelessWidget {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Reset Settings'),
-                  content: Text(
+                  title: const Text('Reset Settings'),
+                  content: const Text(
                     'Are you sure you want reset all data? This includes all authorizations and settings saved.'
                   ),
                   actions: <Widget>[
@@ -77,7 +77,7 @@ class SettingsList extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cancel'),
+                      child: const Text('Cancel'),
                     ),
                     TextButton(
                       onPressed: () {
@@ -85,7 +85,7 @@ class SettingsList extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(resetSnackBar);
                         Navigator.of(context).pop();
                       },
-                      child: Text('Confirm'),
+                      child: const Text('Confirm'),
                     ),
                   ],
                 );

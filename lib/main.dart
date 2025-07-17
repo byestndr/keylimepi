@@ -6,14 +6,25 @@ import 'dart:convert';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/settings/settings.dart';
 import 'dart:async';
+import 'package:flutter/gestures.dart';
 
 void main() {
-  runApp(App());
+  runApp(const App());
   preferences().removeIntValue('playback_state_counter');
   isLoggedIn();
   Timer.periodic(const Duration(minutes: 15), (Timer timer) {
     isLoggedIn();
   });
+}
+
+class ScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    // etc.
+  };
 }
 
 class App extends StatefulWidget {
@@ -81,7 +92,8 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MusicPage(),
+      scrollBehavior: ScrollBehavior(),
+      home: const MusicPage(),
       theme: ThemeData(colorScheme: _colorScheme, fontFamily: 'Noto Sans'),
     );
   }
@@ -101,7 +113,7 @@ class _MusicPageState extends State<MusicPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      bottomNavigationBar: BottomPlaybar(),
+      bottomNavigationBar: const BottomPlaybar(),
       body: Row(
         children: <Widget>[
           NavigationRail(
@@ -114,11 +126,11 @@ class _MusicPageState extends State<MusicPage> {
             groupAlignment: 0,
             labelType: NavigationRailLabelType.all,
             destinations: <NavigationRailDestination>[
-              NavigationRailDestination(
+              const NavigationRailDestination(
                 icon: Icon(Icons.music_note),
                 label: Text('Home'),
               ),
-              NavigationRailDestination(
+              const NavigationRailDestination(
                 icon: Icon(Icons.settings),
                 label: Text('Settings'),
               ),

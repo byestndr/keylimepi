@@ -26,6 +26,7 @@ linter:
     avoid_void_async: true
     sort_pub_dependencies: true
     unawaited_futures: true
+    prefer_const_constructors: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

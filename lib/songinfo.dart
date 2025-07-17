@@ -62,7 +62,7 @@ class _SongInfoState extends State<SongInfo> {
       children: <Widget>[
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 64.0,
             fontFamilyFallback: ['Noto Sans'],
             fontWeight: FontWeight.w800,
@@ -76,7 +76,7 @@ class _SongInfoState extends State<SongInfo> {
 
         Text(
           artist,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24.0,
             fontWeight: FontWeight.w300,
             fontFamilyFallback: ['Noto Sans'],

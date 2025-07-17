@@ -22,10 +22,10 @@ class _AccessTokenState extends State<AccessToken> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.key),
-      trailing: Icon(Icons.open_in_new),
-      subtitle: Text('Enter the redirect URL to successfully login.'),
-      title: Text('Spotify access token'),
+      leading: const Icon(Icons.key),
+      trailing: const Icon(Icons.open_in_new),
+      subtitle: const Text('Enter the redirect URL to successfully login.'),
+      title: const Text('Spotify access token'),
       onTap: () {
         showDialog(
           context: context,
@@ -44,7 +44,7 @@ class _AccessTokenState extends State<AccessToken> {
                             });
                             Navigator.of(context).pop();
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
@@ -59,7 +59,7 @@ class _AccessTokenState extends State<AccessToken> {
                               }
                             });
                           },
-                          child: Text('Next'),
+                          child: const Text('Next'),
                         ),
                       ],
                       shape: RoundedRectangleBorder(
@@ -69,24 +69,24 @@ class _AccessTokenState extends State<AccessToken> {
 
                         child: Column(
                           children: <Widget>[
-                            Padding(
+                            const Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 15.0,
                               ),
                             ),
-                            Icon(Icons.key, size: 60.0),
-                            Text(
+                            const Icon(Icons.key, size: 60.0),
+                            const Text(
                               'Access Token',
                               style: TextStyle(fontSize: 30.0),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 380.0,
                               child: Text(
                                 'After logging in with the previous link, copy the redirected page\'s URL and enter it into the field below.',
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 10.0,
                               ),
@@ -96,8 +96,8 @@ class _AccessTokenState extends State<AccessToken> {
                               child: TextField(
                                 controller: URLtextField,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  label: Text('Redirect URL'),
+                                  border: const OutlineInputBorder(),
+                                  label: const Text('Redirect URL'),
                                   errorText: errorTextField,
                                 ),
                               ),

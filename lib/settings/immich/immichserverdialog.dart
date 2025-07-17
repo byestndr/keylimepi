@@ -22,9 +22,9 @@ class _ImmichServerState extends State<ImmichServer> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.public),
-      subtitle: Text('Enter the redirect URL to successfully login.'),
-      title: Text('Immich Server Location'),
+      leading: const Icon(Icons.public),
+      subtitle: const Text('Enter the redirect URL to successfully login.'),
+      title: const Text('Immich Server Location'),
       onTap: () {
         showDialog(
           context: context,
@@ -40,14 +40,14 @@ class _ImmichServerState extends State<ImmichServer> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
                             ImmichPreferences().SetServerURL(URLField.text);
                             Navigator.of(context).pop();
                           },
-                          child: Text('Next'),
+                          child: const Text('Next'),
                         ),
                       ],
                       shape: RoundedRectangleBorder(
@@ -56,24 +56,24 @@ class _ImmichServerState extends State<ImmichServer> {
                       content: SizedBox.square(
                         child: Column(
                           children: <Widget>[
-                            Padding(
+                            const Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 15.0,
                               ),
                             ),
-                            Icon(Icons.public, size: 60.0),
-                            Text(
+                            const Icon(Icons.public, size: 60.0),
+                            const Text(
                               'Immich URL',
                               style: TextStyle(fontSize: 30.0),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 380.0,
                               child: Text(
                                 'Enter the URL of your Immich server to fetch background images. Must be https.',
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 10.0,
                               ),
@@ -83,8 +83,8 @@ class _ImmichServerState extends State<ImmichServer> {
                               child: TextField(
                                 controller: URLField,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  label: Text('Server URL'),
+                                  border: const OutlineInputBorder(),
+                                  label: const Text('Server URL'),
                                   errorText: errorText,
                                 ),
                               ),

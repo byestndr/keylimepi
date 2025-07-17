@@ -15,8 +15,8 @@ class MediaWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         MediaQuery.of(context).size.width >= imageBreakpoint ?
-          SongImage() : Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
-        Expanded(
+          const SongImage() : const Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
+        const Expanded(
           child: Padding(
             padding: EdgeInsetsGeometry.directional(bottom: 16),
             child: SongInfo(),
@@ -36,9 +36,9 @@ class ImmichCarousel extends StatefulWidget {
 
 class _ImmichCarouselState extends State<ImmichCarousel> {
   Timer? timer;
-  dynamic backgroundImage0 = AssetImage('assets/imagePlaceholder.png');
-  dynamic backgroundImage1 = AssetImage('assets/imagePlaceholder.png');
-  dynamic backgroundImage2 = AssetImage('assets/imagePlaceholder.png');
+  dynamic backgroundImage0 = const AssetImage('assets/imagePlaceholder.png');
+  dynamic backgroundImage1 = const AssetImage('assets/imagePlaceholder.png');
+  dynamic backgroundImage2 = const AssetImage('assets/imagePlaceholder.png');
 
   CarouselController carouselController = CarouselController(initialItem: 0);
   int currentCarouselItem = 0;
@@ -62,7 +62,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
       await carouselController.animateToItem(
         currentCarouselItem,
         curve: Curves.ease,
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       );
     });
   }
@@ -81,7 +81,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
       }
     });
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   @override
@@ -119,7 +119,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
             ),
           ),
         ),
-        MediaWidget(),
+        const MediaWidget(),
       ],
     );
   }

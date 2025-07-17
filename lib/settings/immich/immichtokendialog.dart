@@ -22,9 +22,9 @@ class _ImmichTokenState extends State<ImmichToken> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.key),
-      subtitle: Text('Enter an API key to show background images.'),
-      title: Text('Immich API Key'),
+      leading: const Icon(Icons.key),
+      subtitle: const Text('Enter an API key to show background images.'),
+      title: const Text('Immich API Key'),
       onTap: () {
         showDialog(
           context: context,
@@ -40,7 +40,7 @@ class _ImmichTokenState extends State<ImmichToken> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
@@ -62,7 +62,7 @@ class _ImmichTokenState extends State<ImmichToken> {
                               }
                             });
                           },
-                          child: Text('Next'),
+                          child: const Text('Next'),
                         ),
                       ],
                       shape: RoundedRectangleBorder(
@@ -71,21 +71,21 @@ class _ImmichTokenState extends State<ImmichToken> {
                       content: SizedBox.square(
                         child: Column(
                           children: <Widget>[
-                            Padding(
+                            const Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 15.0,
                               ),
                             ),
-                            Icon(Icons.key, size: 60.0),
-                            Text('API Key', style: TextStyle(fontSize: 30.0)),
-                            SizedBox(
+                            const Icon(Icons.key, size: 60.0),
+                            const Text('API Key', style: TextStyle(fontSize: 30.0)),
+                            const SizedBox(
                               width: 380.0,
                               child: Text(
                                 'Create an API Key and paste it below.',
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 10.0,
                               ),
@@ -95,8 +95,8 @@ class _ImmichTokenState extends State<ImmichToken> {
                               child: TextField(
                                 controller: APIkeyField,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  label: Text('API Key'),
+                                  border: const OutlineInputBorder(),
+                                  label: const Text('API Key'),
                                   errorText: errorText,
                                 ),
                               ),

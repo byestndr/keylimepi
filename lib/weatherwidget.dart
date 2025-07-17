@@ -133,17 +133,17 @@ class _WeatherwidgetState extends State<Weatherwidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Transform.translate(
-                offset: Offset(0, 4),
+                offset: const Offset(0, 4),
                 child: Text(
                   '${temperature.toString()}°',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                 ),
               ),
               Transform.translate(
-                offset: Offset(0, -2),
+                offset: const Offset(0, -2),
                 child: Text(
                   condition,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                 ),
               ),
             ],

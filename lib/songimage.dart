@@ -13,7 +13,7 @@ class SongImage extends StatefulWidget {
 
 class _SongImageState extends State<SongImage> {
   Timer? timer;
-  dynamic songArt = AssetImage('assets/imagePlaceholder.png');
+  dynamic songArt = const AssetImage('assets/imagePlaceholder.png');
   static const double imageRadius = 28;
 
   @override
@@ -35,9 +35,9 @@ class _SongImageState extends State<SongImage> {
               final String imageURL = body['item']['album']['images'][0]['url'];
               songArt = NetworkImage(imageURL);
             } on FormatException {
-              songArt = AssetImage('assets/imagePlaceholder.png');
+              songArt = const AssetImage('assets/imagePlaceholder.png');
             } on NoSuchMethodError {
-              songArt = AssetImage('assets/imagePlaceholder.png');
+              songArt = const AssetImage('assets/imagePlaceholder.png');
             }
           });
     });
@@ -52,11 +52,11 @@ class _SongImageState extends State<SongImage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsGeometry.all(16),
+      padding: const EdgeInsetsGeometry.all(16),
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(imageRadius)),
             color: Colors.transparent,
             boxShadow: <BoxShadow>[

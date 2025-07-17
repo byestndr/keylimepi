@@ -9,8 +9,8 @@ class SpotifyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SettingsList(),
-      appBar: AppBar(title: Text('Spotify Settings')),
+      body: const SettingsList(),
+      appBar: AppBar(title: const Text('Spotify Settings')),
     );
   }
 }
@@ -23,15 +23,15 @@ class SettingsList extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-          leading: Icon(Icons.person),
-          trailing: Icon(Icons.open_in_new),
-          subtitle: Text('Open the Spotify authorization page and log in.'),
-          title: Text('Log into Spotify'),
+          leading: const Icon(Icons.person),
+          trailing: const Icon(Icons.open_in_new),
+          subtitle: const Text('Open the Spotify authorization page and log in.'),
+          title: const Text('Log into Spotify'),
           onTap: () {
             launchURL();
           },
         ),
-        AccessToken(),
+        const AccessToken(),
       ],
     );
   }

@@ -72,13 +72,13 @@ class ImmichPreferences {
 Future<dynamic> getBackgroundImage() async {
   final String? apikey = await ImmichPreferences().GetAPIkey();
   if (apikey == null) {
-    return AssetImage('assets/imagePlaceholder.png');
+    return const AssetImage('assets/imagePlaceholder.png');
   }
 
   String? serverURL = await ImmichPreferences().GetURL();
 
   if (serverURL == null) {
-    return AssetImage('assets/imagePlaceholder.png');
+    return const AssetImage('assets/imagePlaceholder.png');
   }
 
   String? albumID = await ImmichPreferences().GetAlbumID();
@@ -117,6 +117,6 @@ Future<dynamic> getBackgroundImage() async {
         },
       );
   } on HandshakeException {
-    return AssetImage('assets/imagePlaceholder.png');
+    return const AssetImage('assets/imagePlaceholder.png');
   }
 }

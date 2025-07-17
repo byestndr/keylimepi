@@ -14,11 +14,11 @@ class BottomPlaybar extends StatelessWidget {
       
       child: Row(
         children: <Widget>[
-          PlaybackControls(),
+          const PlaybackControls(),
           currentScreenSize > playbarWidthBreakpoint
-              ? Expanded(child: ProgressSlider())
-              : Padding(padding: EdgeInsetsGeometry.directional(start: 12)),
-          FittedBox(child: Weatherwidget()),
+              ? const Expanded(child: ProgressSlider())
+              : const Padding(padding: EdgeInsetsGeometry.directional(start: 12)),
+          const FittedBox(child: Weatherwidget()),
         ],
       ),
     );

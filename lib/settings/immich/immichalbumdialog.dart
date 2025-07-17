@@ -22,9 +22,9 @@ class _AlbumIDState extends State<AlbumID> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.image),
-      subtitle: Text('Enter an album ID to randomly choose pictures from.'),
-      title: Text('Background Album'),
+      leading: const Icon(Icons.image),
+      subtitle: const Text('Enter an album ID to randomly choose pictures from.'),
+      title: const Text('Background Album'),
       onTap: () {
         showDialog(
           context: context,
@@ -40,14 +40,14 @@ class _AlbumIDState extends State<AlbumID> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
                             ImmichPreferences().SetAlbumID(AlbumField.text);
                             Navigator.of(context).pop();
                           },
-                          child: Text('Next'),
+                          child: const Text('Next'),
                         ),
                       ],
                       shape: RoundedRectangleBorder(
@@ -56,21 +56,21 @@ class _AlbumIDState extends State<AlbumID> {
                       content: SizedBox.square(
                         child: Column(
                           children: <Widget>[
-                            Padding(
+                            const Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 15.0,
                               ),
                             ),
-                            Icon(Icons.image, size: 60.0),
-                            Text('Album ID', style: TextStyle(fontSize: 30.0)),
-                            SizedBox(
+                            const Icon(Icons.image, size: 60.0),
+                            const Text('Album ID', style: TextStyle(fontSize: 30.0)),
+                            const SizedBox(
                               width: 380.0,
                               child: Text(
                                 'Enter an album ID to pick photos from. Leave empty to pick from the whole library',
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsetsGeometry.directional(
                                 top: 10.0,
                               ),
@@ -80,8 +80,8 @@ class _AlbumIDState extends State<AlbumID> {
                               child: TextField(
                                 controller: AlbumField,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  label: Text('Album ID'),
+                                  border: const OutlineInputBorder(),
+                                  label: const Text('Album ID'),
                                   errorText: errorText,
                                 ),
                               ),
