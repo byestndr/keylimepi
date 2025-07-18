@@ -4,9 +4,10 @@ import 'dart:async';
 import 'package:spotimmich/songinfo.dart';
 import 'package:spotimmich/songimage.dart';
 
+const int imageBreakpoint = 600;
+
 class MediaWidget extends StatelessWidget {
   const MediaWidget({super.key});
-  static const int imageBreakpoint = 600;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +15,9 @@ class MediaWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        MediaQuery.of(context).size.width >= imageBreakpoint ?
-          const SongImage() : const Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
+        MediaQuery.of(context).size.width >= imageBreakpoint
+            ? const SongImage()
+            : const Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
         const Expanded(
           child: Padding(
             padding: EdgeInsetsGeometry.directional(bottom: 16),
@@ -55,7 +57,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
   @override
   void initState() {
     super.initState();
-  
+
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) async {
       await RefreshLoop();
       changeCarouselItem();
@@ -68,7 +70,9 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
   }
 
   Future<void> RefreshLoop() async {
-    dynamic image = await getBackgroundImage(MediaQuery.of(context).devicePixelRatio);
+    dynamic image = await getBackgroundImage(
+      MediaQuery.of(context).devicePixelRatio,
+    );
 
     setState(() {
       switch (currentCarouselItem) {
@@ -100,22 +104,16 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
           child: SizedBox.expand(
             child: CarouselView.weighted(
               controller: carouselController,
-              scrollDirection: Axis.horizontal,
+              scrollDirection:
+                  MediaQuery.of(context).size.width >= imageBreakpoint
+                  ? Axis.horizontal
+                  : Axis.vertical,
               itemSnapping: true,
-              flexWeights: const <int> [1],
+              flexWeights: const <int>[1],
               children: <Widget>[
-                FittedBox(
-                  fit: BoxFit.cover,
-                  child: backgroundImage0,
-                ),
-                FittedBox(
-                  fit: BoxFit.cover,
-                  child: backgroundImage1,
-                ),
-                FittedBox(
-                  fit: BoxFit.cover,
-                  child: backgroundImage2,
-                ),
+                FittedBox(fit: BoxFit.cover, child: backgroundImage0),
+                FittedBox(fit: BoxFit.cover, child: backgroundImage1),
+                FittedBox(fit: BoxFit.cover, child: backgroundImage2),
               ],
             ),
           ),

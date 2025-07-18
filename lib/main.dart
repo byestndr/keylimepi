@@ -108,35 +108,67 @@ class MusicPage extends StatefulWidget {
 
 class _MusicPageState extends State<MusicPage> {
   int currentPageIndex = 0;
+  static const int navigationRailBreakpoint = 600;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       bottomNavigationBar: const BottomPlaybar(),
+      appBar: MediaQuery.of(context).size.width <= navigationRailBreakpoint
+          ? PreferredSize(
+              preferredSize: const Size(double.infinity, kToolbarHeight),
+              child: NavigationBar(
+                onDestinationSelected: (int newPageIndex) {
+                  setState(() {
+                    currentPageIndex = newPageIndex;
+                  });
+                },
+                backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                destinations: <NavigationDestination>[
+                  const NavigationDestination(
+                    icon: Icon(Icons.music_note),
+                    label: 'Home',
+                  ),
+                  const NavigationDestination(
+                    icon: Icon(Icons.settings),
+                    label: 'Settings',
+                  ),
+                ],
+                selectedIndex: currentPageIndex,
+              ),
+            )
+          : const PreferredSize(
+              preferredSize: Size(double.infinity, kToolbarHeight),
+              child: SizedBox.shrink(),
+            ),
       body: Row(
         children: <Widget>[
-          NavigationRail(
-            onDestinationSelected: (int newPageIndex) {
-              setState(() {
-                currentPageIndex = newPageIndex;
-              });
-            },
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-            groupAlignment: 0,
-            labelType: NavigationRailLabelType.all,
-            destinations: <NavigationRailDestination>[
-              const NavigationRailDestination(
-                icon: Icon(Icons.music_note),
-                label: Text('Home'),
-              ),
-              const NavigationRailDestination(
-                icon: Icon(Icons.settings),
-                label: Text('Settings'),
-              ),
-            ],
-            selectedIndex: currentPageIndex,
-          ),
+          MediaQuery.of(context).size.width >= navigationRailBreakpoint
+              ? NavigationRail(
+                  onDestinationSelected: (int newPageIndex) {
+                    setState(() {
+                      currentPageIndex = newPageIndex;
+                    });
+                  },
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainer,
+                  groupAlignment: 0,
+                  labelType: NavigationRailLabelType.all,
+                  destinations: <NavigationRailDestination>[
+                    const NavigationRailDestination(
+                      icon: Icon(Icons.music_note),
+                      label: Text('Home'),
+                    ),
+                    const NavigationRailDestination(
+                      icon: Icon(Icons.settings),
+                      label: Text('Settings'),
+                    ),
+                  ],
+                  selectedIndex: currentPageIndex,
+                )
+              : const SizedBox.shrink(),
 
           Expanded(
             child: IndexedStack(
@@ -146,8 +178,10 @@ class _MusicPageState extends State<MusicPage> {
           ),
         ],
       ),
-
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar:
+          MediaQuery.of(context).size.width <= navigationRailBreakpoint
+          ? false
+          : true,
     );
   }
 }

@@ -84,7 +84,8 @@ class _SongInfoState extends State<SongInfo> {
             color: Colors.white,
           ),
           maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          overflow: TextOverflow.fade,
+          softWrap: false,
         ),
       ],
     );

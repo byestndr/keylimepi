@@ -8,17 +8,21 @@ class BottomPlaybar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double currentScreenSize = MediaQuery.of(context).size.width;
-    final double playbarWidthBreakpoint = 600;
+    const double sliderWidthBreakpoint = 600;
+    const double weatherWidthBreakpoint = 530;
 
     return BottomAppBar(
       
       child: Row(
         children: <Widget>[
           const PlaybackControls(),
-          currentScreenSize > playbarWidthBreakpoint
+          currentScreenSize > sliderWidthBreakpoint
               ? const Expanded(child: ProgressSlider())
               : const Padding(padding: EdgeInsetsGeometry.directional(start: 12)),
-          const FittedBox(child: Weatherwidget()),
+          currentScreenSize > weatherWidthBreakpoint
+              ? const FittedBox(child: Weatherwidget())
+              : const SizedBox.shrink()
+          
         ],
       ),
     );
