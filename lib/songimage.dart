@@ -13,7 +13,7 @@ class SongImage extends StatefulWidget {
 
 class _SongImageState extends State<SongImage> {
   Timer? timer;
-  dynamic songArt = const AssetImage('assets/imagePlaceholder.png');
+  dynamic songArt = Image.asset('assets/imagePlaceholder.png', width: 300,);
   static const double imageRadius = 28;
 
   @override
@@ -33,11 +33,11 @@ class _SongImageState extends State<SongImage> {
             try {
               final dynamic body = jsonDecode(value);
               final String imageURL = body['item']['album']['images'][0]['url'];
-              songArt = NetworkImage(imageURL);
+              songArt = Image.network(imageURL, cacheHeight: (MediaQuery.of(context).devicePixelRatio * 200).toInt(),);
             } on FormatException {
-              songArt = const AssetImage('assets/imagePlaceholder.png');
+              songArt = Image.asset('assets/imagePlaceholder.png', cacheHeight: (MediaQuery.of(context).devicePixelRatio * 200).toInt(),);
             } on NoSuchMethodError {
-              songArt = const AssetImage('assets/imagePlaceholder.png');
+              songArt = Image.asset('assets/imagePlaceholder.png', cacheHeight: (MediaQuery.of(context).devicePixelRatio * 200).toInt(),);
             }
           });
     });
@@ -70,12 +70,7 @@ class _SongImageState extends State<SongImage> {
 
           child: ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(imageRadius),
-            child: Image(
-              image: ResizeImage(
-                songArt,
-                width: MediaQuery.sizeOf(context).width ~/ 6,
-              ),
-            ),
+            child: songArt
           ),
         ),
       ),

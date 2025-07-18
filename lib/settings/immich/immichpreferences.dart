@@ -69,16 +69,16 @@ class ImmichPreferences {
   }
 }
 
-Future<dynamic> getBackgroundImage() async {
+Future<dynamic> getBackgroundImage(double pixelRatio) async {
   final String? apikey = await ImmichPreferences().GetAPIkey();
   if (apikey == null) {
-    return const AssetImage('assets/imagePlaceholder.png');
+    return Image.asset('assets/imagePlaceholder.png');
   }
 
   String? serverURL = await ImmichPreferences().GetURL();
 
   if (serverURL == null) {
-    return const AssetImage('assets/imagePlaceholder.png');
+    return Image.asset('assets/imagePlaceholder.png');
   }
 
   String? albumID = await ImmichPreferences().GetAlbumID();
@@ -108,15 +108,16 @@ Future<dynamic> getBackgroundImage() async {
     final String id = body[0]["id"];
 
     final String backgroundImage = "https://$serverURL/api/assets/$id/original";
-    return NetworkImage(
+    return Image.network(
         backgroundImage,
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'x-api-key': apikey,
         },
+        cacheWidth: (1000 * pixelRatio).toInt(),
       );
   } on HandshakeException {
-    return const AssetImage('assets/imagePlaceholder.png');
+    return Image.asset('assets/imagePlaceholder.png');
   }
 }

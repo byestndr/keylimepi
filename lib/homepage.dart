@@ -36,9 +36,9 @@ class ImmichCarousel extends StatefulWidget {
 
 class _ImmichCarouselState extends State<ImmichCarousel> {
   Timer? timer;
-  dynamic backgroundImage0 = const AssetImage('assets/imagePlaceholder.png');
-  dynamic backgroundImage1 = const AssetImage('assets/imagePlaceholder.png');
-  dynamic backgroundImage2 = const AssetImage('assets/imagePlaceholder.png');
+  dynamic backgroundImage0 = Image.asset('assets/imagePlaceholder.png');
+  dynamic backgroundImage1 = Image.asset('assets/imagePlaceholder.png');
+  dynamic backgroundImage2 = Image.asset('assets/imagePlaceholder.png');
 
   CarouselController carouselController = CarouselController(initialItem: 0);
   int currentCarouselItem = 0;
@@ -68,7 +68,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
   }
 
   Future<void> RefreshLoop() async {
-    dynamic image = await getBackgroundImage();
+    dynamic image = await getBackgroundImage(MediaQuery.of(context).devicePixelRatio);
 
     setState(() {
       switch (currentCarouselItem) {
@@ -87,6 +87,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
   @override
   void dispose() {
     timer?.cancel();
+    carouselController.dispose();
     super.dispose();
   }
 
@@ -105,15 +106,15 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
               children: <Widget>[
                 FittedBox(
                   fit: BoxFit.cover,
-                  child: Image(image: backgroundImage0),
+                  child: backgroundImage0,
                 ),
                 FittedBox(
                   fit: BoxFit.cover,
-                  child: Image(image: backgroundImage1),
+                  child: backgroundImage1,
                 ),
                 FittedBox(
                   fit: BoxFit.cover,
-                  child: Image(image: backgroundImage2),
+                  child: backgroundImage2,
                 ),
               ],
             ),
