@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/controls.dart';
-import 'package:spotimmich/weatherwidget.dart';
+import 'package:spotimmich/widgets/controls.dart';
+import 'package:spotimmich/widgets/weatherwidget.dart';
 
 class BottomPlaybar extends StatelessWidget {
   const BottomPlaybar({super.key});

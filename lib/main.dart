@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotimmich/homepage.dart';
-import 'package:spotimmich/playbackbar.dart';
+import 'package:spotimmich/widgets/playbackbar.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'dart:convert';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';

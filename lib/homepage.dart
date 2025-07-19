@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/immich/immichpreferences.dart';
 import 'dart:async';
-import 'package:spotimmich/songinfo.dart';
-import 'package:spotimmich/songimage.dart';
+import 'package:spotimmich/widgets/songinfo.dart';
+import 'package:spotimmich/widgets/songimage.dart';
 
 const int imageBreakpoint = 600;
 
