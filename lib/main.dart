@@ -109,6 +109,7 @@ class MusicPage extends StatefulWidget {
 class _MusicPageState extends State<MusicPage> {
   int currentPageIndex = 0;
   static const int navigationRailBreakpoint = 600;
+  static const List<Widget> navigationPages = <Widget>[ImmichCarousel(), SettingsPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -171,11 +172,8 @@ class _MusicPageState extends State<MusicPage> {
               : const SizedBox.shrink(),
 
           Expanded(
-            child: IndexedStack(
-              index: currentPageIndex,
-              children: const <Widget>[ImmichCarousel(), SettingsPage()],
+            child: navigationPages[currentPageIndex],
             ),
-          ),
         ],
       ),
       extendBodyBehindAppBar:
