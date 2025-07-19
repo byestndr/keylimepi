@@ -38,54 +38,51 @@ class ImmichCarousel extends StatefulWidget {
 
 class _ImmichCarouselState extends State<ImmichCarousel> {
   Timer? timer;
-  dynamic backgroundImage0 = Image.asset('assets/imagePlaceholder.png');
-  dynamic backgroundImage1 = Image.asset('assets/imagePlaceholder.png');
-  dynamic backgroundImage2 = Image.asset('assets/imagePlaceholder.png');
+  late final List<Widget> carouselBackgroundWidgets;
+  static const int carouselLength = 3;
 
   CarouselController carouselController = CarouselController(initialItem: 0);
   int currentCarouselItem = 0;
 
-  void changeCarouselItem() {
-    switch (currentCarouselItem) {
-      case 0 || 1:
-        currentCarouselItem++;
-      default:
-        currentCarouselItem = 0;
-    }
+  Future<void> changeCarouselItem() async {
+    final int newCarouselItem = (currentCarouselItem + 1) % carouselLength;
+
+    await carouselController.animateToItem(
+      newCarouselItem,
+      curve: Curves.ease,
+      duration: const Duration(seconds: 2),
+    );
+    
+    currentCarouselItem = newCarouselItem;
   }
 
   @override
   void initState() {
     super.initState();
 
+    carouselBackgroundWidgets = List<Widget>.generate(
+      carouselLength,
+      (_) => Image.asset('assets/imagePlaceholder.png'),
+    );
+
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) async {
-      await RefreshLoop();
-      changeCarouselItem();
-      await carouselController.animateToItem(
-        currentCarouselItem,
-        curve: Curves.ease,
-        duration: const Duration(seconds: 2),
-      );
+      await refreshImages();
+      await changeCarouselItem();
     });
   }
 
-  Future<void> RefreshLoop() async {
+  Future<void> refreshImages() async {
+    final int nextCarouselItem = (currentCarouselItem + 1) % carouselLength;
+
     dynamic image = await getBackgroundImage(
       MediaQuery.of(context).devicePixelRatio,
     );
 
     setState(() {
-      switch (currentCarouselItem) {
-        case 0:
-          backgroundImage1 = image;
-        case 1:
-          backgroundImage2 = image;
-        case 2:
-          backgroundImage0 = image;
-      }
+      carouselBackgroundWidgets[nextCarouselItem] = image;
     });
 
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 
   @override
@@ -110,11 +107,9 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
                   : Axis.vertical,
               itemSnapping: true,
               flexWeights: const <int>[1],
-              children: <Widget>[
-                FittedBox(fit: BoxFit.cover, child: backgroundImage0),
-                FittedBox(fit: BoxFit.cover, child: backgroundImage1),
-                FittedBox(fit: BoxFit.cover, child: backgroundImage2),
-              ],
+              children: carouselBackgroundWidgets.map((Widget image) {
+                return FittedBox(fit: BoxFit.cover, child: image);
+              }).toList(),
             ),
           ),
         ),
