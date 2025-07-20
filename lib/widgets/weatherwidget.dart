@@ -102,6 +102,10 @@ class _WeatherwidgetState extends State<Weatherwidget> {
     String? currentCondition =
         codeToCondition[currentWeatherCode]!['Condition'];
 
+    if (!mounted) {
+      return;
+    }
+    
     setState(() {
       temperature = roundedTemperature;
 
