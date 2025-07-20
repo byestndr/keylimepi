@@ -9,9 +9,9 @@ class SongSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsGeometry.all(6),
+      padding: const EdgeInsetsGeometry.all(6),
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
           color: Theme.of(context).colorScheme.surfaceContainerHigh,
@@ -21,12 +21,27 @@ class SongSelect extends StatelessWidget {
             SizedBox(
               height: 400,
               child: CarouselView.weighted(
-                flexWeights: [2],
-                children: [FittedBox(fit: BoxFit.cover, child: Image.asset('assets/imagePlaceholder.png'))],
+                flexWeights: const <int>[2],
+                children: <Widget>[
+                  FittedBox(
+                    fit: BoxFit.cover,
+                    child: Image.asset('assets/imagePlaceholder.png'),
+                  ),
+                ],
               ),
             ),
-
-            SizedBox(height: 200, child: PlaylistCarousel()),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Your Playlists',
+                style: TextStyle(
+                  fontFamily: 'Roboto Flex',
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: 200, child: PlaylistCarousel()),
           ],
         ),
       ),
@@ -78,7 +93,7 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
       itemExtent: 200,
       children: List<Widget>.generate(
         playlistAmount,
-        (int index) => FutureBuilder(
+        (int index) => FutureBuilder<String>(
           future: getPlaylistCover(index),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             Widget child;
@@ -86,7 +101,36 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
             if (data == null) {
               child = const Center(child: CircularProgressIndicator());
             } else {
-              child = FittedBox(fit: BoxFit.cover, child: Image.network(data));
+              child = Stack(
+                fit: StackFit.passthrough,
+                children: [
+                  const Padding(
+                    padding: EdgeInsetsGeometry.directional(
+                      top: 140,
+                      start: 10,
+                    ),
+                    child: Text(
+                      'Helloooooooooooooo',
+                      style: TextStyle(color: Colors.white, fontSize: 30),
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      softWrap: false,
+                    ),
+                  ),
+                  FittedBox(fit: BoxFit.cover, child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return const LinearGradient(
+                        begin: FractionalOffset.topCenter,
+                        end: FractionalOffset.bottomCenter,
+                        colors: <Color>[Colors.black12, Colors.black],
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.dstOut,
+                    child: Image.network(data),
+                  ),)
+                  
+                ],
+              );
             }
             return child;
           },
