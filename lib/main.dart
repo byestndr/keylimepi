@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/homepage.dart';
+import 'package:spotimmich/player_page.dart';
+import 'package:spotimmich/song_select.dart';
 import 'package:spotimmich/widgets/playbackbar.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'dart:convert';
@@ -109,7 +110,11 @@ class MusicPage extends StatefulWidget {
 class _MusicPageState extends State<MusicPage> {
   int currentPageIndex = 0;
   static const int navigationRailBreakpoint = 600;
-  static const List<Widget> navigationPages = <Widget>[ImmichCarousel(), SettingsPage()];
+  static const List<Widget> navigationPages = <Widget>[
+    ImmichCarousel(),
+    Placeholder(),
+    SongSelect(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +134,10 @@ class _MusicPageState extends State<MusicPage> {
                 destinations: <NavigationDestination>[
                   const NavigationDestination(
                     icon: Icon(Icons.music_note),
+                    label: 'Player',
+                  ),
+                  const NavigationDestination(
+                    icon: Icon(Icons.home),
                     label: 'Home',
                   ),
                   const NavigationDestination(
@@ -160,6 +169,10 @@ class _MusicPageState extends State<MusicPage> {
                   destinations: <NavigationRailDestination>[
                     const NavigationRailDestination(
                       icon: Icon(Icons.music_note),
+                      label: Text('Player'),
+                    ),
+                    const NavigationRailDestination(
+                      icon: Icon(Icons.home),
                       label: Text('Home'),
                     ),
                     const NavigationRailDestination(
@@ -171,9 +184,7 @@ class _MusicPageState extends State<MusicPage> {
                 )
               : const SizedBox.shrink(),
 
-          Expanded(
-            child: navigationPages[currentPageIndex],
-            ),
+          Expanded(child: navigationPages[currentPageIndex]),
         ],
       ),
       extendBodyBehindAppBar:
