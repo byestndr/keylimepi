@@ -5,7 +5,7 @@ import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 
 class Interactions {
   final String base = 'api.spotify.com';
-  final String path = 'v1/me/player';
+  final String path = 'v1/me';
 
   Future<Map<String, String>> _getHeaders() async {
     final String? token = await preferences().getStringValue('token');
@@ -91,29 +91,34 @@ class Interactions {
   }
 
   Future<String> getPlaybackState() async {
-    final http.Response response = await _getRequest('');
+    final http.Response response = await _getRequest('player');
+    return response.body;
+  }
+
+  Future<dynamic> getUserPlaylists() async {
+    final http.Response response = await _getRequest('playlists');
     return response.body;
   }
 
   Future<void> pausePlayback() async {
-    await _putRequest('pause');
+    await _putRequest('player/pause');
   }
 
   Future<void> resumePlayback() async {
-    await _putRequest('play');
+    await _putRequest('player/play');
   }
 
   Future<void> skipPrevious() async {
-    await _postRequest('previous');
+    await _postRequest('player/previous');
   }
 
   Future<void> skipNext() async {
-    await _postRequest('next');
+    await _postRequest('player/next');
   }
 
   Future<void> seekSong(int position) async {
     final Map<String, String> parameters = <String, String>{'position_ms': '$position'};
-    await _putRequest('seek', params: parameters);
+    await _putRequest('player/seek', params: parameters);
   }
 
   Future<bool> shuffleToggle() async {
@@ -129,7 +134,7 @@ class Interactions {
     }
 
     final Map<String, String> parameters = <String, String>{'state': '$newState'};
-    await _putRequest('shuffle', params: parameters);
+    await _putRequest('player/shuffle', params: parameters);
 
     return newState;
   }
@@ -171,7 +176,7 @@ class Interactions {
     }
 
     final Map<String, String> parameters = <String, String>{'state': '$newState'};
-    await _putRequest('repeat', params: parameters);
+    await _putRequest('player/repeat', params: parameters);
 
     return newState;
   }

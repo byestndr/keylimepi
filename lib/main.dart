@@ -112,8 +112,8 @@ class _MusicPageState extends State<MusicPage> {
   static const int navigationRailBreakpoint = 600;
   static const List<Widget> navigationPages = <Widget>[
     ImmichCarousel(),
-    Placeholder(),
     SongSelect(),
+    SettingsPage(),
   ];
 
   @override

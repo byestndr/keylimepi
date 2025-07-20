@@ -18,7 +18,7 @@ String AuthFlow() {
   const String clientID = 'c92fab18b6924cf7872ed2965644cb25';
   Preferences.setStringValue('state', stateCode);
   final String spotifyURL =
-      'https://accounts.spotify.com/authorize?client_id=$clientID&response_type=code&redirect_uri=http://127.0.0.1:8080&code_challenge_method=S256&code_challenge=$codeChallenge&scope=user-read-playback-state+user-modify-playback-state+user-read-currently-playing&state=$stateCode';
+      'https://accounts.spotify.com/authorize?client_id=$clientID&response_type=code&redirect_uri=http://127.0.0.1:8080&code_challenge_method=S256&code_challenge=$codeChallenge&scope=user-read-playback-state+user-modify-playback-state+user-read-currently-playing+playlist-read-private&state=$stateCode';
   return spotifyURL;
 }
 

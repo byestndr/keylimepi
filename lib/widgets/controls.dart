@@ -221,6 +221,10 @@ class _ProgressSliderState extends State<ProgressSlider> {
         return;
       }
 
+      if (!mounted) {
+        return;
+      }
+
       setState(() {
         try {
           int pos = body['item']['duration_ms'];
@@ -233,6 +237,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
           sliderPos = 0;
         }
       });
+      
     } on FormatException {
       maxPos = 1;
       sliderPos = 0;
