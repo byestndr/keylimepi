@@ -120,49 +120,54 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
       itemExtent: 200,
       children: List<Widget>.generate(
         playlistAmount,
-        (int index) => FutureBuilder<String>(
-          future: getPlaylistCover(index),
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            Widget child;
-            String? data = snapshot.data;
-            if (data == null) {
-              child = const Center(child: CircularProgressIndicator());
-            } else {
-              child = Stack(
-                fit: StackFit.passthrough,
-                children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsetsGeometry.directional(
-                      top: 155,
-                      start: 15,
-                    ),
-                    child: Text(
-                      'Helloooooooooooooo',
-                      style: TextStyle(color: Colors.white, fontSize: 30),
-                      overflow: TextOverflow.fade,
-                      maxLines: 1,
-                      softWrap: false,
-                    ),
-                  ),
-                  FittedBox(
-                    fit: BoxFit.cover,
-                    child: ShaderMask(
-                      shaderCallback: (Rect bounds) {
-                        return const LinearGradient(
-                          begin: FractionalOffset.topCenter,
-                          end: FractionalOffset.bottomCenter,
-                          colors: <Color>[Colors.black12, Colors.black],
-                        ).createShader(bounds);
-                      },
-                      blendMode: BlendMode.dstOut,
-                      child: Image.network(data),
-                    ),
-                  ),
-                ],
-              );
-            }
-            return child;
-          },
+        (int index) => FutureBuilder<List<dynamic>>(
+          future: getPlaylists(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+                Widget child;
+                List<dynamic>? data = snapshot.data;
+                if (data == null) {
+                  child = const Center(child: CircularProgressIndicator());
+                } else {
+                  child = Stack(
+                    fit: StackFit.passthrough,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsetsGeometry.directional(
+                          top: 155,
+                          start: 15,
+                        ),
+                        child: Text(
+                          data[index]['name'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
+                        ),
+                      ),
+                      FittedBox(
+                        fit: BoxFit.cover,
+                        child: ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return const LinearGradient(
+                              begin: FractionalOffset.topCenter,
+                              end: FractionalOffset.bottomCenter,
+                              colors: <Color>[Colors.black12, Colors.black],
+                            ).createShader(bounds);
+                          },
+                          blendMode: BlendMode.dstOut,
+                          child: Image.network(data[index]['images'][0]['url']),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return child;
+              },
         ),
       ),
     );
@@ -204,12 +209,6 @@ class _AlbumCarouselState extends State<AlbumCarousel> {
   Future<void> refreshCarousel() async {
     await Interactions().getSavedAlbums();
     setCarouselLength();
-  }
-
-  Future<String> getAlbumArt(int albumIndex) async {
-    final List<dynamic> albums = await getAlbums();
-    final String coverURL = albums[albumIndex]['album']['images'][0]['url'];
-    return coverURL;
   }
 
   Future<void> startAlbum(int albumIndex) async {
