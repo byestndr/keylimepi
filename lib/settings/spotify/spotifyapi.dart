@@ -100,6 +100,20 @@ class Interactions {
     return response.body;
   }
 
+  Future<String> getSavedAlbums() async {
+    final http.Response response = await _getRequest('albums');
+    await preferences().setStringValue('saved_albums', response.body);
+    return response.body;
+  }
+
+  Future<String> getCachedAlbums() async {
+    String? albums = await preferences().getStringValue('saved_albums');
+    if (albums == null) {
+      return await getSavedAlbums();
+    }
+    return albums;
+  }
+
   Future<String> getCachedPlaylists() async {
     String? playlists = await preferences().getStringValue('playlists');
     

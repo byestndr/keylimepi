@@ -18,6 +18,7 @@ class SongSelect extends StatelessWidget {
         ),
         child: RefreshIndicator(
           child: ListView(
+            addAutomaticKeepAlives: true,
             children: <Widget>[
               SizedBox(
                 height: 400,
@@ -43,9 +44,23 @@ class SongSelect extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 200, child: PlaylistCarousel()),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Saved Albums',
+                  style: TextStyle(
+                    fontFamily: 'Roboto Flex',
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 200, child: AlbumCarousel()),
             ],
           ),
-          onRefresh: () async {return _PlaylistCarouselState().setPlaylistLength();},
+          onRefresh: () async {
+            return _AlbumCarouselState().refreshCarousel();
+          },
         ),
       ),
     );
@@ -61,7 +76,6 @@ class PlaylistCarousel extends StatefulWidget {
 
 class _PlaylistCarouselState extends State<PlaylistCarousel> {
   int playlistAmount = 1;
-  dynamic playlist;
 
   @override
   void initState() {
@@ -119,8 +133,8 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
                 children: <Widget>[
                   const Padding(
                     padding: EdgeInsetsGeometry.directional(
-                      top: 140,
-                      start: 10,
+                      top: 155,
+                      start: 15,
                     ),
                     child: Text(
                       'Helloooooooooooooo',
@@ -149,6 +163,120 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
             }
             return child;
           },
+        ),
+      ),
+    );
+  }
+}
+
+class AlbumCarousel extends StatefulWidget {
+  const AlbumCarousel({super.key});
+
+  @override
+  State<AlbumCarousel> createState() => _AlbumCarouselState();
+}
+
+class _AlbumCarouselState extends State<AlbumCarousel> {
+  int itemsInCarousel = 1;
+
+  @override
+  void initState() {
+    setCarouselLength();
+    super.initState();
+  }
+
+  Future<List<dynamic>> getAlbums() async {
+    final dynamic response = await Interactions().getCachedAlbums();
+    final Map<dynamic, dynamic> body = jsonDecode(response);
+    final List<dynamic> albums = body['items'];
+    return albums;
+  }
+
+  Future<void> setCarouselLength() async {
+    final List<dynamic> albums = await getAlbums();
+
+    setState(() {
+      itemsInCarousel = albums.length;
+    });
+    return;
+  }
+
+  Future<void> refreshCarousel() async {
+    await Interactions().getSavedAlbums();
+    setCarouselLength();
+  }
+
+  Future<String> getAlbumArt(int albumIndex) async {
+    final List<dynamic> albums = await getAlbums();
+    final String coverURL = albums[albumIndex]['album']['images'][0]['url'];
+    return coverURL;
+  }
+
+  Future<void> startAlbum(int albumIndex) async {
+    final List<dynamic> playlists = await getAlbums();
+    final String albumID = playlists[albumIndex]['album']['uri'];
+    await Interactions().resumePlayback(context_uri: albumID);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CarouselView(
+      onTap: (int index) async {
+        startAlbum(index);
+      },
+      itemExtent: 200,
+      children: List<Widget>.generate(
+        itemsInCarousel,
+        (int index) => FutureBuilder<List<dynamic>>(
+          future: getAlbums(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+                Widget child;
+                dynamic data = snapshot.data;
+                if (data == null) {
+                  child = const Center(child: CircularProgressIndicator());
+                } else {
+                  child = Stack(
+                    fit: StackFit.passthrough,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsetsGeometry.directional(
+                          top: 155,
+                          start: 15,
+                        ),
+                        child: Text(
+                          data[index]['album']['name'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
+                        ),
+                      ),
+                      FittedBox(
+                        fit: BoxFit.cover,
+                        child: ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return const LinearGradient(
+                              begin: FractionalOffset.topCenter,
+                              end: FractionalOffset.bottomCenter,
+                              colors: <Color>[Colors.black12, Colors.black],
+                            ).createShader(bounds);
+                          },
+                          blendMode: BlendMode.dstOut,
+                          child: Image.network(
+                            data[index]['album']['images'][0]['url'],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return child;
+              },
         ),
       ),
     );
