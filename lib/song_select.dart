@@ -16,33 +16,36 @@ class SongSelect extends StatelessWidget {
           borderRadius: BorderRadius.circular(28),
           color: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),
-        child: ListView(
-          children: <Widget>[
-            SizedBox(
-              height: 400,
-              child: CarouselView.weighted(
-                flexWeights: const <int>[2],
-                children: <Widget>[
-                  FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image.asset('assets/imagePlaceholder.png'),
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Your Playlists',
-                style: TextStyle(
-                  fontFamily: 'Roboto Flex',
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
+        child: RefreshIndicator(
+          child: ListView(
+            children: <Widget>[
+              SizedBox(
+                height: 400,
+                child: CarouselView.weighted(
+                  flexWeights: const <int>[2],
+                  children: <Widget>[
+                    FittedBox(
+                      fit: BoxFit.cover,
+                      child: Image.asset('assets/imagePlaceholder.png'),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 200, child: PlaylistCarousel()),
-          ],
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Your Playlists',
+                  style: TextStyle(
+                    fontFamily: 'Roboto Flex',
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 200, child: PlaylistCarousel()),
+            ],
+          ),
+          onRefresh: () async {return _PlaylistCarouselState().setPlaylistLength();},
         ),
       ),
     );
@@ -67,7 +70,7 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
   }
 
   Future<List<dynamic>> getPlaylists() async {
-    final dynamic response = await Interactions().getUserPlaylists();
+    final dynamic response = await Interactions().getCachedPlaylists();
     final Map<dynamic, dynamic> body = jsonDecode(response);
     final List<dynamic> playlists = body['items'];
     return playlists;
@@ -79,6 +82,7 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
     setState(() {
       playlistAmount = playlists.length;
     });
+    return;
   }
 
   Future<String> getPlaylistCover(int playlistIndex) async {
@@ -103,7 +107,7 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
             } else {
               child = Stack(
                 fit: StackFit.passthrough,
-                children: [
+                children: <Widget>[
                   const Padding(
                     padding: EdgeInsetsGeometry.directional(
                       top: 140,
@@ -117,18 +121,20 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
                       softWrap: false,
                     ),
                   ),
-                  FittedBox(fit: BoxFit.cover, child: ShaderMask(
-                    shaderCallback: (Rect bounds) {
-                      return const LinearGradient(
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomCenter,
-                        colors: <Color>[Colors.black12, Colors.black],
-                      ).createShader(bounds);
-                    },
-                    blendMode: BlendMode.dstOut,
-                    child: Image.network(data),
-                  ),)
-                  
+                  FittedBox(
+                    fit: BoxFit.cover,
+                    child: ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return const LinearGradient(
+                          begin: FractionalOffset.topCenter,
+                          end: FractionalOffset.bottomCenter,
+                          colors: <Color>[Colors.black12, Colors.black],
+                        ).createShader(bounds);
+                      },
+                      blendMode: BlendMode.dstOut,
+                      child: Image.network(data),
+                    ),
+                  ),
                 ],
               );
             }

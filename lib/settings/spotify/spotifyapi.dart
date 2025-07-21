@@ -97,7 +97,18 @@ class Interactions {
 
   Future<dynamic> getUserPlaylists() async {
     final http.Response response = await _getRequest('playlists');
+    await preferences().setStringValue('playlists', response.body);
     return response.body;
+  }
+
+  Future<String> getCachedPlaylists() async {
+    String? playlists = await preferences().getStringValue('playlists');
+    
+    if (playlists == null) {
+      return await getUserPlaylists();
+    }
+    
+    return playlists;
   }
 
   Future<void> pausePlayback() async {
