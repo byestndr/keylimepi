@@ -241,19 +241,37 @@ class _AlbumCarouselState extends State<AlbumCarousel> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsetsGeometry.directional(
-                          top: 155,
+                          top: 135,
                           start: 15,
                         ),
                         child: Text(
                           data[index]['album']['name'],
                           style: const TextStyle(
+                            fontFamily: 'Roboto Flex',
                             color: Colors.white,
                             fontSize: 20,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                           overflow: TextOverflow.fade,
                           maxLines: 1,
                           softWrap: false,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsGeometry.directional(
+                          top: 162,
+                          start: 15,
+                        ),
+                        child: Text(
+                          data[index]['album']['artists'][0]['name'],
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Roboto Flex',
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       FittedBox(
