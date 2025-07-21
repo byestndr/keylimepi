@@ -14,11 +14,10 @@ class Interactions {
     return headers;
   }
 
-  Future<void> _putRequest(String endpoint, {Map<String, dynamic>? params}) async {
+  Future<void> _putRequest(String endpoint, {Map<String, dynamic>? params, String? body}) async {
     final Uri uri = Uri.https(base, '$path/$endpoint', params);
     final Map<String, String> headers = await _getHeaders();
-
-    await http.put(uri, headers: headers);
+    await http.put(uri, headers: headers, body: body);
   }
 
   Future<http.Response> _getRequest(String endpoint) async {
@@ -115,8 +114,15 @@ class Interactions {
     await _putRequest('player/pause');
   }
 
-  Future<void> resumePlayback() async {
-    await _putRequest('player/play');
+  Future<void> resumePlayback({String? context_uri}) async {
+    String body = '';
+
+    if (context_uri != '' && context_uri != null) {
+      final Map<String, String> bodyMap = {'context_uri': context_uri};
+      body = jsonEncode(bodyMap);
+    }
+
+    await _putRequest('player/play', body: body);
   }
 
   Future<void> skipPrevious() async {
