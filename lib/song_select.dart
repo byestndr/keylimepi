@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotimmich/album_carousel.dart';
+import 'package:spotimmich/liked_songs.dart';
 import 'package:spotimmich/playlist_carousel.dart';
 
 class SongSelect extends StatefulWidget {
@@ -71,6 +72,18 @@ class _SongSelectState extends State<SongSelect> {
                 ),
               ),
               SizedBox(height: 200, child: AlbumCarousel(refresh: refreshing)),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Liked Songs',
+                  style: TextStyle(
+                    fontFamily: 'Roboto Flex',
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              SizedBox(height: 200, child: SongCarousel(refresh: refreshing)),
             ],
           ),
           onRefresh: () async {

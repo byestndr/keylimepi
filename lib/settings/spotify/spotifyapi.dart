@@ -114,6 +114,20 @@ class Interactions {
     return albums;
   }
 
+  Future<String> getLikedSongs() async {
+    final http.Response response = await _getRequest('tracks');
+    await preferences().setStringValue('liked_songs', response.body);
+    return response.body;
+  }
+
+  Future<String> getCachedSongs() async {
+    String? songs = await preferences().getStringValue('liked_songs');
+    if (songs == null) {
+      return await getLikedSongs();
+    }
+    return songs;
+  }
+
   Future<String> getCachedPlaylists() async {
     String? playlists = await preferences().getStringValue('playlists');
     
@@ -131,7 +145,17 @@ class Interactions {
   Future<void> resumePlayback({String? context_uri}) async {
     String body = '';
 
-    if (context_uri != '' && context_uri != null) {
+    if (context_uri == null) {
+      await _putRequest('player/play');
+      return;
+    }
+
+    if (context_uri != '' && context_uri.contains('track')) {
+      final Map<String, List<String>> bodyMap = {'uris': [context_uri]};
+      body = jsonEncode(bodyMap);
+    }
+
+    else if (context_uri != '') {
       final Map<String, String> bodyMap = {'context_uri': context_uri};
       body = jsonEncode(bodyMap);
     }
