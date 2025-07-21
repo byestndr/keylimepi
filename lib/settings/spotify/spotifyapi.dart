@@ -94,7 +94,7 @@ class Interactions {
     return response.body;
   }
 
-  Future<dynamic> getUserPlaylists() async {
+  Future<String> getUserPlaylists() async {
     final http.Response response = await _getRequest('playlists');
     await preferences().setStringValue('playlists', response.body);
     return response.body;

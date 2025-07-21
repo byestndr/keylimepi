@@ -3,8 +3,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 
-class SongSelect extends StatelessWidget {
+class SongSelect extends StatefulWidget {
   const SongSelect({super.key});
+
+  @override
+  State<SongSelect> createState() => _SongSelectState();
+}
+
+class _SongSelectState extends State<SongSelect> {
+  bool refreshing = false;
+
+  Future<void> refreshChildren() async {
+    setState(() {
+      refreshing = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +56,10 @@ class SongSelect extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 200, child: PlaylistCarousel()),
+              SizedBox(
+                height: 200,
+                child: PlaylistCarousel(refresh: refreshing),
+              ),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
@@ -55,11 +71,11 @@ class SongSelect extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 200, child: AlbumCarousel()),
+              SizedBox(height: 200, child: AlbumCarousel(refresh: refreshing,)),
             ],
           ),
           onRefresh: () async {
-            return _AlbumCarouselState().refreshCarousel();
+            return refreshChildren();
           },
         ),
       ),
@@ -68,7 +84,8 @@ class SongSelect extends StatelessWidget {
 }
 
 class PlaylistCarousel extends StatefulWidget {
-  const PlaylistCarousel({super.key});
+  final bool refresh;
+  const PlaylistCarousel({super.key, required this.refresh});
 
   @override
   State<PlaylistCarousel> createState() => _PlaylistCarouselState();
@@ -76,11 +93,20 @@ class PlaylistCarousel extends StatefulWidget {
 
 class _PlaylistCarouselState extends State<PlaylistCarousel> {
   int playlistAmount = 1;
+  late bool _refresh;
 
   @override
   void initState() {
     setPlaylistLength();
+    _refresh = widget.refresh;
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant PlaylistCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    refreshCarousel();
+
   }
 
   Future<List<dynamic>> getPlaylists() async {
@@ -99,13 +125,12 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
     return;
   }
 
-  Future<String> getPlaylistCover(int playlistIndex) async {
-    final List<dynamic> playlists = await getPlaylists();
-    final String coverURL = playlists[playlistIndex]['images'][0]['url'];
-    return coverURL;
+  Future<void> refreshCarousel() async {
+    await Interactions().getUserPlaylists();
+    await setPlaylistLength();
   }
 
-  Future<void> startPlaylist(playlistIndex) async {
+  Future<void> startPlaylist(int playlistIndex) async {
     final List<dynamic> playlists = await getPlaylists();
     final String playlistID = playlists[playlistIndex]['uri'];
     await Interactions().resumePlayback(context_uri: playlistID);
@@ -175,7 +200,8 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
 }
 
 class AlbumCarousel extends StatefulWidget {
-  const AlbumCarousel({super.key});
+  final bool refresh;
+  const AlbumCarousel({super.key, required this.refresh});
 
   @override
   State<AlbumCarousel> createState() => _AlbumCarouselState();
@@ -183,11 +209,18 @@ class AlbumCarousel extends StatefulWidget {
 
 class _AlbumCarouselState extends State<AlbumCarousel> {
   int itemsInCarousel = 1;
-
+  late bool refresh;
   @override
   void initState() {
+    refresh = widget.refresh;
     setCarouselLength();
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant AlbumCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    refreshCarousel();
   }
 
   Future<List<dynamic>> getAlbums() async {
@@ -208,7 +241,7 @@ class _AlbumCarouselState extends State<AlbumCarousel> {
 
   Future<void> refreshCarousel() async {
     await Interactions().getSavedAlbums();
-    setCarouselLength();
+    await setCarouselLength();
   }
 
   Future<void> startAlbum(int albumIndex) async {
