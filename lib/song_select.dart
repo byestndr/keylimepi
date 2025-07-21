@@ -91,9 +91,18 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
     return coverURL;
   }
 
+  Future<void> startPlaylist(playlistIndex) async {
+    final List<dynamic> playlists = await getPlaylists();
+    final String playlistID = playlists[playlistIndex]['uri'];
+    await Interactions().resumePlayback(context_uri: playlistID);
+  }
+
   @override
   Widget build(BuildContext context) {
     return CarouselView(
+      onTap: (int index) async {
+        await startPlaylist(index);
+      },
       itemExtent: 200,
       children: List<Widget>.generate(
         playlistAmount,
