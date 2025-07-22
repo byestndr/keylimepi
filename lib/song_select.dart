@@ -5,6 +5,7 @@ import 'package:spotimmich/album_carousel.dart';
 import 'package:spotimmich/liked_songs.dart';
 import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/playlist_carousel.dart';
+import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/widgets/songimage.dart';
 
 class SongSelect extends StatefulWidget {
@@ -18,6 +19,9 @@ class _SongSelectState extends State<SongSelect> {
   bool refreshing = false;
 
   Future<void> refreshChildren() async {
+    await Interactions().getUserPlaylists();
+    await Interactions().getSavedAlbums();
+    await Interactions().getLikedSongs();
     setState(() {
       refreshing = true;
     });
@@ -35,7 +39,6 @@ class _SongSelectState extends State<SongSelect> {
         ),
         child: RefreshIndicator(
           child: ListView(
-            addAutomaticKeepAlives: true,
             children: <Widget>[
               SizedBox(
                 height: 400,

@@ -13,8 +13,8 @@ class WeatherLocation extends StatefulWidget {
 class _WeatherLocationState extends State<WeatherLocation> {
   final TextEditingController LocationField = TextEditingController();
 
-  List items = [
-    {'name': '', 'admin1': '', 'country': ''},
+  List<dynamic> items = <dynamic>[
+    <String, String>{'name': '', 'admin1': '', 'country': ''},
   ];
 
   SnackBar confirmationSnackbar(String location) =>
@@ -35,7 +35,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
     return Scaffold(
       body: ListView.builder(
         itemCount: items.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return ListTile(
             title: Text(items[index]['name']),
             subtitle: Text(

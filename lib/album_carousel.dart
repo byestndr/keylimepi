@@ -45,7 +45,6 @@ class _AlbumCarouselState extends State<AlbumCarousel> {
   }
 
   Future<void> refreshCarousel() async {
-    await Interactions().getSavedAlbums();
     await setCarouselLength();
   }
 

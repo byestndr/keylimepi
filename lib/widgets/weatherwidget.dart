@@ -6,6 +6,67 @@ import 'dart:async';
 
 import 'package:spotimmich/settings/weatherrequest.dart';
 
+
+enum WeatherCodeEnum {
+  clearSky(0, 'Clear sky', Icons.sunny),
+  mostlyClear(1, 'Mostly clear', Icons.wb_cloudy_outlined),
+  partlyCloudy(2, 'Partly cloudy', Icons.wb_cloudy_outlined),
+  overcast(3, 'Overcast', Icons.cloud),
+
+  // Fog
+  fog(45, 'Fog', Icons.foggy),
+  depositingRimeFog(48, 'Depositing rime fog', Icons.cloudy_snowing),
+
+  // Drizzle
+  lightDrizzle(51, 'Light drizzle', Icons.water_drop_outlined),
+  moderateDrizzle(53, 'Moderate drizzle', Icons.water_drop),
+  denseDrizzle(55, 'Dense drizzle', Icons.water_drop_sharp),
+  lightFreezingDrizzle(56, 'Light freezing drizzle', Icons.cloudy_snowing),
+  denseFreezingDrizzle(57, 'Dense freezing drizzle', Icons.cloudy_snowing),
+
+  // Rain
+  slightRain(61, 'Slight rain', Icons.water_drop_outlined),
+  moderateRain(63, 'Moderate rain', Icons.water_drop_rounded),
+  heavyRain(65, 'Heavy rain', Icons.water_drop_sharp),
+  lightFreezingRain(66, 'Light freezing rain', Icons.cloudy_snowing),
+  heavyFreezingRain(67, 'Heavy freezing rain', Icons.cloudy_snowing),
+
+  // Snow
+  slightSnowfall(71, 'Slight snowfall', Icons.snowing),
+  moderateSnowfall(73, 'Moderate snowfall', Icons.snowing),
+  heavySnowfall(75, 'Heavy snowfall', Icons.snowing),
+  snowGrains(77, 'Snow grains', Icons.grain),
+
+  // Showers
+  slightRainShowers(80, 'Slight rain showers', Icons.shower),
+  moderateRainShowers(81, 'Moderate rain showers', Icons.shower),
+  violentRainShowers(82, 'Violent rain showers', Icons.thunderstorm),
+  slightSnowShowers(85, 'Slight snow showers', Icons.cloudy_snowing),
+  heavySnowShowers(86, 'Heavy snow showers', Icons.cloudy_snowing),
+
+  // Thunderstorm
+  thunderstorm(95, 'Thunderstorm', Icons.thunderstorm),
+  thunderstormSlightHail(96, 'Thunderstorm with slight hail', Icons.thunderstorm),
+  thunderstormHeavyHail(99, 'Thunderstorm with heavy hail', Icons.thunderstorm);
+  
+  final int code;
+  final String description;
+  final IconData icon;
+
+  const WeatherCodeEnum(this.code, this.description, this.icon);
+
+  static WeatherCodeEnum codeToCondition(int code) {
+    for (final WeatherCodeEnum condition in values) {
+      if (condition.code == code) {
+        return condition;
+      }
+    }
+    return clearSky;
+  }
+  
+  }
+
+
 class Weatherwidget extends StatefulWidget {
   const Weatherwidget({super.key});
 
@@ -19,54 +80,6 @@ class _WeatherwidgetState extends State<Weatherwidget> {
   String condition = 'No data';
   IconData conditionIcon = Icons.sunny;
   late int roundedTemperature;
-
-  static const Map<int, Map<String, dynamic>> codeToCondition = {
-    0: {'Condition': 'Clear sky', 'Icon': Icons.sunny},
-    1: {'Condition': 'Mostly clear', 'Icon': Icons.wb_cloudy_outlined},
-    2: {'Condition': 'Partly cloudy', 'Icon': Icons.wb_cloudy_outlined},
-    3: {'Condition': 'Overcast', 'Icon': Icons.cloud},
-
-    // Fog and Deposit of Ice
-    45: {'Condition': 'Fog', 'Icon': Icons.foggy},
-    48: {'Condition': 'Depositing rime fog', 'Icon': Icons.cloudy_snowing},
-    // Drizzle
-    51: {'Condition': 'Light drizzle', 'Icon': Icons.water_drop_outlined},
-    53: {'Condition': 'Moderate drizzle', 'Icon': Icons.water_drop},
-    55: {'Condition': 'Dense drizzle', 'Icon': Icons.water_drop_sharp},
-
-    // Rain
-    56: {'Condition': 'Light freezing drizzle', 'Icon': Icons.cloudy_snowing},
-    57: {'Condition': 'Dense freezing drizzle', 'Icon': Icons.cloudy_snowing},
-    61: {'Condition': 'Slight rain', 'Icon': Icons.water_drop_outlined},
-    63: {'Condition': 'Moderate rain', 'Icon': Icons.water_drop_rounded},
-    65: {'Condition': 'Heavy rain', 'Icon': Icons.water_drop_sharp},
-    66: {'Condition': 'Light freezing rain', 'Icon': Icons.cloudy_snowing},
-    67: {'Condition': 'Heavy freezing rain', 'Icon': Icons.cloudy_snowing},
-
-    // Snow
-    71: {'Condition': 'Slight snowfall', 'Icon': Icons.snowing},
-    73: {'Condition': 'Moderate snowfall', 'Icon': Icons.snowing},
-    75: {'Condition': 'Heavy snowfall', 'Icon': Icons.snowing},
-    77: {'Condition': 'Snow grains', 'Icon': Icons.grain},
-
-    // Showers
-    80: {'Condition': 'Slight rain showers', 'Icon': Icons.shower},
-    81: {'Condition': 'Moderate rain showers', 'Icon': Icons.shower},
-    82: {'Condition': 'Violent rain showers', 'Icon': Icons.thunderstorm},
-    85: {'Condition': 'Slight snow showers', 'Icon': Icons.cloudy_snowing},
-    86: {'Condition': 'Heavy snow showers', 'Icon': Icons.cloudy_snowing},
-
-    // Thunderstorm
-    95: {'Condition': 'Thunderstorm', 'Icon': Icons.thunderstorm},
-    96: {
-      'Condition': 'Thunderstorm with slight hail',
-      'Icon': Icons.thunderstorm,
-    },
-    99: {
-      'Condition': 'Thunderstorm with heavy hail',
-      'Icon': Icons.thunderstorm,
-    },
-  };
 
   @override
   void initState() {
@@ -100,7 +113,7 @@ class _WeatherwidgetState extends State<Weatherwidget> {
 
     int currentWeatherCode = body['current']['weather_code'];
     String? currentCondition =
-        codeToCondition[currentWeatherCode]!['Condition'];
+        WeatherCodeEnum.codeToCondition(currentWeatherCode).description;
 
     if (!mounted) {
       return;
@@ -109,13 +122,9 @@ class _WeatherwidgetState extends State<Weatherwidget> {
     setState(() {
       temperature = roundedTemperature;
 
-      conditionIcon = codeToCondition[currentWeatherCode]!['Icon'];
-
-      if (currentCondition == null) {
-        condition = 'No data';
-      } else {
-        condition = currentCondition;
-      }
+      conditionIcon = WeatherCodeEnum.codeToCondition(currentWeatherCode).icon;
+      condition = currentCondition;
+      
     });
   }
 

@@ -45,7 +45,6 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
   }
 
   Future<void> refreshCarousel() async {
-    await Interactions().getUserPlaylists();
     await setPlaylistLength();
   }
 

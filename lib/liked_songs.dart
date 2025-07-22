@@ -44,7 +44,6 @@ class _SongCarouselState extends State<SongCarousel> {
   }
 
   Future<void> refreshCarousel() async {
-    await Interactions().getLikedSongs();
     await setCarouselLength();
   }
 
