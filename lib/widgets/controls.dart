@@ -75,7 +75,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
     return Row(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget> [
+      children: <Widget>[
         FloatingActionButton.large(
           onPressed: () {
             Interactions().pauseToggle().then((bool value) {
@@ -176,6 +176,17 @@ class _PlaybackControlsState extends State<PlaybackControls> {
             ),
           ),
         ),
+        IconButton.filled(
+          onPressed: () {},
+          icon: const Icon(Icons.queue_music_rounded),
+          iconSize: 30,
+          visualDensity: const VisualDensity(horizontal: 1, vertical: 1),
+          style: IconButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(16),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -198,7 +209,9 @@ class _ProgressSliderState extends State<ProgressSlider> {
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(const Duration(milliseconds: 200), (Timer timer) async {
+    timer = Timer.periodic(const Duration(milliseconds: 200), (
+      Timer timer,
+    ) async {
       await RefreshLoop();
     });
   }
@@ -215,7 +228,11 @@ class _ProgressSliderState extends State<ProgressSlider> {
     }
 
     try {
-      final dynamic body = jsonDecode(await Interactions().cachedPlaybackStateResponse(functionName: 'ProgressSlider'));
+      final dynamic body = jsonDecode(
+        await Interactions().cachedPlaybackStateResponse(
+          functionName: 'ProgressSlider',
+        ),
+      );
 
       if (body['is_playing'] == false) {
         return;
@@ -237,7 +254,6 @@ class _ProgressSliderState extends State<ProgressSlider> {
           sliderPos = 0;
         }
       });
-      
     } on FormatException {
       maxPos = 1;
       sliderPos = 0;

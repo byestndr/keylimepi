@@ -111,7 +111,7 @@ class _MusicPageState extends State<MusicPage> {
   int currentPageIndex = 0;
   static const int navigationRailBreakpoint = 600;
   static const List<Widget> navigationPages = <Widget>[
-    ImmichCarousel(),
+    FullPlayerPage(),
     SongSelect(),
     SettingsPage(),
   ];

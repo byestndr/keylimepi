@@ -27,6 +27,9 @@ class _SongImageState extends State<SongImage> {
   }
 
   void RefreshLoop() {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       Interactions()
           .cachedPlaybackStateResponse(functionName: 'SongImage')

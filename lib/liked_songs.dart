@@ -37,9 +37,11 @@ class _SongCarouselState extends State<SongCarousel> {
   Future<void> setCarouselLength() async {
     final List<dynamic> songs = await getSongs();
 
-    setState(() {
-      songAmount = songs.length;
-    });
+    if (mounted) {
+      setState(() {
+        songAmount = songs.length;
+      });
+    }
     return;
   }
 
