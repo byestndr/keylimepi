@@ -52,13 +52,13 @@ class Interactions {
     switch (functionImportance[functionName]) {
       case 0:
         final String response = await getPlaybackState();
-        preferences().setStringValue('response', response);
+        await preferences().setStringValue('response', response);
         return response;
       case 2:
         String? response = await preferences().getStringValue('response');
         if (response == null) {
           final String newResponse = await getPlaybackState();
-          preferences().setStringValue('response', newResponse);
+          await preferences().setStringValue('response', newResponse);
           return newResponse;
         } else {
           return response;
@@ -70,18 +70,18 @@ class Interactions {
 
         if (counter == null || counter == maxBeforeNewRequest) {
           const int newCounter = 1;
-          preferences().setIntValue('playback_state_counter', newCounter);
+          await preferences().setIntValue('playback_state_counter', newCounter);
           final String response = await getPlaybackState();
           return response;
         }
 
         final int newCounter = counter++;
-        preferences().setIntValue('playback_state_counter', newCounter);
+        await preferences().setIntValue('playback_state_counter', newCounter);
 
         String? response = await preferences().getStringValue('response');
         if (response == null) {
           final http.Response newResponse = await _getRequest('');
-          preferences().setStringValue('response', newResponse.body);
+          await preferences().setStringValue('response', newResponse.body);
           return newResponse.body;
         } else {
           return response;
