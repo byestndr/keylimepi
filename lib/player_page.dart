@@ -8,6 +8,7 @@ const int imageBreakpoint = 600;
 
 class MediaWidget extends StatelessWidget {
   const MediaWidget({super.key});
+  static const double imageRadius = 28;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,29 @@ class MediaWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         MediaQuery.of(context).size.width >= imageBreakpoint
-            ? const SongImage()
+            ? Padding(
+                padding: const EdgeInsetsGeometry.all(16),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(imageRadius),
+                    ),
+                    color: Colors.transparent,
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.black38,
+                        blurRadius: 2,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+
+                  child: ClipRRect(
+                    borderRadius: BorderRadiusGeometry.circular(imageRadius),
+                    child: const SongImage(imageMultiplier: 200),
+                  ),
+                ),
+              )
             : const Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
         const Expanded(
           child: Padding(
@@ -52,7 +75,7 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
       curve: Curves.ease,
       duration: const Duration(seconds: 2),
     );
-    
+
     currentCarouselItem = newCarouselItem;
   }
 

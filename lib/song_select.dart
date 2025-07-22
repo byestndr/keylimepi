@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:spotimmich/album_carousel.dart';
 import 'package:spotimmich/liked_songs.dart';
+import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/playlist_carousel.dart';
+import 'package:spotimmich/widgets/songimage.dart';
 
 class SongSelect extends StatefulWidget {
   const SongSelect({super.key});
@@ -36,11 +40,33 @@ class _SongSelectState extends State<SongSelect> {
               SizedBox(
                 height: 400,
                 child: CarouselView.weighted(
-                  flexWeights: const <int>[2],
+                  flexWeights: <int>[2],
                   children: <Widget>[
-                    FittedBox(
-                      fit: BoxFit.cover,
-                      child: Image.asset('assets/imagePlaceholder.png'),
+                    Stack(
+                      fit: StackFit.passthrough,
+                      children: <Widget>[
+                        ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return const LinearGradient(
+                              begin: FractionalOffset.centerLeft,
+                              end: FractionalOffset.centerRight,
+                              colors: <Color>[Colors.black12, Colors.black87],
+                            ).createShader(bounds);
+                          },
+                          blendMode: BlendMode.dstIn,
+                          child: FittedBox(
+                            fit: BoxFit.cover,
+                            child: ImageFiltered(
+                              imageFilter: ImageFilter.blur(
+                                sigmaX: 10,
+                                sigmaY: 10,
+                              ),
+                              child: const SongImage(imageMultiplier: 200),
+                            ),
+                          ),
+                        ),
+                        MediaWidget(),
+                      ],
                     ),
                   ],
                 ),
