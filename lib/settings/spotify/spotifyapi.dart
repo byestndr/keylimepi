@@ -138,6 +138,11 @@ class Interactions {
     return playlists;
   }
 
+  Future<String> getQueue() async {
+    final http.Response response = await _getRequest('player/queue');
+    return response.body;
+  }
+
   Future<void> pausePlayback() async {
     await _putRequest('player/pause');
   }
