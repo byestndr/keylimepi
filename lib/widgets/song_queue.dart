@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 
 class QueueSideSheet extends StatefulWidget {
   const QueueSideSheet({super.key});
@@ -33,9 +35,9 @@ class QueueContent extends StatefulWidget {
 }
 
 class _QueueContentState extends State<QueueContent> {
-  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   List<dynamic> currentQueue = [];
   String? currentSong;
+  Timer? timer;
 
   Future<void> getQueueItems() async {
     final String response = await Interactions().getQueue();
@@ -46,39 +48,39 @@ class _QueueContentState extends State<QueueContent> {
       return;
     }
 
-    if (currentSong == null || currentQueue == []) {
+    try {
+      if (currentSong == null || currentQueue == []) {
+        setState(() {
+          currentSong = body['currently_playing']['name'];
+          currentQueue = body['queue'];
+        });
+      }
+    } on NoSuchMethodError {
+      await isLoggedIn();
       setState(() {
         currentSong = body['currently_playing']['name'];
         currentQueue = body['queue'];
-        listKey.currentState?.insertAllItems(0, currentQueue.length);
       });
     }
 
-    String newCurrentSong = body['currently_playing']['name'];
-    List<dynamic> newCurrentQueue = body['queue'];
-
-    if (newCurrentSong != currentSong) {
-      currentSong = newCurrentSong;
-
-      for (final (x) in currentQueue) {
-        if (newCurrentQueue.contains(x)) {
-          final int maximumItemToRemove = currentQueue.indexOf(x) - 1;
-          currentQueue.removeRange(0, maximumItemToRemove);
-          newCurrentQueue.removeAt(x);
-          currentQueue.addAll(newCurrentQueue);
-
-          break;
-        }
-      }
-    }
-
     return;
+  }
+
+  Future<List<dynamic>> returnQueue() async {
+    if (currentQueue != []) {
+      return currentQueue;
+    } else {
+      return const [{'queue': [{'name': 'Nothing is playing'}]}];
+    }
   }
 
   @override
   void initState() {
     getQueueItems();
     super.initState();
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
+      getQueueItems();
+    });
   }
 
   @override
@@ -90,29 +92,39 @@ class _QueueContentState extends State<QueueContent> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text('Queue', style: TextStyle(fontFamily: 'Roboto Flex', fontSize: 30, fontWeight: FontWeight.w600),),
+        children: <Widget>[
+          const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              'Queue',
+              style: TextStyle(
+                fontFamily: 'Roboto Flex',
+                fontSize: 30,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           Expanded(
-            child: AnimatedList(
-              initialItemCount: currentQueue.length,
-              key: listKey,
-              itemBuilder:
-                  (
-                    BuildContext context,
-                    int index,
-                    Animation<double> animation,
-                  ) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(1, 0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: ListTile(leading: Icon(Icons.music_note), title: Text(currentQueue[index]['name']),),
-                    );
-                  },
+            child: FutureBuilder(
+              future: returnQueue(),
+              builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+                Widget child;
+                List<dynamic>? data = snapshot.data;
+                if (data != null) {
+                  child = ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        leading: ClipRRect(borderRadius: BorderRadiusGeometry.circular(5), child: Image.network(data[index]['album']['images'][0]['url'], cacheWidth: 40,),),
+                        title: Text(data[index]['name']),
+                      );
+                    },
+                  );
+                } else {
+                  child = const CircularProgressIndicator();
+                }
+                return child;
+              },
             ),
           ),
         ],
