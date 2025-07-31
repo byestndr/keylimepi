@@ -17,7 +17,6 @@ class ImmichPreferences {
     final Uri uri = Uri.https(serverURL, 'api/search/random');
 
     final String data = jsonEncode(<String, Object>{
-      "albumIds": <String>["f39a6a14-82d9-4c49-9c35-6c09603d46aa"],
       "size": 1,
       "type": "IMAGE",
     });

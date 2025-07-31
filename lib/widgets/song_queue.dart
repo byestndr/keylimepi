@@ -36,7 +36,6 @@ class QueueContent extends StatefulWidget {
 
 class _QueueContentState extends State<QueueContent> {
   List<dynamic> currentQueue = [];
-  String? currentSong;
   Timer? timer;
 
   Future<void> getQueueItems() async {
@@ -49,16 +48,12 @@ class _QueueContentState extends State<QueueContent> {
     }
 
     try {
-      if (currentSong == null || currentQueue == []) {
-        setState(() {
-          currentSong = body['currently_playing']['name'];
-          currentQueue = body['queue'];
-        });
-      }
+      setState(() {
+        currentQueue = body['queue'];
+      });
     } on NoSuchMethodError {
       await isLoggedIn();
       setState(() {
-        currentSong = body['currently_playing']['name'];
         currentQueue = body['queue'];
       });
     }
@@ -70,7 +65,13 @@ class _QueueContentState extends State<QueueContent> {
     if (currentQueue != []) {
       return currentQueue;
     } else {
-      return const [{'queue': [{'name': 'Nothing is playing'}]}];
+      return const [
+        {
+          'queue': [
+            {'name': 'Nothing is playing'},
+          ],
+        },
+      ];
     }
   }
 
@@ -107,24 +108,34 @@ class _QueueContentState extends State<QueueContent> {
           Expanded(
             child: FutureBuilder(
               future: returnQueue(),
-              builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-                Widget child;
-                List<dynamic>? data = snapshot.data;
-                if (data != null) {
-                  child = ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        leading: ClipRRect(borderRadius: BorderRadiusGeometry.circular(5), child: Image.network(data[index]['album']['images'][0]['url'], cacheWidth: 40,),),
-                        title: Text(data[index]['name']),
+              builder:
+                  (
+                    BuildContext context,
+                    AsyncSnapshot<List<dynamic>> snapshot,
+                  ) {
+                    Widget child;
+                    List<dynamic>? data = snapshot.data;
+                    if (data != null) {
+                      child = ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadiusGeometry.circular(5),
+                              child: Image.network(
+                                data[index]['album']['images'][0]['url'],
+                                cacheWidth: 40,
+                              ),
+                            ),
+                            title: Text(data[index]['name']),
+                          );
+                        },
                       );
-                    },
-                  );
-                } else {
-                  child = const CircularProgressIndicator();
-                }
-                return child;
-              },
+                    } else {
+                      child = const CircularProgressIndicator();
+                    }
+                    return child;
+                  },
             ),
           ),
         ],
