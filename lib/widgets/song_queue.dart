@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -6,23 +7,47 @@ import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 
 class QueueSideSheet extends StatefulWidget {
-  const QueueSideSheet({super.key});
+  final bool isExpanded;
+  const QueueSideSheet({super.key, required this.isExpanded});
 
   @override
   State<QueueSideSheet> createState() => _QueueSideSheetState();
 }
 
 class _QueueSideSheetState extends State<QueueSideSheet> {
+  late bool isExpanded;
+
+  @override
+  void initState() {
+    isExpanded = widget.isExpanded;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant QueueSideSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.isExpanded != oldWidget.isExpanded) {
+      isExpanded = widget.isExpanded;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOut,
-      width: MediaQuery.of(context).devicePixelRatio * 300,
-      child: const Padding(
-        padding: EdgeInsetsGeometry.directional(top: 8, bottom: 5, end: 6),
-        child: QueueContent(),
-      ),
+      duration: const Duration(milliseconds: 300),
+      curve: Easing.standard,
+      width: isExpanded ? MediaQuery.of(context).devicePixelRatio * 300 : 0,
+      child: isExpanded
+          ? const Padding(
+              padding: EdgeInsetsGeometry.directional(
+                top: 8,
+                bottom: 5,
+                end: 6,
+              ),
+              child: QueueContent(),
+            )
+          : const Padding(padding: EdgeInsetsGeometry.zero),
     );
   }
 }

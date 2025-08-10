@@ -8,6 +8,7 @@ import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/settings/settings.dart';
 import 'dart:async';
 import 'package:flutter/gestures.dart';
+import 'package:spotimmich/widgets/song_queue.dart';
 
 void main() async {
   await isLoggedIn();
@@ -109,6 +110,7 @@ class MusicPage extends StatefulWidget {
 
 class _MusicPageState extends State<MusicPage> {
   int currentPageIndex = 0;
+  bool queueExpanded = false;
   static const int navigationRailBreakpoint = 600;
   static const List<Widget> navigationPages = <Widget>[
     FullPlayerPage(),
@@ -116,11 +118,21 @@ class _MusicPageState extends State<MusicPage> {
     SettingsPage(),
   ];
 
+  void queueExpandedButton(bool data) {
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      queueExpanded = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      bottomNavigationBar: const BottomPlaybar(),
+      bottomNavigationBar: BottomPlaybar(isQueueExpanded: queueExpandedButton),
       appBar: MediaQuery.of(context).size.width <= navigationRailBreakpoint
           ? PreferredSize(
               preferredSize: const Size(double.infinity, kToolbarHeight),
@@ -185,6 +197,10 @@ class _MusicPageState extends State<MusicPage> {
               : const SizedBox.shrink(),
 
           Expanded(child: navigationPages[currentPageIndex]),
+          if (currentPageIndex != 2)
+            QueueSideSheet(isExpanded: queueExpanded)
+          else
+            const Padding(padding: EdgeInsetsGeometry.zero),
         ],
       ),
       extendBodyBehindAppBar:

@@ -102,11 +102,11 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
     dynamic image = await getBackgroundImage(
       MediaQuery.of(context).devicePixelRatio,
     );
-  if (mounted) {
-    setState(() {
-      carouselBackgroundWidgets[nextCarouselItem] = image;
-    });
-  }
+    if (mounted) {
+      setState(() {
+        carouselBackgroundWidgets[nextCarouselItem] = image;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 500));
   }
 
@@ -149,6 +149,6 @@ class FullPlayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(children: [Expanded(child: ImmichCarousel()), QueueSideSheet()]);
+    return const Row(children: [Expanded(child: ImmichCarousel())]);
   }
 }

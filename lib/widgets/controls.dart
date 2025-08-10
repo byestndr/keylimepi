@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 
 class PlaybackControls extends StatefulWidget {
-  const PlaybackControls({super.key});
+  final Function(bool) isExpanded;
+  const PlaybackControls({super.key, required this.isExpanded});
 
   @override
   State<PlaybackControls> createState() => _PlaybackControlsState();
@@ -16,12 +17,15 @@ class _PlaybackControlsState extends State<PlaybackControls> {
   Timer? timer;
   IconData shuffleStatus = Icons.shuffle;
   IconData repeatStatus = Icons.repeat;
+  bool queueExpanded = false;
+  late Function(bool) isExpandedCallback;
   static const double iconButtonDensityHorizontal = 1;
   static const double iconButtonDensityVertical = 1;
 
   @override
   void initState() {
     super.initState();
+    isExpandedCallback = widget.isExpanded;
 
     timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       RefreshLoop();
@@ -177,7 +181,10 @@ class _PlaybackControlsState extends State<PlaybackControls> {
           ),
         ),
         IconButton.filled(
-          onPressed: () {},
+          onPressed: () {
+            queueExpanded = !queueExpanded;
+            isExpandedCallback(queueExpanded);
+          },
           icon: const Icon(Icons.queue_music_rounded),
           iconSize: 30,
           visualDensity: const VisualDensity(horizontal: 1, vertical: 1),

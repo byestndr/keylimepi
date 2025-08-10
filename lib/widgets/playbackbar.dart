@@ -3,7 +3,8 @@ import 'package:spotimmich/widgets/controls.dart';
 import 'package:spotimmich/widgets/weatherwidget.dart';
 
 class BottomPlaybar extends StatelessWidget {
-  const BottomPlaybar({super.key});
+  final Function(bool) isQueueExpanded;
+  const BottomPlaybar({super.key, required this.isQueueExpanded});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class BottomPlaybar extends StatelessWidget {
     return BottomAppBar(
       child: Row(
         children: <Widget>[
-          const PlaybackControls(),
+          PlaybackControls(isExpanded: isQueueExpanded,),
           currentScreenSize > sliderWidthBreakpoint
               ? const Expanded(child: ProgressSlider())
               : const Padding(
