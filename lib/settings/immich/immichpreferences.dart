@@ -104,7 +104,14 @@ Future<dynamic> getBackgroundImage(double pixelRatio) async {
       body: data,
     );
     final dynamic body = jsonDecode(response.body);
-    final String id = body[0]["id"];
+
+    late String id;
+     
+    try {
+      id = body[0]["id"];
+    } on NoSuchMethodError {
+      return Image.asset('assets/imagePlaceholder.png');
+    }
 
     final String backgroundImage = "https://$serverURL/api/assets/$id/original";
     return Image.network(

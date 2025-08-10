@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 
 final preferences Preferences = preferences();
 
-String AuthFlow() {
+Future<int> AuthFlow() async {
   int length = Random().nextInt(85) + 43;
   final String codeVerifier = generateRandomString(length);
   Preferences.setStringValue('code_verifier', codeVerifier);
@@ -17,9 +18,24 @@ String AuthFlow() {
   final String stateCode = generateRandomString(Random().nextInt(30) + 20);
   const String clientID = 'c92fab18b6924cf7872ed2965644cb25';
   Preferences.setStringValue('state', stateCode);
-  final String spotifyURL =
-      'https://accounts.spotify.com/authorize?client_id=$clientID&response_type=code&redirect_uri=http://127.0.0.1:8080&code_challenge_method=S256&code_challenge=$codeChallenge&scope=user-read-playback-state+user-modify-playback-state+user-read-currently-playing+playlist-read-private+user-library-read&state=$stateCode';
-  return spotifyURL;
+  
+  final Uri spotifyURL = Uri.https('accounts.spotify.com', 'authorize', {
+    'client_id': clientID,
+    'response_type': 'code',
+    'redirect_uri': 'immichfy://callback',
+    'code_challenge_method': 'S256',
+    'code_challenge': codeChallenge,
+    'scope':
+        'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private user-library-read',
+    'state': stateCode,
+  });
+
+  final result = await FlutterWebAuth2.authenticate(url: spotifyURL.toString(), callbackUrlScheme: 'immichfy', options: const FlutterWebAuth2Options(useWebview: true));
+  final Uri callbackURI = Uri.parse(result);
+
+  final int statusCode = await GetAccessToken(callbackURI);
+
+  return statusCode;
 }
 
 class preferences {
@@ -35,16 +51,16 @@ class preferences {
     return value;
   }
 
-  Future<void> setIntValue(String key, int value) async{
+  Future<void> setIntValue(String key, int value) async {
     await prefs.remove(key);
     await prefs.setInt(key, value);
   }
 
-  Future<void> removeIntValue(String key) async{
+  Future<void> removeIntValue(String key) async {
     await prefs.remove(key);
   }
 
-  Future<int?> getIntValue(String key) async{
+  Future<int?> getIntValue(String key) async {
     final int? value = await prefs.getInt(key);
     return value;
   }
@@ -66,50 +82,39 @@ String generateRandomString(int length) {
   );
 }
 
-Future<dynamic> parseURL(String url) async {
-  String? stateCode = await Preferences.getStringValue('state');
-  if (stateCode == null) {
-    return 404;
-  }
-
-  final String splicedURL = url.replaceAll('http://127.0.0.1:8080/?code=', '');
-
-  if (splicedURL.contains('&state=$stateCode') == false) {
-    return 400;
-  }
-
-  final String finalURL = splicedURL.replaceAll('&state=$stateCode', '');
-  return finalURL;
-}
-
-Future<int?> GetAccessToken(String url) async {
-  final dynamic authcode = await parseURL(url);
-
-  if (authcode.runtimeType == int) {
-    return 400;
-  }
-
-  final String? code = await Preferences.getStringValue('code_verifier');
-
-  if (code == null) {
-    return 404;
-  }
-
+Future<int> GetAccessToken(Uri url) async {
+  final String? savedStateCode = await Preferences.getStringValue('state');
+  final String? savedCodeVerifier = await Preferences.getStringValue('code_verifier');
+  final String? authcode = url.queryParameters['code'];
   final Uri uri = Uri.https('accounts.spotify.com', 'api/token');
+  
+  if (url.queryParameters['state'] != savedStateCode) {
+    return 400;
+  }
+
+  if (savedCodeVerifier == null) {
+    return 404;
+  }
+
+  if (authcode == null) {
+    return 400;
+  }
+
   final http.Response response = await http.post(
     uri,
-    headers: <String, String>{'Content-Type': 'application/x-www-form-urlencoded'},
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
     body: <String, dynamic>{
       'grant_type': 'authorization_code',
       'code': authcode,
-      'redirect_uri': 'http://127.0.0.1:8080',
+      'redirect_uri': 'immichfy://callback',
       'client_id': 'c92fab18b6924cf7872ed2965644cb25',
-      'code_verifier': code,
+      'code_verifier': savedCodeVerifier,
     },
   );
 
   final dynamic decodedJSON = jsonDecode(response.body);
-
   final String? token = decodedJSON['access_token'];
 
   if (token == null) {
@@ -117,7 +122,10 @@ Future<int?> GetAccessToken(String url) async {
   }
 
   await Preferences.setStringValue('token', decodedJSON['access_token']);
-  await Preferences.setStringValue('refresh_token', decodedJSON['refresh_token']);
+  await Preferences.setStringValue(
+    'refresh_token',
+    decodedJSON['refresh_token'],
+  );
 
   return response.statusCode;
 }

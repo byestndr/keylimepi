@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/immich/immichpage.dart';
 import 'package:spotimmich/settings/immich/immichpreferences.dart';
-import 'package:spotimmich/widgets/song_queue.dart';
 import 'dart:async';
 import 'package:spotimmich/widgets/songinfo.dart';
 import 'package:spotimmich/widgets/songimage.dart';

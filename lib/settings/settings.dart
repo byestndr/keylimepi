@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/immich/immichpage.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
-import 'package:spotimmich/settings/spotify/spotifypage.dart';
 import 'package:spotimmich/settings/weatherdialog.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -18,7 +17,12 @@ class SettingsPage extends StatelessWidget {
 
 class SettingsList extends StatelessWidget {
   const SettingsList({super.key});
-  static const SnackBar resetSnackBar = SnackBar(content: Text('Reseted all settings'));
+  static const SnackBar resetSnackBar = SnackBar(
+    content: Text('Reseted all settings'),
+  );
+  static const SnackBar spotifyConfirmation = SnackBar(
+    content: Text('Logged into Spotify'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +30,32 @@ class SettingsList extends StatelessWidget {
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.music_note_rounded),
-          title: const Text('Spotify Settings'),
-          subtitle: const Text('Authorize Spotify and configure settings.'),
+          title: const Text('Authorize Spotify'),
+          subtitle: const Text('Log into Spotify.'),
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => const SpotifyPage()),
-            );
+            AuthFlow().then((int statusCode) {
+              if (statusCode >= 400) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Error'),
+                      content: const Text(
+                        'There was a problem logging into Spotify, please try again.',
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(spotifyConfirmation);
+              }
+            });
           },
         ),
         ListTile(
@@ -42,18 +65,24 @@ class SettingsList extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => const ImmichPage()),
+              MaterialPageRoute(
+                builder: (BuildContext context) => const ImmichPage(),
+              ),
             );
           },
         ),
         ListTile(
           leading: const Icon(Icons.sunny),
           title: const Text('Weather Location'),
-          subtitle: const Text('Choose a weather location to show in the player'),
+          subtitle: const Text(
+            'Choose a weather location to show in the player',
+          ),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => const WeatherLocation()),
+              MaterialPageRoute(
+                builder: (BuildContext context) => const WeatherLocation(),
+              ),
             );
           },
         ),
@@ -70,7 +99,7 @@ class SettingsList extends StatelessWidget {
                 return AlertDialog(
                   title: const Text('Reset Settings'),
                   content: const Text(
-                    'Are you sure you want reset all data? This includes all authorizations and settings saved.'
+                    'Are you sure you want reset all data? This includes all authorizations and settings saved.',
                   ),
                   actions: <Widget>[
                     TextButton(
@@ -82,7 +111,9 @@ class SettingsList extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         preferences().ClearPreferences();
-                        ScaffoldMessenger.of(context).showSnackBar(resetSnackBar);
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(resetSnackBar);
                         Navigator.of(context).pop();
                       },
                       child: const Text('Confirm'),

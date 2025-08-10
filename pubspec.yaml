@@ -12,9 +12,9 @@ dependencies:
   crypto: ^3.0.6
   flutter:
     sdk: flutter
+  flutter_web_auth_2: ^5.0.0-alpha.3
   http: ^1.4.0
   shared_preferences: ^2.5.3
-  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -22,7 +22,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
   assets:
      - assets/imagePlaceholder.png

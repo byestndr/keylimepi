@@ -11,6 +11,7 @@ import 'package:flutter/gestures.dart';
 import 'package:spotimmich/widgets/song_queue.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await isLoggedIn();
   await preferences().removeIntValue('playback_state_counter');
   runApp(const App());
