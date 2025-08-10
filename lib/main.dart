@@ -9,10 +9,10 @@ import 'package:spotimmich/settings/settings.dart';
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 
-void main() {
+void main() async {
+  await isLoggedIn();
+  await preferences().removeIntValue('playback_state_counter');
   runApp(const App());
-  preferences().removeIntValue('playback_state_counter');
-  isLoggedIn();
   Timer.periodic(const Duration(minutes: 15), (Timer timer) {
     isLoggedIn();
   });

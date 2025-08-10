@@ -51,7 +51,7 @@ class _QueueContentState extends State<QueueContent> {
       setState(() {
         currentQueue = body['queue'];
       });
-    } on NoSuchMethodError {
+    } on TypeError {
       await isLoggedIn();
       setState(() {
         currentQueue = body['queue'];
@@ -65,7 +65,7 @@ class _QueueContentState extends State<QueueContent> {
     if (currentQueue != []) {
       return currentQueue;
     } else {
-      return const [
+      return const <dynamic>[
         {
           'queue': [
             {'name': 'Nothing is playing'},
@@ -73,6 +73,17 @@ class _QueueContentState extends State<QueueContent> {
         },
       ];
     }
+  }
+
+  Future<void> skipToSong(int index) async {
+    for (int i = 0; i < index + 1; i++) {
+      unawaited(Interactions().skipNext());
+    }
+    // For some reason, the first time an item is clicked, the
+    // queue returned by Spotify doesn't change without delay.
+    await Future.delayed(const Duration(milliseconds: 700));
+    await getQueueItems();
+    return;
   }
 
   @override
@@ -120,6 +131,9 @@ class _QueueContentState extends State<QueueContent> {
                         itemCount: data.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
+                            onTap: () {
+                              skipToSong(index);
+                            },
                             leading: ClipRRect(
                               borderRadius: BorderRadiusGeometry.circular(5),
                               child: Image.network(
@@ -128,6 +142,7 @@ class _QueueContentState extends State<QueueContent> {
                               ),
                             ),
                             title: Text(data[index]['name']),
+                            subtitle: Text(data[index]['artists'][0]['name']),
                           );
                         },
                       );
@@ -138,6 +153,7 @@ class _QueueContentState extends State<QueueContent> {
                   },
             ),
           ),
+          const Padding(padding: EdgeInsetsGeometry.directional(bottom: 10)),
         ],
       ),
     );
