@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:spotimmich/settings/immich/immichpage.dart';
 import 'package:spotimmich/settings/immich/immichpreferences.dart';
+import 'package:spotimmich/widgets/song_queue.dart';
 import 'dart:async';
 import 'package:spotimmich/widgets/songinfo.dart';
 import 'package:spotimmich/widgets/songimage.dart';
@@ -100,11 +102,11 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
     dynamic image = await getBackgroundImage(
       MediaQuery.of(context).devicePixelRatio,
     );
-
-    setState(() {
-      carouselBackgroundWidgets[nextCarouselItem] = image;
-    });
-
+    if (mounted) {
+      setState(() {
+        carouselBackgroundWidgets[nextCarouselItem] = image;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 500));
   }
 
@@ -139,5 +141,14 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
         const MediaWidget(),
       ],
     );
+  }
+}
+
+class FullPlayerPage extends StatelessWidget {
+  const FullPlayerPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(children: [Expanded(child: ImmichCarousel())]);
   }
 }
