@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/song_select.dart';
 import 'package:spotimmich/widgets/playbackbar.dart';
@@ -9,11 +10,12 @@ import 'package:spotimmich/settings/settings.dart';
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:spotimmich/widgets/song_queue.dart';
+import 'package:spotimmich/providers/colorscheme.dart';
 
 void main() async {
   await isLoggedIn();
   await preferences().removeIntValue('playback_state_counter');
-  runApp(const App());
+  runApp(const ProviderScope(child: App()));
   Timer.periodic(const Duration(minutes: 15), (Timer timer) {
     isLoggedIn();
   });
@@ -29,74 +31,34 @@ class ScrollBehavior extends MaterialScrollBehavior {
   };
 }
 
-class App extends StatefulWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  Timer? timer;
-  ColorScheme _colorScheme = ColorScheme.fromSeed(
-    seedColor: Colors.lightGreen,
-    brightness: Brightness.dark,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-
-    timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
-      await RefreshLoop();
-    });
-  }
-
-  Future<void> RefreshLoop() async {
-    final String playstate = await Interactions().cachedPlaybackStateResponse(
-      functionName: 'ColorScheme',
-    );
-    ColorScheme newcs = ColorScheme.fromSeed(
-      seedColor: Colors.lightGreen,
-      brightness: Brightness.dark,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<ColorScheme> appColorScheme = ref.watch(
+      appColorSchemeProvider,
     );
 
-    try {
-      final dynamic body = jsonDecode(playstate);
-      final String imageURL = body['item']['album']['images'][0]['url'];
-      newcs = await ColorScheme.fromImageProvider(
-        brightness: Brightness.dark,
-        provider: NetworkImage(imageURL),
-      );
-    } on FormatException {
-      newcs = ColorScheme.fromSeed(
-        seedColor: Colors.lightGreen,
-        brightness: Brightness.dark,
-      );
-    } on NoSuchMethodError {
-      newcs = ColorScheme.fromSeed(
-        seedColor: Colors.lightGreen,
-        brightness: Brightness.dark,
-      );
-    }
-
-    setState(() {
-      _colorScheme = newcs;
-    });
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return MaterialApp(
       scrollBehavior: ScrollBehavior(),
       home: const MusicPage(),
-      theme: ThemeData(colorScheme: _colorScheme, fontFamily: 'Noto Sans'),
+      theme: ThemeData(
+        colorScheme: appColorScheme.when(
+          data: (appscheme) => appscheme,
+          error: (error, stacktrace) {
+            ColorScheme.fromSeed(
+              seedColor: Colors.lightGreen,
+              brightness: Brightness.dark,
+            );
+          },
+          loading: () => ColorScheme.fromSeed(
+            seedColor: Colors.lightGreen,
+            brightness: Brightness.dark,
+          ),
+        ),
+        fontFamily: 'Noto Sans',
+      ),
     );
   }
 }
