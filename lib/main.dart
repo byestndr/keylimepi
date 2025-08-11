@@ -24,7 +24,7 @@ void main() async {
 class ScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
-  Set<PointerDeviceKind> get dragDevices => {
+  Set<PointerDeviceKind> get dragDevices => <PointerDeviceKind>{
     PointerDeviceKind.touch,
     PointerDeviceKind.mouse,
     // etc.
@@ -45,8 +45,8 @@ class App extends ConsumerWidget {
       home: const MusicPage(),
       theme: ThemeData(
         colorScheme: appColorScheme.when(
-          data: (appscheme) => appscheme,
-          error: (error, stacktrace) {
+          data: (ColorScheme appscheme) => appscheme,
+          error: (Object error, StackTrace stacktrace) {
             ColorScheme.fromSeed(
               seedColor: Colors.lightGreen,
               brightness: Brightness.dark,
