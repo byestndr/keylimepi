@@ -1,8 +1,5 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/providers/album_art_provider.dart';
 
 class SongImage extends ConsumerStatefulWidget {

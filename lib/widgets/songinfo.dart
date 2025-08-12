@@ -1,10 +1,5 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
-import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/providers/song_info_provider.dart';
 
 class SongInfo extends ConsumerWidget {

@@ -4,8 +4,6 @@ import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/song_select.dart';
 import 'package:spotimmich/widgets/playbackbar.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
-import 'dart:convert';
-import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/settings/settings.dart';
 import 'dart:async';
 import 'package:flutter/gestures.dart';
