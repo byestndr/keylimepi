@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:spotimmich/providers/album_art_provider.dart';
+import 'package:spotimmich/providers/song_info_provider.dart';
 
 class SongImage extends ConsumerStatefulWidget {
   final int imageMultiplier;
@@ -12,11 +15,21 @@ class SongImage extends ConsumerStatefulWidget {
 
 class _SongImageState extends ConsumerState<SongImage> {
   late int imageMultiplier;
+  Timer? timer;
 
   @override
   void initState() {
     super.initState();
     imageMultiplier = widget.imageMultiplier;
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      ref.read(infoGetterProvider.notifier).getNewSong();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
   }
 
   @override
