@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/immich/immichpage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/settings/immich/immichpreferences.dart';
-import 'package:spotimmich/widgets/song_queue.dart';
 import 'dart:async';
 import 'package:spotimmich/widgets/songinfo.dart';
 import 'package:spotimmich/widgets/songimage.dart';
@@ -54,16 +54,15 @@ class MediaWidget extends StatelessWidget {
   }
 }
 
-class ImmichCarousel extends StatefulWidget {
+class ImmichCarousel extends ConsumerStatefulWidget {
   const ImmichCarousel({super.key});
 
   @override
-  State<ImmichCarousel> createState() => _ImmichCarouselState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ImmichCarouselState();
 }
 
-class _ImmichCarouselState extends State<ImmichCarousel> {
+class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
   Timer? timer;
-  late final List<Widget> carouselBackgroundWidgets;
   static const int carouselLength = 3;
 
   CarouselController carouselController = CarouselController(initialItem: 0);
@@ -78,6 +77,33 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
       duration: const Duration(seconds: 2),
     );
 
+    switch (newCarouselItem) {
+      case 0:
+        ref
+            .read(
+              background3Provider(
+                pixelRatio: MediaQuery.of(context).devicePixelRatio,
+              ).notifier,
+            )
+            .refreshImage();
+      case 1:
+        ref
+            .read(
+              background1Provider(
+                pixelRatio: MediaQuery.of(context).devicePixelRatio,
+              ).notifier,
+            )
+            .refreshImage();
+      case 2:
+        ref
+            .read(
+              background2Provider(
+                pixelRatio: MediaQuery.of(context).devicePixelRatio,
+              ).notifier,
+            )
+            .refreshImage();
+    }
+
     currentCarouselItem = newCarouselItem;
   }
 
@@ -85,29 +111,9 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
   void initState() {
     super.initState();
 
-    carouselBackgroundWidgets = List<Widget>.generate(
-      carouselLength,
-      (_) => Image.asset('assets/imagePlaceholder.png'),
-    );
-
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) async {
-      await refreshImages();
       await changeCarouselItem();
     });
-  }
-
-  Future<void> refreshImages() async {
-    final int nextCarouselItem = (currentCarouselItem + 1) % carouselLength;
-
-    dynamic image = await getBackgroundImage(
-      MediaQuery.of(context).devicePixelRatio,
-    );
-    if (mounted) {
-      setState(() {
-        carouselBackgroundWidgets[nextCarouselItem] = image;
-      });
-    }
-    await Future.delayed(const Duration(milliseconds: 500));
   }
 
   @override
@@ -119,6 +125,16 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    AsyncValue<Image> image1 = ref.watch(
+      background1Provider(pixelRatio: MediaQuery.of(context).devicePixelRatio),
+    );
+    AsyncValue<Image> image2 = ref.watch(
+      background2Provider(pixelRatio: MediaQuery.of(context).devicePixelRatio),
+    );
+    AsyncValue<Image> image3 = ref.watch(
+      background3Provider(pixelRatio: MediaQuery.of(context).devicePixelRatio),
+    );
+
     return Stack(
       children: <Widget>[
         Padding(
@@ -132,9 +148,56 @@ class _ImmichCarouselState extends State<ImmichCarousel> {
                   : Axis.vertical,
               itemSnapping: true,
               flexWeights: const <int>[1],
-              children: carouselBackgroundWidgets.map((Widget image) {
-                return FittedBox(fit: BoxFit.cover, child: image);
-              }).toList(),
+              children: [
+                FittedBox(
+                  fit: BoxFit.cover,
+                  child: image1.when(
+                    data: (data) => data,
+                    error: (error, stack) {
+                      Image.asset('assets/imagePlaceholder.png');
+                    },
+                    loading: () => const Padding(
+                      padding: EdgeInsets.all(150.0),
+                      child: SizedBox.square(
+                        dimension: 50,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+                ),
+                FittedBox(
+                  fit: BoxFit.cover,
+                  child: image2.when(
+                    data: (data) => data,
+                    error: (error, stack) {
+                      Image.asset('assets/imagePlaceholder.png');
+                    },
+                    loading: () => const Padding(
+                      padding: EdgeInsets.all(150.0),
+                      child: SizedBox.square(
+                        dimension: 50,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+                ),
+                FittedBox(
+                  fit: BoxFit.cover,
+                  child: image3.when(
+                    data: (data) => data,
+                    error: (error, stack) {
+                      Image.asset('assets/imagePlaceholder.png');
+                    },
+                    loading: () => const Padding(
+                      padding: EdgeInsets.all(150.0),
+                      child: SizedBox.square(
+                        dimension: 50,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

@@ -68,7 +68,7 @@ class ImmichPreferences {
   }
 }
 
-Future<dynamic> getBackgroundImage(double pixelRatio) async {
+Future<Image> getBackgroundImage(double pixelRatio) async {
   final String? apikey = await ImmichPreferences().GetAPIkey();
   if (apikey == null) {
     return Image.asset('assets/imagePlaceholder.png');
