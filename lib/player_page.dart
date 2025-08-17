@@ -77,6 +77,10 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
       duration: const Duration(seconds: 2),
     );
 
+    if (!mounted) {
+      return;
+    }
+
     switch (newCarouselItem) {
       case 0:
         ref

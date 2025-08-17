@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/providers/song_info_provider.dart';
 
-class SongInfo extends ConsumerWidget {
+class SongInfo extends ConsumerStatefulWidget {
   const SongInfo({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SongInfo> createState() => _SongInfoState();
+}
+
+class _SongInfoState extends ConsumerState<SongInfo> {
+
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final AsyncValue<Song> currentSongInfo = ref.watch(infoGetterProvider);
 
     return Column(
@@ -20,6 +32,10 @@ class SongInfo extends ConsumerWidget {
               if (data.title == null) {
                 return 'Nothing currently playing...';
               } else {
+                Future.microtask(() {
+                  ref.read(oldSongProvider.notifier).setOldSong(oldSong: data);
+                });
+                
                 return data.title!;
               }
             },
@@ -30,7 +46,9 @@ class SongInfo extends ConsumerWidget {
                 return error.toString();
               }
             },
-            loading: () => "Nothing currently playing...",
+            loading: () {
+              return ref.read(oldSongProvider).title;
+            },
           ),
           style: const TextStyle(
             fontSize: 64.0,
@@ -60,7 +78,7 @@ class SongInfo extends ConsumerWidget {
                 return error.toString();
               }
             },
-            loading: () => "Start playing a song to control playback",
+            loading: () => ref.read(oldSongProvider).artist,
           ),
           style: const TextStyle(
             fontSize: 24.0,

@@ -21,9 +21,6 @@ class _SongImageState extends ConsumerState<SongImage> {
   void initState() {
     super.initState();
     imageMultiplier = widget.imageMultiplier;
-    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      ref.read(infoGetterProvider.notifier).getNewSong();
-    });
   }
 
   @override

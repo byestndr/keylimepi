@@ -6,16 +6,36 @@ import 'package:spotimmich/providers/album_art_provider.dart';
 
 part 'song_info_provider.g.dart';
 
+@riverpod
+Stream<void> refreshTimer(Ref ref) {
+  return Stream.periodic(const Duration(seconds: 5), (_) => {});
+}
+
 class Song {
-  String? title;
-  String? artist;
+  String title = 'Nothing currently playing...';
+  String artist = "Start playing a song to control playback";
   String? uri;
+}
+
+@riverpod
+class OldSong extends _$OldSong {
+  @override
+  Song build() {
+    ref.keepAlive();
+    return Song();
+  }
+
+  void setOldSong({required Song oldSong}) {
+    state = oldSong;
+    return;
+  }
 }
 
 @riverpod
 class InfoGetter extends _$InfoGetter {
   @override
   Future<Song> build() {
+    ref.watch(refreshTimerProvider);
     return getCurrentSong();
   }
 
@@ -42,7 +62,7 @@ class InfoGetter extends _$InfoGetter {
     if (state.value!.uri != newURI) {
       ref.read(albumImageProvider.notifier).refreshImage();
       ref.read(appColorSchemeProvider.notifier).refreshColorscheme();
-    }
+    } 
   }
 
   void getNewSong() async {
