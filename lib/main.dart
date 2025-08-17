@@ -11,6 +11,7 @@ import 'package:spotimmich/widgets/song_queue.dart';
 import 'package:spotimmich/providers/colorscheme.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await isLoggedIn();
   await preferences().removeIntValue('playback_state_counter');
   runApp(const ProviderScope(child: App()));
