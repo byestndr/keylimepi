@@ -1,21 +1,23 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/album_carousel.dart';
 import 'package:spotimmich/liked_songs.dart';
 import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/playlist_carousel.dart';
+import 'package:spotimmich/providers/album_provider.dart';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/widgets/songimage.dart';
 
-class SongSelect extends StatefulWidget {
+class SongSelect extends ConsumerStatefulWidget {
   const SongSelect({super.key});
 
   @override
-  State<SongSelect> createState() => _SongSelectState();
+  ConsumerState<SongSelect> createState() => _SongSelectState();
 }
 
-class _SongSelectState extends State<SongSelect> {
+class _SongSelectState extends ConsumerState<SongSelect> {
   bool refreshing = false;
 
   Future<void> refreshChildren() async {
@@ -100,7 +102,7 @@ class _SongSelectState extends State<SongSelect> {
                   ),
                 ),
               ),
-              SizedBox(height: 200, child: AlbumCarousel(refresh: refreshing)),
+              const SizedBox(height: 200, child: AlbumCarousel()),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
@@ -116,7 +118,9 @@ class _SongSelectState extends State<SongSelect> {
             ],
           ),
           onRefresh: () async {
-            return refreshChildren();
+            final Future<void> refreshAlbums = ref.read(albumProviderProvider.notifier).refreshAlbums();
+
+            await Future.wait([refreshAlbums]);
           },
         ),
       ),
