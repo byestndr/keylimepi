@@ -7,6 +7,7 @@ import 'package:spotimmich/liked_songs.dart';
 import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/playlist_carousel.dart';
 import 'package:spotimmich/providers/album_provider.dart';
+import 'package:spotimmich/providers/likedSongs_provider.dart';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/widgets/songimage.dart';
 
@@ -114,13 +115,14 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                   ),
                 ),
               ),
-              SizedBox(height: 200, child: SongCarousel(refresh: refreshing)),
+              const SizedBox(height: 200, child: SongCarousel()),
             ],
           ),
           onRefresh: () async {
             final Future<void> refreshAlbums = ref.read(albumProviderProvider.notifier).refreshAlbums();
+            final Future<void> refreshSongs = ref.read(songProviderProvider.notifier).refreshSongs();
 
-            await Future.wait([refreshAlbums]);
+            await Future.wait([refreshAlbums, refreshSongs]);
           },
         ),
       ),
