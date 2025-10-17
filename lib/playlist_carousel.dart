@@ -38,6 +38,10 @@ class _PlaylistCarouselState extends State<PlaylistCarousel> {
   Future<void> setPlaylistLength() async {
     final List<dynamic> playlists = await getPlaylists();
 
+    if (!mounted) {
+      return;
+    }
+
     setState(() {
       playlistAmount = playlists.length;
     });
