@@ -9,7 +9,6 @@ import 'package:spotimmich/playlist_carousel.dart';
 import 'package:spotimmich/providers/album_provider.dart';
 import 'package:spotimmich/providers/likedSongs_provider.dart';
 import 'package:spotimmich/providers/playlists_provider.dart';
-import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/widgets/songimage.dart';
 
 class SongSelect extends ConsumerStatefulWidget {
@@ -20,16 +19,6 @@ class SongSelect extends ConsumerStatefulWidget {
 }
 
 class _SongSelectState extends ConsumerState<SongSelect> {
-  bool refreshing = false;
-
-  Future<void> refreshChildren() async {
-    await Interactions().getUserPlaylists();
-    await Interactions().getSavedAlbums();
-    await Interactions().getLikedSongs();
-    setState(() {
-      refreshing = true;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +61,7 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                             ),
                           ),
                         ),
-                        MediaWidget(),
+                        const MediaWidget(),
                       ],
                     ),
                   ],
@@ -89,9 +78,9 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 200,
-                child: PlaylistCarousel(refresh: refreshing),
+                child: PlaylistCarousel(),
               ),
               const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -124,7 +113,7 @@ class _SongSelectState extends ConsumerState<SongSelect> {
             final Future<void> refreshSongs = ref.read(songProviderProvider.notifier).refreshSongs();
             final Future<void> refreshPlaylists = ref.read(playlistsProviderProvider.notifier).refreshPlaylists();
 
-            await Future.wait([refreshAlbums, refreshSongs, refreshPlaylists]);
+            await Future.wait(<Future<void>>[refreshAlbums, refreshSongs, refreshPlaylists]);
           },
         ),
       ),
