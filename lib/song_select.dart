@@ -8,6 +8,7 @@ import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/playlist_carousel.dart';
 import 'package:spotimmich/providers/album_provider.dart';
 import 'package:spotimmich/providers/likedSongs_provider.dart';
+import 'package:spotimmich/providers/playlists_provider.dart';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/widgets/songimage.dart';
 
@@ -121,8 +122,9 @@ class _SongSelectState extends ConsumerState<SongSelect> {
           onRefresh: () async {
             final Future<void> refreshAlbums = ref.read(albumProviderProvider.notifier).refreshAlbums();
             final Future<void> refreshSongs = ref.read(songProviderProvider.notifier).refreshSongs();
+            final Future<void> refreshPlaylists = ref.read(playlistsProviderProvider.notifier).refreshPlaylists();
 
-            await Future.wait([refreshAlbums, refreshSongs]);
+            await Future.wait([refreshAlbums, refreshSongs, refreshPlaylists]);
           },
         ),
       ),
