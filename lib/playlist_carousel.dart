@@ -4,8 +4,7 @@ import 'package:spotimmich/providers/playlists_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 class PlaylistCarousel extends ConsumerStatefulWidget {
-  final bool refresh;
-  const PlaylistCarousel({super.key, required this.refresh});
+  const PlaylistCarousel({super.key});
 
   @override
   ConsumerState<PlaylistCarousel> createState() => _PlaylistCarouselState();
