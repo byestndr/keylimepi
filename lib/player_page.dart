@@ -2,59 +2,51 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/alignedPlayers.dart';
 import 'package:spotimmich/providers/album_art_provider.dart';
 import 'package:spotimmich/providers/background_getter.dart';
-import 'package:spotimmich/settings/immich/immichpreferences.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'dart:async';
-import 'package:spotimmich/widgets/songinfo.dart';
-import 'package:spotimmich/widgets/songimage.dart';
 
 const int imageBreakpoint = 600;
 
-class MediaWidget extends StatelessWidget {
+class MediaWidget extends StatefulWidget {
   const MediaWidget({super.key});
-  static const double imageRadius = 28;
+
+  @override
+  State<MediaWidget> createState() => _MediaWidgetState();
+}
+
+class _MediaWidgetState extends State<MediaWidget> {
+  int position = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getPosition();
+  }
+
+
+  Future<void> getPosition() async {
+    final int? positionType = await preferences().getIntValue(
+      'player_alignment',
+    );
+
+    if (positionType == null) {
+      setState(() {
+        position = 0;
+      });
+    }
+    setState(() {
+      position = positionType!;
+    });
+
+    return;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        MediaQuery.of(context).size.width >= imageBreakpoint
-            ? Padding(
-                padding: const EdgeInsetsGeometry.all(16),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(imageRadius),
-                    ),
-                    color: Colors.transparent,
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black38,
-                        blurRadius: 2,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-
-                  child: ClipRRect(
-                    borderRadius: BorderRadiusGeometry.circular(imageRadius),
-                    child: const SongImage(imageMultiplier: 200),
-                  ),
-                ),
-              )
-            : const Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
-        const Expanded(
-          child: Padding(
-            padding: EdgeInsetsGeometry.directional(bottom: 16),
-            child: SongInfo(),
-          ),
-        ),
-      ],
-    );
+    return position != 0 ? const CenteredInfo() : const BottomLeftInfo();
   }
 }
 
@@ -144,6 +136,7 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
     );
 
     return Stack(
+      fit: StackFit.passthrough,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(2.0),
