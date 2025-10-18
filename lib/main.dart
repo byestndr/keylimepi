@@ -31,7 +31,7 @@ class ScrollBehavior extends MaterialScrollBehavior {
 }
 
 class App extends ConsumerWidget {
-  const App({super.key});
+  const App({super.key, });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

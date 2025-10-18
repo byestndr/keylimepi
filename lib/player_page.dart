@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/providers/album_art_provider.dart';
 import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/settings/immich/immichpreferences.dart';
+import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'dart:async';
 import 'package:spotimmich/widgets/songinfo.dart';
 import 'package:spotimmich/widgets/songimage.dart';
@@ -152,12 +156,12 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
                   : Axis.vertical,
               itemSnapping: true,
               flexWeights: const <int>[1],
-              children: [
+              children: <Widget>[
                 FittedBox(
                   fit: BoxFit.cover,
                   child: image1.when(
-                    data: (data) => data,
-                    error: (error, stack) {
+                    data: (Image data) => data,
+                    error: (Object error, StackTrace stack) {
                       Image.asset('assets/imagePlaceholder.png');
                     },
                     loading: () => const Padding(
@@ -172,8 +176,8 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
                 FittedBox(
                   fit: BoxFit.cover,
                   child: image2.when(
-                    data: (data) => data,
-                    error: (error, stack) {
+                    data: (Image data) => data,
+                    error: (Object error, StackTrace stack) {
                       Image.asset('assets/imagePlaceholder.png');
                     },
                     loading: () => const Padding(
@@ -188,8 +192,8 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
                 FittedBox(
                   fit: BoxFit.cover,
                   child: image3.when(
-                    data: (data) => data,
-                    error: (error, stack) {
+                    data: (Image data) => data,
+                    error: (Object error, StackTrace stack) {
                       Image.asset('assets/imagePlaceholder.png');
                     },
                     loading: () => const Padding(
@@ -211,11 +215,97 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
   }
 }
 
-class FullPlayerPage extends StatelessWidget {
+class AlbumArtBackground extends ConsumerWidget {
+  const AlbumArtBackground({super.key});
+  static const double backgroundBlur = 80;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<String> backgroundImage = ref.watch(albumImageProvider);
+    return Padding(
+      padding: const EdgeInsets.all(6.0),
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 400),
+            curve: Easing.standard,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: backgroundImage.when(
+                  data: (String data) {
+                    return NetworkImage(data);
+                  },
+                  error: (Object error, StackTrace stack) {
+                    return const AssetImage('assets/imagePlaceholder.png');
+                  },
+                  loading: () =>
+                      const AssetImage('assets/imagePlaceholder.png'),
+                ),
+              ),
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadiusGeometry.circular(28),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: backgroundBlur,
+                sigmaY: backgroundBlur,
+              ),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+          const MediaWidget(),
+        ],
+      ),
+    );
+  }
+}
+
+class FullPlayerPage extends StatefulWidget {
   const FullPlayerPage({super.key});
 
   @override
+  State<FullPlayerPage> createState() => _FullPlayerPageState();
+}
+
+class _FullPlayerPageState extends State<FullPlayerPage> {
+  bool isImmich = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getBackgroundType();
+  }
+
+  Future<void> getBackgroundType() async {
+    final bool? backgroundState = await preferences().getBoolValue(
+      'immich_background',
+    );
+
+    if (backgroundState == null) {
+      setState(() {
+        isImmich = false;
+      });
+    }
+    setState(() {
+      isImmich = backgroundState!;
+    });
+
+    return;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Row(children: [Expanded(child: ImmichCarousel())]);
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: isImmich ? const ImmichCarousel() : const AlbumArtBackground(),
+        ),
+      ],
+    );
   }
 }
