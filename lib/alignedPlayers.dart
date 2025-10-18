@@ -8,44 +8,52 @@ const double _imageRadius = 28;
 class CenteredInfo extends StatelessWidget {
   const CenteredInfo({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        MediaQuery.of(context).size.width >= _imageBreakpoint
-            ? Padding(
-                padding: const EdgeInsetsGeometry.all(16),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(_imageRadius),
-                    ),
-                    color: Colors.transparent,
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black38,
-                        blurRadius: 2,
-                        offset: Offset(0, 2),
+    return Align(
+      alignment: Alignment.center,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            MediaQuery.of(context).size.width >= _imageBreakpoint
+                ? Padding(
+                    padding: const EdgeInsetsGeometry.all(16),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(_imageRadius),
+                        ),
+                        color: Colors.transparent,
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black38,
+                            blurRadius: 2,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
                       ),
-                    ],
+
+                      child: ClipRRect(
+                        borderRadius: BorderRadiusGeometry.circular(
+                          _imageRadius,
+                        ),
+                        child: const SongImage(imageMultiplier: 400),
+                      ),
+                    ),
+                  )
+                : const Padding(
+                    padding: EdgeInsetsGeometry.directional(start: 20),
                   ),
 
-                  child: ClipRRect(
-                    borderRadius: BorderRadiusGeometry.circular(_imageRadius),
-                    child: const SongImage(imageMultiplier: 500),
-                  ),
-                ),
-              )
-            : const Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
-
-        const SongTitleInfo(),
-        const SongArtistInfo(),
-      ],
+            const SongTitleInfo(),
+            const SongArtistInfo(),
+          ],
+        ),
+      ),
     );
-    ;
   }
 }
 
