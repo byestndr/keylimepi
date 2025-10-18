@@ -49,6 +49,16 @@ class preferences {
     return value;
   }
 
+  Future<void> setBoolValue(String key, bool value) async {
+    await prefs.remove(key);
+    await prefs.setBool(key, value);
+  }
+
+  Future<bool?> getBoolValue(String key) async{
+    final bool? value = await prefs.getBool(key);
+    return value;
+  }
+
   Future<void> ClearPreferences() async {
     await prefs.clear();
   }

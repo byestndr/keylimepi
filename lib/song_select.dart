@@ -10,6 +10,7 @@ import 'package:spotimmich/providers/album_provider.dart';
 import 'package:spotimmich/providers/likedSongs_provider.dart';
 import 'package:spotimmich/providers/playlists_provider.dart';
 import 'package:spotimmich/widgets/songimage.dart';
+import 'package:spotimmich/widgets/songinfo.dart';
 
 class SongSelect extends ConsumerStatefulWidget {
   const SongSelect({super.key});
@@ -19,6 +20,7 @@ class SongSelect extends ConsumerStatefulWidget {
 }
 
 class _SongSelectState extends ConsumerState<SongSelect> {
+  static const double imageRadius = 28;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,59 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                             ),
                           ),
                         ),
-                        const MediaWidget(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            MediaQuery.of(context).size.width >= imageBreakpoint
+                                ? Padding(
+                                    padding: const EdgeInsetsGeometry.all(16),
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(imageRadius),
+                                        ),
+                                        color: Colors.transparent,
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                            color: Colors.black38,
+                                            blurRadius: 2,
+                                            offset: Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadiusGeometry.circular(
+                                              imageRadius,
+                                            ),
+                                        child: const SongImage(
+                                          imageMultiplier: 200,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const Padding(
+                                    padding: EdgeInsetsGeometry.directional(
+                                      start: 20,
+                                    ),
+                                  ),
+                            const Expanded(
+                              child: Padding(
+                                padding: EdgeInsetsGeometry.directional(bottom: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    const SongTitleInfo(),
+                                    const SongArtistInfo(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -78,10 +132,7 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 200,
-                child: PlaylistCarousel(),
-              ),
+              const SizedBox(height: 200, child: PlaylistCarousel()),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
@@ -109,11 +160,21 @@ class _SongSelectState extends ConsumerState<SongSelect> {
             ],
           ),
           onRefresh: () async {
-            final Future<void> refreshAlbums = ref.read(albumProviderProvider.notifier).refreshAlbums();
-            final Future<void> refreshSongs = ref.read(songProviderProvider.notifier).refreshSongs();
-            final Future<void> refreshPlaylists = ref.read(playlistsProviderProvider.notifier).refreshPlaylists();
+            final Future<void> refreshAlbums = ref
+                .read(albumProviderProvider.notifier)
+                .refreshAlbums();
+            final Future<void> refreshSongs = ref
+                .read(songProviderProvider.notifier)
+                .refreshSongs();
+            final Future<void> refreshPlaylists = ref
+                .read(playlistsProviderProvider.notifier)
+                .refreshPlaylists();
 
-            await Future.wait(<Future<void>>[refreshAlbums, refreshSongs, refreshPlaylists]);
+            await Future.wait(<Future<void>>[
+              refreshAlbums,
+              refreshSongs,
+              refreshPlaylists,
+            ]);
           },
         ),
       ),

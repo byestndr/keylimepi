@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotimmich/settings/appearancepage.dart';
 import 'package:spotimmich/settings/immich/immichpage.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/spotify/spotifypage.dart';
@@ -18,12 +19,25 @@ class SettingsPage extends StatelessWidget {
 
 class SettingsList extends StatelessWidget {
   const SettingsList({super.key});
-  static const SnackBar resetSnackBar = SnackBar(content: Text('Reseted all settings'));
+  static const SnackBar resetSnackBar = SnackBar(
+    content: Text('Reseted all settings'),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        ListTile(
+          leading: const Icon(Icons.palette_rounded),
+          title: const Text('Appearance'),
+          subtitle: const Text('Control the app\'s look'),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const AppearancePage(),
+            ),
+          ),
+        ),
         ListTile(
           leading: const Icon(Icons.music_note_rounded),
           title: const Text('Spotify Settings'),
@@ -31,7 +45,9 @@ class SettingsList extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => const SpotifyPage()),
+              MaterialPageRoute(
+                builder: (BuildContext context) => const SpotifyPage(),
+              ),
             );
           },
         ),
@@ -42,18 +58,24 @@ class SettingsList extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => const ImmichPage()),
+              MaterialPageRoute(
+                builder: (BuildContext context) => const ImmichPage(),
+              ),
             );
           },
         ),
         ListTile(
           leading: const Icon(Icons.sunny),
           title: const Text('Weather Location'),
-          subtitle: const Text('Choose a weather location to show in the player'),
+          subtitle: const Text(
+            'Choose a weather location to show in the player',
+          ),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => const WeatherLocation()),
+              MaterialPageRoute(
+                builder: (BuildContext context) => const WeatherLocation(),
+              ),
             );
           },
         ),
@@ -70,7 +92,7 @@ class SettingsList extends StatelessWidget {
                 return AlertDialog(
                   title: const Text('Reset Settings'),
                   content: const Text(
-                    'Are you sure you want reset all data? This includes all authorizations and settings saved.'
+                    'Are you sure you want reset all data? This includes all authorizations and settings saved.',
                   ),
                   actions: <Widget>[
                     TextButton(
@@ -82,7 +104,9 @@ class SettingsList extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         preferences().ClearPreferences();
-                        ScaffoldMessenger.of(context).showSnackBar(resetSnackBar);
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(resetSnackBar);
                         Navigator.of(context).pop();
                       },
                       child: const Text('Confirm'),
