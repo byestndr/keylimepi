@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/alignedPlayers.dart';
+import 'package:spotimmich/widgets/alignedPlayers.dart';
 import 'package:spotimmich/providers/album_art_provider.dart';
 import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
