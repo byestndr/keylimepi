@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spotimmich/settings/appearancepage.dart';
 import 'package:spotimmich/settings/immich/immichpage.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/settings/spotify/spotifypage.dart';
 import 'package:spotimmich/settings/weatherdialog.dart';
 

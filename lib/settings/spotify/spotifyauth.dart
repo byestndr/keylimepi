@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spotimmich/settings/preferences.dart';
 
 final preferences Preferences = preferences();
 
@@ -20,48 +20,6 @@ String AuthFlow() {
   final String spotifyURL =
       'https://accounts.spotify.com/authorize?client_id=$clientID&response_type=code&redirect_uri=http://127.0.0.1:8080&code_challenge_method=S256&code_challenge=$codeChallenge&scope=user-read-playback-state+user-modify-playback-state+user-read-currently-playing+playlist-read-private+user-library-read&state=$stateCode';
   return spotifyURL;
-}
-
-class preferences {
-  final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-
-  Future<void> setStringValue(String key, String value) async {
-    await prefs.remove(key);
-    await prefs.setString(key, value);
-  }
-
-  Future<String?> getStringValue(String key) async {
-    final String? value = await prefs.getString(key);
-    return value;
-  }
-
-  Future<void> setIntValue(String key, int value) async{
-    await prefs.remove(key);
-    await prefs.setInt(key, value);
-  }
-
-  Future<void> removeIntValue(String key) async{
-    await prefs.remove(key);
-  }
-
-  Future<int?> getIntValue(String key) async{
-    final int? value = await prefs.getInt(key);
-    return value;
-  }
-
-  Future<void> setBoolValue(String key, bool value) async {
-    await prefs.remove(key);
-    await prefs.setBool(key, value);
-  }
-
-  Future<bool?> getBoolValue(String key) async{
-    final bool? value = await prefs.getBool(key);
-    return value;
-  }
-
-  Future<void> ClearPreferences() async {
-    await prefs.clear();
-  }
 }
 
 String generateRandomString(int length) {

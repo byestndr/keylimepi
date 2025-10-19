@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/settings/preferences.dart';
 
 class Interactions {
   final String base = 'api.spotify.com';

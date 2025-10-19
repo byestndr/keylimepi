@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/settings/preferences.dart';
 
 class AppearancePage extends StatelessWidget {
   const AppearancePage({super.key});
