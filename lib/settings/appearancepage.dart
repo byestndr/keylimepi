@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/settings/preferences.dart';
 
 class AppearancePage extends StatelessWidget {
   const AppearancePage({super.key});
@@ -13,14 +14,14 @@ class AppearancePage extends StatelessWidget {
   }
 }
 
-class SettingsList extends StatefulWidget {
+class SettingsList extends ConsumerStatefulWidget {
   const SettingsList({super.key});
 
   @override
-  State<SettingsList> createState() => _SettingsListState();
+  ConsumerState<SettingsList> createState() => _SettingsListState();
 }
 
-class _SettingsListState extends State<SettingsList> {
+class _SettingsListState extends ConsumerState<SettingsList> {
   bool state = false;
   int? _currentAlignment = 1;
 
@@ -32,7 +33,7 @@ class _SettingsListState extends State<SettingsList> {
   }
 
   Future<void> getBackgroundToggle() async {
-    final bool? background_bool = await preferences().getBoolValue(
+    final bool? background_bool = await AsyncPreferences().getBoolValue(
       'immich_background',
     );
     if (background_bool == null) {
@@ -49,7 +50,7 @@ class _SettingsListState extends State<SettingsList> {
   }
 
   Future<void> getAlignment() async {
-    final int? alignment = await preferences().getIntValue('player_alignment');
+    final int? alignment = await AsyncPreferences().getIntValue('player_alignment');
 
     if (alignment == null) {
       setState(() {
@@ -77,8 +78,9 @@ class _SettingsListState extends State<SettingsList> {
           ),
           trailing: Switch(
             value: state,
-            onChanged: (bool value) {
-              preferences().setBoolValue('immich_background', value);
+            onChanged: (bool value) async {
+              AsyncPreferences().setBoolValue('immich_background', value);
+              await ref.read(sharedPrefsProvider).reloadCache();
               setState(() {
                 state = value;
               });
@@ -102,7 +104,7 @@ class _SettingsListState extends State<SettingsList> {
                       return RadioGroup<int>(
                         groupValue: _currentAlignment,
                         onChanged: (int? value) {
-                          preferences().setIntValue('player_alignment', value!);
+                          AsyncPreferences().setIntValue('player_alignment', value!);
                           setState(() {
                             _currentAlignment = value;
                           });

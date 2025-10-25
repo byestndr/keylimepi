@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/alignedPlayers.dart';
+import 'package:spotimmich/widgets/alignedPlayers.dart';
 import 'package:spotimmich/providers/album_art_provider.dart';
 import 'package:spotimmich/providers/background_getter.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/settings/preferences.dart';
 import 'dart:async';
 
 const int imageBreakpoint = 600;
@@ -26,9 +26,8 @@ class _MediaWidgetState extends State<MediaWidget> {
     getPosition();
   }
 
-
   Future<void> getPosition() async {
-    final int? positionType = await preferences().getIntValue(
+    final int? positionType = await AsyncPreferences().getIntValue(
       'player_alignment',
     );
 
@@ -36,10 +35,11 @@ class _MediaWidgetState extends State<MediaWidget> {
       setState(() {
         position = 0;
       });
+    } else {
+      setState(() {
+        position = positionType;
+      });
     }
-    setState(() {
-      position = positionType!;
-    });
 
     return;
   }
@@ -258,14 +258,14 @@ class AlbumArtBackground extends ConsumerWidget {
   }
 }
 
-class FullPlayerPage extends StatefulWidget {
+class FullPlayerPage extends ConsumerStatefulWidget {
   const FullPlayerPage({super.key});
 
   @override
-  State<FullPlayerPage> createState() => _FullPlayerPageState();
+  ConsumerState<FullPlayerPage> createState() => _FullPlayerPageState();
 }
 
-class _FullPlayerPageState extends State<FullPlayerPage> {
+class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
   bool isImmich = false;
 
   @override
@@ -275,7 +275,7 @@ class _FullPlayerPageState extends State<FullPlayerPage> {
   }
 
   Future<void> getBackgroundType() async {
-    final bool? backgroundState = await preferences().getBoolValue(
+    final bool? backgroundState = await AsyncPreferences().getBoolValue(
       'immich_background',
     );
 
@@ -283,10 +283,11 @@ class _FullPlayerPageState extends State<FullPlayerPage> {
       setState(() {
         isImmich = false;
       });
+    } else {
+      setState(() {
+        isImmich = backgroundState;
+      });
     }
-    setState(() {
-      isImmich = backgroundState!;
-    });
 
     return;
   }
