@@ -208,12 +208,42 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
   }
 }
 
-class AlbumArtBackground extends ConsumerWidget {
+class AlbumArtBackground extends ConsumerStatefulWidget {
   const AlbumArtBackground({super.key});
-  static const double backgroundBlur = 80;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _AlbumArtBackgroundState();
+}
+
+class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
+  double backgroundBlur = 80;
+
+  @override
+  void initState() {
+    super.initState();
+    getBlur();
+  }
+
+  Future<void> getBlur() async {
+    final double? blur = await AsyncPreferences().getDoubleValue(
+      'background_blur_radius',
+    );
+
+    if (blur == null) {
+      setState(() {
+        backgroundBlur = 80;
+      });
+    } else {
+      setState(() {
+        backgroundBlur = blur;
+      });
+    }
+    return;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final AsyncValue<String> backgroundImage = ref.watch(albumImageProvider);
     return Padding(
       padding: const EdgeInsets.all(6.0),
