@@ -24,12 +24,14 @@ class SettingsList extends ConsumerStatefulWidget {
 class _SettingsListState extends ConsumerState<SettingsList> {
   bool state = false;
   int? _currentAlignment = 1;
+  double sliderValue = 0;
 
   @override
   void initState() {
     super.initState();
     getBackgroundToggle();
     getAlignment();
+    getSliderPos();
   }
 
   Future<void> getBackgroundToggle() async {
@@ -50,16 +52,35 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   }
 
   Future<void> getAlignment() async {
-    final int? alignment = await AsyncPreferences().getIntValue('player_alignment');
+    final int? alignment = await AsyncPreferences().getIntValue(
+      'player_alignment',
+    );
 
     if (alignment == null) {
       setState(() {
-        print('null');
         _currentAlignment = 0;
       });
     } else {
       setState(() {
         _currentAlignment = alignment;
+      });
+    }
+
+    return;
+  }
+
+  Future<void> getSliderPos() async {
+    final double? position = await AsyncPreferences().getDoubleValue(
+      'background_blur_radius',
+    );
+
+    if (position == null) {
+      setState(() {
+        sliderValue = 0;
+      });
+    } else {
+      setState(() {
+        sliderValue = position;
       });
     }
 
@@ -88,6 +109,30 @@ class _SettingsListState extends ConsumerState<SettingsList> {
           ),
         ),
         ListTile(
+          title: const Text('Background blur'),
+          leading: const Icon(Icons.blur_on_rounded),
+          enabled: !state,
+          subtitle: SliderTheme(data: SliderThemeData(showValueIndicator: ShowValueIndicator.onDrag), child: Slider(
+            value: sliderValue,
+            max: 128,
+            onChanged: !state
+                ? (double value) {
+                    setState(() {
+                      sliderValue = value;
+                    });
+                  }
+                : null,
+            onChangeEnd: (double value) async {
+              await AsyncPreferences().setDoubleValue('background_blur_radius', value);
+            },
+            divisions: 8,
+            year2023: false,
+            padding: const EdgeInsets.all(0),
+            label: sliderValue.toString(),
+          ),) 
+          
+        ),
+        ListTile(
           title: const Text('Album info position'),
           leading: const Icon(Icons.image),
           subtitle: const Text(
@@ -104,7 +149,10 @@ class _SettingsListState extends ConsumerState<SettingsList> {
                       return RadioGroup<int>(
                         groupValue: _currentAlignment,
                         onChanged: (int? value) {
-                          AsyncPreferences().setIntValue('player_alignment', value!);
+                          AsyncPreferences().setIntValue(
+                            'player_alignment',
+                            value!,
+                          );
                           setState(() {
                             _currentAlignment = value;
                           });
