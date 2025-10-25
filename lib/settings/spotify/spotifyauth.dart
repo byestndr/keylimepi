@@ -4,7 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotimmich/settings/preferences.dart';
 
-final preferences Preferences = preferences();
+final AsyncPreferences Preferences = AsyncPreferences();
 
 String AuthFlow() {
   int length = Random().nextInt(85) + 43;

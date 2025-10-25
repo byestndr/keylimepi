@@ -6,7 +6,7 @@ import 'package:spotimmich/settings/preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ImmichPreferences {
-  final preferences prefs = preferences();
+  final AsyncPreferences prefs = AsyncPreferences();
   Future<int> SetAPIkey(String key) async {
     final String? serverURL = await GetURL();
 

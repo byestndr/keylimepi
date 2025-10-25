@@ -8,7 +8,7 @@ class Interactions {
   final String path = 'v1/me';
 
   Future<Map<String, String>> _getHeaders() async {
-    final String? token = await preferences().getStringValue('token');
+    final String? token = await AsyncPreferences().getStringValue('token');
     final Map<String, String> headers = <String, String>{'Authorization': 'Bearer $token'};
 
     return headers;
@@ -52,36 +52,36 @@ class Interactions {
     switch (functionImportance[functionName]) {
       case 0:
         final String response = await getPlaybackState();
-        await preferences().setStringValue('response', response);
+        await AsyncPreferences().setStringValue('response', response);
         return response;
       case 2:
-        String? response = await preferences().getStringValue('response');
+        String? response = await AsyncPreferences().getStringValue('response');
         if (response == null) {
           final String newResponse = await getPlaybackState();
-          await preferences().setStringValue('response', newResponse);
+          await AsyncPreferences().setStringValue('response', newResponse);
           return newResponse;
         } else {
           return response;
         }
       default:
-        int? counter = await preferences().getIntValue(
+        int? counter = await AsyncPreferences().getIntValue(
           'playback_state_counter',
         );
 
         if (counter == null || counter == maxBeforeNewRequest) {
           const int newCounter = 1;
-          await preferences().setIntValue('playback_state_counter', newCounter);
+          await AsyncPreferences().setIntValue('playback_state_counter', newCounter);
           final String response = await getPlaybackState();
           return response;
         }
 
         final int newCounter = counter++;
-        await preferences().setIntValue('playback_state_counter', newCounter);
+        await AsyncPreferences().setIntValue('playback_state_counter', newCounter);
 
-        String? response = await preferences().getStringValue('response');
+        String? response = await AsyncPreferences().getStringValue('response');
         if (response == null) {
           final http.Response newResponse = await _getRequest('');
-          await preferences().setStringValue('response', newResponse.body);
+          await AsyncPreferences().setStringValue('response', newResponse.body);
           return newResponse.body;
         } else {
           return response;
@@ -96,18 +96,18 @@ class Interactions {
 
   Future<String> getUserPlaylists() async {
     final http.Response response = await _getRequest('playlists');
-    await preferences().setStringValue('playlists', response.body);
+    await AsyncPreferences().setStringValue('playlists', response.body);
     return response.body;
   }
 
   Future<String> getSavedAlbums() async {
     final http.Response response = await _getRequest('albums');
-    await preferences().setStringValue('saved_albums', response.body);
+    await AsyncPreferences().setStringValue('saved_albums', response.body);
     return response.body;
   }
 
   Future<String> getCachedAlbums() async {
-    String? albums = await preferences().getStringValue('saved_albums');
+    String? albums = await AsyncPreferences().getStringValue('saved_albums');
     if (albums == null) {
       return await getSavedAlbums();
     }
@@ -116,12 +116,12 @@ class Interactions {
 
   Future<String> getLikedSongs() async {
     final http.Response response = await _getRequest('tracks');
-    await preferences().setStringValue('liked_songs', response.body);
+    await AsyncPreferences().setStringValue('liked_songs', response.body);
     return response.body;
   }
 
   Future<String> getCachedSongs() async {
-    String? songs = await preferences().getStringValue('liked_songs');
+    String? songs = await AsyncPreferences().getStringValue('liked_songs');
     if (songs == null) {
       return await getLikedSongs();
     }
@@ -129,7 +129,7 @@ class Interactions {
   }
 
   Future<String> getCachedPlaylists() async {
-    String? playlists = await preferences().getStringValue('playlists');
+    String? playlists = await AsyncPreferences().getStringValue('playlists');
     
     if (playlists == null) {
       return await getUserPlaylists();
