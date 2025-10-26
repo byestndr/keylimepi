@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/player_page.dart';
@@ -28,7 +26,7 @@ void main() async {
 
   runApp(
     ProviderScope(
-      overrides: [sharedPrefsProvider.overrideWithValue(cachedPrefs),],
+      overrides: [sharedPrefsProvider.overrideWithValue(cachedPrefs)],
       child: const App(),
     ),
   );

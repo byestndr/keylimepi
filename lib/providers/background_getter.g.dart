@@ -278,3 +278,55 @@ abstract class _$background3 extends $AsyncNotifier<Image> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(BarPosition)
+const barPositionProvider = BarPositionProvider._();
+
+final class BarPositionProvider extends $NotifierProvider<BarPosition, int> {
+  const BarPositionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'barPositionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$barPositionHash();
+
+  @$internal
+  @override
+  BarPosition create() => BarPosition();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$barPositionHash() => r'9c0116be108db48b1a4e663916637e9e69391cd1';
+
+abstract class _$BarPosition extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
