@@ -20,7 +20,7 @@ class SettingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.person),

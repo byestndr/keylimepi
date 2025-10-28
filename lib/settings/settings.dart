@@ -25,8 +25,8 @@ class SettingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
+    return ListView(
+      children: [
         ListTile(
           leading: const Icon(Icons.palette_rounded),
           title: const Text('Appearance'),

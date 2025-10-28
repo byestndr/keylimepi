@@ -330,3 +330,57 @@ abstract class _$BarPosition extends $Notifier<int> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(NavigationBarColor)
+const navigationBarColorProvider = NavigationBarColorProvider._();
+
+final class NavigationBarColorProvider
+    extends $NotifierProvider<NavigationBarColor, bool> {
+  const NavigationBarColorProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'navigationBarColorProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$navigationBarColorHash();
+
+  @$internal
+  @override
+  NavigationBarColor create() => NavigationBarColor();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$navigationBarColorHash() =>
+    r'f69b58675ca3e60b9e713b0331f42c28a175c68a';
+
+abstract class _$NavigationBarColor extends $Notifier<bool> {
+  bool build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<bool, bool>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

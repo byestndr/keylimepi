@@ -20,8 +20,8 @@ class SettingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: <Widget>[
+    return ListView(
+      children: const <Widget>[
         ImmichServer(),
         ImmichToken(),
         AlbumID(),

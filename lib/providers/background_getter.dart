@@ -57,3 +57,16 @@ class BarPosition extends _$BarPosition {
     return;
   }
 }
+
+@riverpod
+class NavigationBarColor extends _$NavigationBarColor {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void changeColor(bool colorState) {
+    state = colorState;
+    return;
+  }
+}

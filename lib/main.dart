@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/player_page.dart';
+import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/song_select.dart';
 import 'package:spotimmich/widgets/playbackbar.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
@@ -78,14 +79,14 @@ class App extends ConsumerWidget {
   }
 }
 
-class MusicPage extends StatefulWidget {
+class MusicPage extends ConsumerStatefulWidget {
   const MusicPage({super.key});
 
   @override
-  State<MusicPage> createState() => _MusicPageState();
+  ConsumerState<MusicPage> createState() => _MusicPageState();
 }
 
-class _MusicPageState extends State<MusicPage> {
+class _MusicPageState extends ConsumerState<MusicPage> {
   int currentPageIndex = 0;
   bool queueExpanded = false;
   static const int navigationRailBreakpoint = 600;
@@ -106,20 +107,41 @@ class _MusicPageState extends State<MusicPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getNaviBarColor();
+  }
+
+  Future<void> getNaviBarColor() async {
+    final bool? naviState = await AsyncPreferences().getBoolValue(
+      'transparent_navibar',
+    );
+
+    if (naviState == null) {
+      ref.read(navigationBarColorProvider.notifier).changeColor(false);
+    } else {
+      ref.read(navigationBarColorProvider.notifier).changeColor(naviState);
+    }
+
+    return;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final bool navibarState = ref.watch(navigationBarColorProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       bottomNavigationBar: BottomPlaybar(isQueueExpanded: queueExpandedButton),
       appBar: MediaQuery.of(context).size.width <= navigationRailBreakpoint
           ? PreferredSize(
-              preferredSize: const Size(double.infinity, kToolbarHeight),
+              preferredSize: Size(double.infinity, !navibarState ? kToolbarHeight : 100),
               child: NavigationBar(
                 onDestinationSelected: (int newPageIndex) {
                   setState(() {
                     currentPageIndex = newPageIndex;
                   });
                 },
-                backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                backgroundColor: !navibarState ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
                 destinations: <NavigationDestination>[
                   const NavigationDestination(
                     icon: Icon(Icons.music_note),
@@ -180,10 +202,7 @@ class _MusicPageState extends State<MusicPage> {
             const Padding(padding: EdgeInsetsGeometry.zero),
         ],
       ),
-      extendBodyBehindAppBar:
-          MediaQuery.of(context).size.width <= navigationRailBreakpoint
-          ? false
-          : true,
+      extendBodyBehindAppBar: navibarState,
     );
   }
 }

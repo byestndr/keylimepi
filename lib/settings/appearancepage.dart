@@ -23,14 +23,16 @@ class SettingsList extends ConsumerStatefulWidget {
 }
 
 class _SettingsListState extends ConsumerState<SettingsList> {
-  bool state = false;
+  bool backgroundState = false;
   int? _currentAlignment = 1;
   double sliderValue = 0;
+  bool navibarState = false;
 
   @override
   void initState() {
     super.initState();
     getBackgroundToggle();
+    getBarToggle();
     getAlignment();
     getSliderPos();
   }
@@ -41,11 +43,28 @@ class _SettingsListState extends ConsumerState<SettingsList> {
     );
     if (background_bool == null) {
       setState(() {
-        state = false;
+        backgroundState = false;
       });
     } else {
       setState(() {
-        state = background_bool;
+        backgroundState = background_bool;
+      });
+    }
+
+    return;
+  }
+
+  Future<void> getBarToggle() async {
+    final bool? naviState = await AsyncPreferences().getBoolValue(
+      'transparent_navibar',
+    );
+    if (naviState == null) {
+      setState(() {
+        navibarState = false;
+      });
+    } else {
+      setState(() {
+        navibarState = naviState;
       });
     }
 
@@ -90,7 +109,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: <Widget>[
         ListTile(
           title: const Text('Immich background image'),
@@ -99,12 +118,12 @@ class _SettingsListState extends ConsumerState<SettingsList> {
             'Turn on and off the Immich background. When off, the background will be replaced by the cover art.',
           ),
           trailing: Switch(
-            value: state,
+            value: backgroundState,
             onChanged: (bool value) async {
               AsyncPreferences().setBoolValue('immich_background', value);
               await ref.read(sharedPrefsProvider).reloadCache();
               setState(() {
-                state = value;
+                backgroundState = value;
               });
             },
           ),
@@ -112,7 +131,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
         ListTile(
           title: const Text('Background blur'),
           leading: const Icon(Icons.blur_on_rounded),
-          enabled: !state,
+          enabled: !backgroundState,
           subtitle: SliderTheme(
             data: const SliderThemeData(
               showValueIndicator: ShowValueIndicator.onDrag,
@@ -120,7 +139,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
             child: Slider(
               value: sliderValue,
               max: 128,
-              onChanged: !state
+              onChanged: !backgroundState
                   ? (double value) {
                       setState(() {
                         sliderValue = value;
@@ -138,6 +157,22 @@ class _SettingsListState extends ConsumerState<SettingsList> {
               padding: const EdgeInsets.all(0),
               label: sliderValue.toString(),
             ),
+          ),
+        ),
+        ListTile(
+          title: const Text('Transparent navigation bar'),
+          leading: const Icon(Icons.visibility_rounded),
+          subtitle: const Text(
+            'When on, the navigation bar turns transparent and overlays over the content.',
+          ),
+          trailing: Switch(
+            value: navibarState,
+            onChanged: (bool value) {
+              AsyncPreferences().setBoolValue('transparent_navibar', value);
+              setState(() {
+                navibarState = value;
+              });
+            },
           ),
         ),
         ListTile(
@@ -195,7 +230,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
             );
           },
         ),
-        const BarPositionTile()
+        const BarPositionTile(),
       ],
     );
   }
@@ -217,7 +252,6 @@ class _BarPositionTileState extends ConsumerState<BarPositionTile> {
     super.initState();
     getPlaybackBarState();
   }
-
 
   Future<void> getPlaybackBarState() async {
     final int? barState = await AsyncPreferences().getIntValue(
@@ -262,7 +296,9 @@ class _BarPositionTileState extends ConsumerState<BarPositionTile> {
                         _currentAppearance = value;
                       });
 
-                      ref.read(barPositionProvider.notifier).changeCurrentPosition(value);
+                      ref
+                          .read(barPositionProvider.notifier)
+                          .changeCurrentPosition(value);
                     },
                     child: const Column(
                       mainAxisSize: MainAxisSize.min,
