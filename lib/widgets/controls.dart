@@ -2,30 +2,28 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/providers/song_info_provider.dart';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 
-class PlaybackControls extends StatefulWidget {
-  final Function(bool) isExpanded;
-  const PlaybackControls({super.key, required this.isExpanded});
+class PlaybackControls extends ConsumerStatefulWidget {
+  const PlaybackControls({super.key});
 
   @override
-  State<PlaybackControls> createState() => _PlaybackControlsState();
+  ConsumerState<PlaybackControls> createState() => _PlaybackControlsState();
 }
 
-class _PlaybackControlsState extends State<PlaybackControls> {
+class _PlaybackControlsState extends ConsumerState<PlaybackControls> {
   IconData pauseStatus = Icons.pause;
   Timer? timer;
   IconData shuffleStatus = Icons.shuffle;
   IconData repeatStatus = Icons.repeat;
-  bool queueExpanded = false;
-  late Function(bool) isExpandedCallback;
   static const double iconButtonDensityHorizontal = 1;
   static const double iconButtonDensityVertical = 1;
 
   @override
   void initState() {
     super.initState();
-    isExpandedCallback = widget.isExpanded;
 
     timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       RefreshLoop();
@@ -182,8 +180,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
         ),
         IconButton.filled(
           onPressed: () {
-            queueExpanded = !queueExpanded;
-            isExpandedCallback(queueExpanded);
+            ref.read(isQueueExpandedProvider.notifier).changeState();
           },
           icon: const Icon(Icons.queue_music_rounded),
           iconSize: 30,

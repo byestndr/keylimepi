@@ -8,6 +8,8 @@ import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'dart:async';
 
+import 'package:spotimmich/widgets/controls.dart';
+
 const int imageBreakpoint = 600;
 
 class MediaWidget extends StatefulWidget {
@@ -282,6 +284,7 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
             ),
           ),
           const MediaWidget(),
+          const PlaybackControls()
         ],
       ),
     );

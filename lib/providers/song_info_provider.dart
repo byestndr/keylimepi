@@ -69,3 +69,15 @@ class InfoGetter extends _$InfoGetter {
     ref.invalidateSelf();
   }
 }
+
+@riverpod
+class isQueueExpanded extends _$isQueueExpanded {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void changeState() {
+    state = !state;
+  }
+}

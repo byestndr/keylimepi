@@ -197,7 +197,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
           Expanded(child: navigationPages[currentPageIndex]),
           if (currentPageIndex != 2)
-            QueueSideSheet(isExpanded: queueExpanded)
+            const QueueSideSheet()
           else
             const Padding(padding: EdgeInsetsGeometry.zero),
         ],

@@ -2,38 +2,30 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/providers/song_info_provider.dart';
 import 'dart:async';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 
-class QueueSideSheet extends StatefulWidget {
-  final bool isExpanded;
-  const QueueSideSheet({super.key, required this.isExpanded});
+class QueueSideSheet extends ConsumerStatefulWidget {
+  const QueueSideSheet({super.key});
 
   @override
-  State<QueueSideSheet> createState() => _QueueSideSheetState();
+  ConsumerState<QueueSideSheet> createState() => _QueueSideSheetState();
 }
 
-class _QueueSideSheetState extends State<QueueSideSheet> {
-  late bool isExpanded;
+class _QueueSideSheetState extends ConsumerState<QueueSideSheet> {
 
   @override
   void initState() {
-    isExpanded = widget.isExpanded;
     super.initState();
   }
 
   @override
-  void didUpdateWidget(covariant QueueSideSheet oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.isExpanded != oldWidget.isExpanded) {
-      isExpanded = widget.isExpanded;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final bool isExpanded = ref.watch(isQueueExpandedProvider);
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Easing.standard,

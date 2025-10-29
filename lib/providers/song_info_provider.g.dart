@@ -138,3 +138,56 @@ abstract class _$InfoGetter extends $AsyncNotifier<Song> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(isQueueExpanded)
+const isQueueExpandedProvider = IsQueueExpandedProvider._();
+
+final class IsQueueExpandedProvider
+    extends $NotifierProvider<isQueueExpanded, bool> {
+  const IsQueueExpandedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'isQueueExpandedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$isQueueExpandedHash();
+
+  @$internal
+  @override
+  isQueueExpanded create() => isQueueExpanded();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$isQueueExpandedHash() => r'6a9766efcb93f83cb56c4c594347a4dd32829d73';
+
+abstract class _$isQueueExpanded extends $Notifier<bool> {
+  bool build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<bool, bool>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

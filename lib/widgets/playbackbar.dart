@@ -44,7 +44,6 @@ class _BottomPlaybarState extends ConsumerState<BottomPlaybar> {
       0 => BottomAppBar(
         child: Row(
           children: <Widget>[
-            PlaybackControls(isExpanded: widget.isQueueExpanded),
             currentScreenSize > sliderWidthBreakpoint
                 ? const Expanded(child: ProgressSlider())
                 : const Padding(
