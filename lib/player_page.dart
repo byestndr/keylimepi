@@ -298,12 +298,43 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
               child: Container(color: Colors.transparent),
             ),
           ),
-          const MediaWidget(),
-          onPageWidget
-              ? const OnPageControls()
-              : const Padding(padding: EdgeInsetsGeometry.zero),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const MediaWidget(),
+              onPageWidget
+                  ? const SizedBox(width: 800, child: const ProgressSlider())
+                  : const Padding(padding: EdgeInsetsGeometry.zero),
+              onPageWidget
+                  ? const Padding(
+                      padding: EdgeInsetsDirectional.only(top: 8),
+                      child: OnPageControls(),
+                    )
+                  : const Padding(padding: EdgeInsetsGeometry.zero),
+            ],
+          ),
         ],
       ),
+    );
+  }
+}
+
+class OnPageControls extends StatelessWidget {
+  const OnPageControls({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 10,
+      children: [
+        ShuffleButton(),
+        PreviousButton(),
+        PauseButton(),
+        NextButton(),
+        RepeatButton(),
+      ],
     );
   }
 }
@@ -351,14 +382,5 @@ class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
         ),
       ],
     );
-  }
-}
-
-class OnPageControls extends StatelessWidget {
-  const OnPageControls({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(children: [ProgressSlider(), PlaybackControls()]);
   }
 }
