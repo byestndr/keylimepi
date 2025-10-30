@@ -9,6 +9,7 @@ import 'package:spotimmich/settings/preferences.dart';
 import 'dart:async';
 
 import 'package:spotimmich/widgets/controls.dart';
+import 'package:spotimmich/widgets/seekbar.dart';
 
 const int imageBreakpoint = 600;
 
@@ -220,11 +221,25 @@ class AlbumArtBackground extends ConsumerStatefulWidget {
 
 class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
   double backgroundBlur = 80;
+  bool onPageWidget = false;
 
   @override
   void initState() {
     super.initState();
     getBlur();
+    getOnPageControls();
+  }
+
+  Future<void> getOnPageControls() async {
+    final int? isOnPageWidget = await AsyncPreferences().getIntValue(
+      'playback_bar_position',
+    );
+
+    if (isOnPageWidget == 1) {
+      onPageWidget = true;
+    }
+
+    return;
   }
 
   Future<void> getBlur() async {
@@ -284,7 +299,9 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
             ),
           ),
           const MediaWidget(),
-          const PlaybackControls()
+          onPageWidget
+              ? const OnPageControls()
+              : const Padding(padding: EdgeInsetsGeometry.zero),
         ],
       ),
     );
@@ -334,5 +351,14 @@ class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
         ),
       ],
     );
+  }
+}
+
+class OnPageControls extends StatelessWidget {
+  const OnPageControls({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(children: [ProgressSlider(), PlaybackControls()]);
   }
 }

@@ -4,6 +4,7 @@ import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/widgets/controls.dart';
 import 'package:spotimmich/widgets/weatherwidget.dart';
+import 'package:spotimmich/widgets/seekbar.dart';
 
 class BottomPlaybar extends ConsumerStatefulWidget {
   final Function(bool) isQueueExpanded;
@@ -44,6 +45,7 @@ class _BottomPlaybarState extends ConsumerState<BottomPlaybar> {
       0 => BottomAppBar(
         child: Row(
           children: <Widget>[
+            const PlaybackControls(),
             currentScreenSize > sliderWidthBreakpoint
                 ? const Expanded(child: ProgressSlider())
                 : const Padding(

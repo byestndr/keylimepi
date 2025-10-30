@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,288 +7,241 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/providers/song_info_provider.dart';
 import 'package:spotimmich/settings/spotify/spotifyapi.dart';
 
-class PlaybackControls extends ConsumerStatefulWidget {
+const double iconButtonDensityHorizontal = 1;
+const double iconButtonDensityVertical = 1;
+
+enum RepeatStates {
+  off('off', Icons.repeat_rounded, 'context', Icons.repeat_on_rounded),
+  context(
+    'context',
+    Icons.repeat_on_rounded,
+    'track',
+    Icons.repeat_one_on_rounded,
+  ),
+  track('track', Icons.repeat_one_on_rounded, 'off', Icons.repeat);
+
+  final String current;
+  final String next;
+  final IconData nextIcon;
+  final IconData currentIcon;
+
+  const RepeatStates(this.current, this.currentIcon, this.next, this.nextIcon);
+
+  static IconData getIcon(String currentState) {
+    for (final RepeatStates state in values) {
+      if (state.current == currentState) {
+        return state.currentIcon;
+      }
+    }
+    return Icons.repeat;
+  }
+}
+
+class PlaybackControls extends StatelessWidget {
   const PlaybackControls({super.key});
 
   @override
-  ConsumerState<PlaybackControls> createState() => _PlaybackControlsState();
-}
-
-class _PlaybackControlsState extends ConsumerState<PlaybackControls> {
-  IconData pauseStatus = Icons.pause;
-  Timer? timer;
-  IconData shuffleStatus = Icons.shuffle;
-  IconData repeatStatus = Icons.repeat;
-  static const double iconButtonDensityHorizontal = 1;
-  static const double iconButtonDensityVertical = 1;
-
-  @override
-  void initState() {
-    super.initState();
-
-    timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      RefreshLoop();
-    });
-  }
-
-  void RefreshLoop() {
-    setState(() {
-      Interactions().cachedPlaybackStateResponse(functionName: 'Controls').then(
-        (String value) {
-          try {
-            final dynamic body = jsonDecode(value);
-            final bool paused = body['is_playing'];
-            final bool shuffled = body['shuffle_state'];
-            final String repeatstate = body['repeat_state'];
-            paused == false
-                ? pauseStatus = Icons.play_arrow
-                : pauseStatus = Icons.pause;
-            shuffled == false
-                ? shuffleStatus = Icons.shuffle
-                : shuffleStatus = Icons.shuffle_on_rounded;
-            if (repeatstate == 'context') {
-              repeatStatus = Icons.repeat_on_rounded;
-            } else if (repeatstate == 'track') {
-              repeatStatus = Icons.repeat_one_on_rounded;
-            } else {
-              repeatStatus = Icons.repeat;
-            }
-          } on FormatException {
-            pauseStatus = Icons.play_arrow;
-            shuffleStatus = Icons.shuffle;
-            repeatStatus = Icons.repeat;
-          } on TypeError {
-            pauseStatus = Icons.play_arrow;
-            shuffleStatus = Icons.shuffle;
-            repeatStatus = Icons.repeat;
-          }
-        },
-      );
-    });
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        FloatingActionButton.large(
-          onPressed: () {
-            Interactions().pauseToggle().then((bool value) {
-              setState(() {
-                if (value == true) {
-                  pauseStatus = Icons.pause;
-                } else {
-                  pauseStatus = Icons.play_arrow;
-                }
-              });
-            });
-          },
-          child: Icon(pauseStatus),
-        ),
-        // Previous button
-        IconButton.filled(
-          onPressed: () {
-            Interactions().skipPrevious();
-          },
-          icon: const Icon(Icons.skip_previous),
-          iconSize: 30,
-          visualDensity: const VisualDensity(
-            horizontal: iconButtonDensityHorizontal,
-            vertical: iconButtonDensityVertical,
-          ),
-          style: IconButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(16),
-            ),
-          ),
-        ),
-        // Next button
-        IconButton.filled(
-          onPressed: () {
-            Interactions().skipNext();
-          },
-          icon: const Icon(Icons.skip_next),
-          iconSize: 30,
-          visualDensity: const VisualDensity(
-            horizontal: iconButtonDensityHorizontal,
-            vertical: iconButtonDensityVertical,
-          ),
-          style: IconButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(16),
-            ),
-          ),
-        ),
-        // Repeat button
-        IconButton.filled(
-          onPressed: () {
-            Interactions().repeatState().then((String value) {
-              setState(() {
-                if (value == 'context') {
-                  repeatStatus = Icons.repeat_on_rounded;
-                } else if (value == 'track') {
-                  repeatStatus = Icons.repeat_one_on_rounded;
-                } else {
-                  repeatStatus = Icons.repeat;
-                }
-              });
-            });
-          },
-          icon: Icon(repeatStatus),
-          iconSize: 30,
-          visualDensity: const VisualDensity(
-            horizontal: iconButtonDensityHorizontal,
-            vertical: iconButtonDensityVertical,
-          ),
-          style: IconButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(16),
-            ),
-          ),
-        ),
-        // Shuffle button
-        IconButton.filled(
-          onPressed: () {
-            Interactions().shuffleToggle().then((bool value) {
-              setState(() {
-                if (value == false) {
-                  shuffleStatus = Icons.shuffle;
-                } else {
-                  shuffleStatus = Icons.shuffle_on_rounded;
-                }
-              });
-            });
-          },
-          icon: Icon(shuffleStatus),
-          iconSize: 30,
-          visualDensity: const VisualDensity(
-            horizontal: iconButtonDensityHorizontal,
-            vertical: iconButtonDensityVertical,
-          ),
-          style: IconButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(16),
-            ),
-          ),
-        ),
-        IconButton.filled(
-          onPressed: () {
-            ref.read(isQueueExpandedProvider.notifier).changeState();
-          },
-          icon: const Icon(Icons.queue_music_rounded),
-          iconSize: 30,
-          visualDensity: const VisualDensity(horizontal: 1, vertical: 1),
-          style: IconButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(16),
-            ),
-          ),
-        ),
+        PauseButton(),
+        PreviousButton(),
+        NextButton(),
+        RepeatButton(),
+        ShuffleButton(),
+        QueueButton(),
       ],
     );
   }
 }
 
-class ProgressSlider extends StatefulWidget {
-  const ProgressSlider({super.key});
+class RepeatButton extends ConsumerWidget {
+  const RepeatButton({super.key});
 
   @override
-  State<ProgressSlider> createState() => _ProgressSliderState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<dynamic> playbackStateResponse = ref.watch(
+      getPlaybackStateProvider,
+    );
+
+    return IconButton.filled(
+      onPressed: () {
+        Interactions().repeatState();
+      },
+      icon: Icon(
+        playbackStateResponse.when(
+          skipLoadingOnRefresh: true,
+          skipLoadingOnReload: true,
+          data: (data) {
+            final IconData currentIcon = RepeatStates.getIcon(
+              data['repeat_state'],
+            );
+            return currentIcon;
+          },
+          error: (error, stack) {
+            return Icons.play_arrow;
+          },
+          loading: () {
+            return Icons.play_arrow;
+          },
+        ),
+      ),
+      iconSize: 30,
+      visualDensity: const VisualDensity(
+        horizontal: iconButtonDensityHorizontal,
+        vertical: iconButtonDensityVertical,
+      ),
+      style: IconButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(16),
+        ),
+      ),
+    );
+  }
 }
 
-class _ProgressSliderState extends State<ProgressSlider> {
-  double sliderPos = 0;
-  double maxPos = 3600000;
-  Timer? timer;
-  int refreshCount = 20;
-
-  @override
-  void initState() {
-    super.initState();
-
-    timer = Timer.periodic(const Duration(milliseconds: 200), (
-      Timer timer,
-    ) async {
-      await RefreshLoop();
-    });
-  }
-
-  Future<void> RefreshLoop() async {
-    if (refreshCount < 30) {
-      refreshCount++;
-      setState(() {
-        if (sliderPos + 200 <= maxPos) {
-          sliderPos = sliderPos + 200;
-        }
-      });
-      return;
-    }
-
-    try {
-      final dynamic body = jsonDecode(
-        await Interactions().cachedPlaybackStateResponse(
-          functionName: 'ProgressSlider',
-        ),
-      );
-
-      if (body['is_playing'] == false) {
-        return;
-      }
-
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        try {
-          int pos = body['item']['duration_ms'];
-          maxPos = pos.toDouble();
-          int currentpos = body['progress_ms'];
-          sliderPos = currentpos.toDouble();
-          refreshCount = 0;
-        } on NoSuchMethodError {
-          maxPos = 1;
-          sliderPos = 0;
-        }
-      });
-    } on FormatException {
-      maxPos = 1;
-      sliderPos = 0;
-      return;
-    }
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
+class NextButton extends StatelessWidget {
+  const NextButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SliderTheme(
-      data: const SliderThemeData(year2023: false),
-      child: Slider(
-        value: sliderPos,
-        min: 0,
-        max: maxPos,
-        onChanged: (double value) {
-          setState(() {
-            sliderPos = value;
-          });
-        },
-        onChangeEnd: (double value) {
-          int currentPosition = value.toInt();
-          Interactions().seekSong(currentPosition);
-        },
+    return IconButton.filled(
+      onPressed: () {
+        Interactions().skipNext();
+      },
+      icon: const Icon(Icons.skip_next),
+      iconSize: 30,
+      visualDensity: const VisualDensity(
+        horizontal: iconButtonDensityHorizontal,
+        vertical: iconButtonDensityVertical,
+      ),
+      style: IconButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(16),
+        ),
+      ),
+    );
+  }
+}
+
+class PreviousButton extends StatelessWidget {
+  const PreviousButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton.filled(
+      onPressed: () {
+        Interactions().skipPrevious();
+      },
+      icon: const Icon(Icons.skip_previous),
+      iconSize: 30,
+      visualDensity: const VisualDensity(
+        horizontal: iconButtonDensityHorizontal,
+        vertical: iconButtonDensityVertical,
+      ),
+      style: IconButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(16),
+        ),
+      ),
+    );
+  }
+}
+
+class QueueButton extends ConsumerWidget {
+  const QueueButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconButton.filled(
+      onPressed: () {
+        ref.read(isQueueExpandedProvider.notifier).changeState();
+      },
+      icon: const Icon(Icons.queue_music_rounded),
+      iconSize: 30,
+      visualDensity: const VisualDensity(horizontal: 1, vertical: 1),
+      style: IconButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(16),
+        ),
+      ),
+    );
+  }
+}
+
+class ShuffleButton extends ConsumerWidget {
+  const ShuffleButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<dynamic> playbackStateResponse = ref.watch(
+      getPlaybackStateProvider,
+    );
+
+    return IconButton.filled(
+      onPressed: () {
+        Interactions().shuffleToggle();
+      },
+      icon: Icon(
+        playbackStateResponse.when(
+          skipLoadingOnRefresh: true,
+          skipLoadingOnReload: true,
+          data: (data) {
+            return data['shuffle_state'] == false
+                ? Icons.shuffle
+                : Icons.shuffle_on_rounded;
+          },
+          error: (error, stack) {
+            return Icons.shuffle;
+          },
+          loading: () {
+            return Icons.shuffle;
+          },
+        ),
+      ),
+      iconSize: 30,
+      visualDensity: const VisualDensity(
+        horizontal: iconButtonDensityHorizontal,
+        vertical: iconButtonDensityVertical,
+      ),
+      style: IconButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(16),
+        ),
+      ),
+    );
+  }
+}
+
+class PauseButton extends ConsumerWidget {
+  const PauseButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<dynamic> playbackStateResponse = ref.watch(
+      getPlaybackStateProvider,
+    );
+
+    return FloatingActionButton.large(
+      onPressed: () {
+        Interactions().pauseToggle();
+      },
+      child: Icon(
+        playbackStateResponse.when(
+          skipLoadingOnRefresh: true,
+          skipLoadingOnReload: true,
+          data: (data) {
+            return data['is_playing'] == false ? Icons.play_arrow : Icons.pause;
+          },
+          error: (error, stack) {
+            return Icons.play_arrow;
+          },
+          loading: () {
+            return Icons.play_arrow;
+          },
+        ),
       ),
     );
   }

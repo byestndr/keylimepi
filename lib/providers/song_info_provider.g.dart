@@ -191,3 +191,48 @@ abstract class _$isQueueExpanded extends $Notifier<bool> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(GetPlaybackState)
+const getPlaybackStateProvider = GetPlaybackStateProvider._();
+
+final class GetPlaybackStateProvider
+    extends $AsyncNotifierProvider<GetPlaybackState, dynamic> {
+  const GetPlaybackStateProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getPlaybackStateProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getPlaybackStateHash();
+
+  @$internal
+  @override
+  GetPlaybackState create() => GetPlaybackState();
+}
+
+String _$getPlaybackStateHash() => r'495f7a0982194255f75803d35778ae5346e0601b';
+
+abstract class _$GetPlaybackState extends $AsyncNotifier<dynamic> {
+  FutureOr<dynamic> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<dynamic>, dynamic>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<dynamic>, dynamic>,
+              AsyncValue<dynamic>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
