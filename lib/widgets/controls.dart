@@ -75,16 +75,22 @@ class RepeatButton extends ConsumerWidget {
           skipLoadingOnRefresh: true,
           skipLoadingOnReload: true,
           data: (data) {
+            final String? iconState = data['repeat_state'];
+
+            if (iconState == null) {
+              return Icons.repeat;
+            }
+
             final IconData currentIcon = RepeatStates.getIcon(
-              data['repeat_state'],
+              iconState
             );
             return currentIcon;
           },
           error: (error, stack) {
-            return Icons.play_arrow;
+            return Icons.repeat;
           },
           loading: () {
-            return Icons.play_arrow;
+            return Icons.repeat;
           },
         ),
       ),
@@ -224,7 +230,7 @@ class PauseButton extends ConsumerWidget {
       getPlaybackStateProvider,
     );
 
-    return FloatingActionButton.large(
+    return FloatingActionButton(
       onPressed: () {
         Interactions().pauseToggle();
       },

@@ -308,7 +308,7 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
                   : const Padding(padding: EdgeInsetsGeometry.zero),
               onPageWidget
                   ? const Padding(
-                      padding: EdgeInsetsDirectional.only(top: 8),
+                      padding: EdgeInsetsDirectional.only(top: 2),
                       child: OnPageControls(),
                     )
                   : const Padding(padding: EdgeInsetsGeometry.zero),
