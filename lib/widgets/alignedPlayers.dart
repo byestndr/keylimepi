@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:spotimmich/widgets/songimage.dart';
 import 'package:spotimmich/widgets/songinfo.dart';
 
-const int _imageBreakpoint = 600;
-const double _imageRadius = 28;
+const int _imageBreakpoint = 0;
+const double _imageRadius = 15;
 
 class CenteredInfo extends StatelessWidget {
   const CenteredInfo({super.key});
@@ -86,7 +86,7 @@ class BottomLeftInfo extends StatelessWidget {
 
                   child: ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(_imageRadius),
-                    child: const SongImage(imageMultiplier: 200),
+                    child: const SongImage(imageMultiplier: 125),
                   ),
                 ),
               )

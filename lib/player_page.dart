@@ -222,12 +222,32 @@ class AlbumArtBackground extends ConsumerStatefulWidget {
 class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
   double backgroundBlur = 80;
   bool onPageWidget = false;
+  int position = 0;
 
   @override
   void initState() {
     super.initState();
     getBlur();
     getOnPageControls();
+    getPosition();
+  }
+
+  Future<void> getPosition() async {
+    final int? positionType = await AsyncPreferences().getIntValue(
+      'player_alignment',
+    );
+
+    if (positionType == null) {
+      setState(() {
+        position = 0;
+      });
+    } else {
+      setState(() {
+        position = positionType;
+      });
+    }
+
+    return;
   }
 
   Future<void> getOnPageControls() async {
@@ -266,7 +286,7 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
       padding: const EdgeInsets.all(6.0),
       child: Stack(
         fit: StackFit.passthrough,
-        children: [
+        children: <Widget>[
           AnimatedContainer(
             duration: const Duration(milliseconds: 400),
             curve: Easing.standard,
@@ -299,42 +319,40 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
             ),
           ),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            crossAxisAlignment: position == 0
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
+            mainAxisAlignment: position == 0
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.center,
+            children: <Widget>[
               const MediaWidget(),
               onPageWidget
-                  ? const SizedBox(width: 800, child: const ProgressSlider())
+                  ? const SizedBox(width: 800, child: ProgressSlider())
                   : const Padding(padding: EdgeInsetsGeometry.zero),
               onPageWidget
-                  ? const Padding(
-                      padding: EdgeInsetsDirectional.only(top: 2),
-                      child: OnPageControls(),
+                  ? Padding(
+                      padding: EdgeInsetsDirectional.only(top: 10, start: position == 0 ? 22 : 0, bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: position == 0
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
+                        spacing: 10,
+                        children: const <Widget>[
+                          ShuffleButton(),
+                          PreviousButton(),
+                          PauseButton(),
+                          NextButton(),
+                          RepeatButton(),
+                          QueueButton()
+                        ],
+                      ),
                     )
                   : const Padding(padding: EdgeInsetsGeometry.zero),
             ],
           ),
         ],
       ),
-    );
-  }
-}
-
-class OnPageControls extends StatelessWidget {
-  const OnPageControls({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      spacing: 10,
-      children: [
-        ShuffleButton(),
-        PreviousButton(),
-        PauseButton(),
-        NextButton(),
-        RepeatButton(),
-      ],
     );
   }
 }
