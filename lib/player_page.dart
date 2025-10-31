@@ -8,6 +8,9 @@ import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'dart:async';
 
+import 'package:spotimmich/widgets/controls.dart';
+import 'package:spotimmich/widgets/seekbar.dart';
+
 const int imageBreakpoint = 600;
 
 class MediaWidget extends StatefulWidget {
@@ -208,18 +211,82 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
   }
 }
 
-class AlbumArtBackground extends ConsumerWidget {
+class AlbumArtBackground extends ConsumerStatefulWidget {
   const AlbumArtBackground({super.key});
-  static const double backgroundBlur = 80;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _AlbumArtBackgroundState();
+}
+
+class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
+  double backgroundBlur = 80;
+  bool onPageWidget = false;
+  int position = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getBlur();
+    getOnPageControls();
+    getPosition();
+  }
+
+  Future<void> getPosition() async {
+    final int? positionType = await AsyncPreferences().getIntValue(
+      'player_alignment',
+    );
+
+    if (positionType == null) {
+      setState(() {
+        position = 0;
+      });
+    } else {
+      setState(() {
+        position = positionType;
+      });
+    }
+
+    return;
+  }
+
+  Future<void> getOnPageControls() async {
+    final int? isOnPageWidget = await AsyncPreferences().getIntValue(
+      'playback_bar_position',
+    );
+
+    if (isOnPageWidget == 1) {
+      onPageWidget = true;
+    }
+
+    return;
+  }
+
+  Future<void> getBlur() async {
+    final double? blur = await AsyncPreferences().getDoubleValue(
+      'background_blur_radius',
+    );
+
+    if (blur == null) {
+      setState(() {
+        backgroundBlur = 80;
+      });
+    } else {
+      setState(() {
+        backgroundBlur = blur;
+      });
+    }
+    return;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final AsyncValue<String> backgroundImage = ref.watch(albumImageProvider);
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: Stack(
         fit: StackFit.passthrough,
-        children: [
+        children: <Widget>[
           AnimatedContainer(
             duration: const Duration(milliseconds: 400),
             curve: Easing.standard,
@@ -251,7 +318,39 @@ class AlbumArtBackground extends ConsumerWidget {
               child: Container(color: Colors.transparent),
             ),
           ),
-          const MediaWidget(),
+          Column(
+            crossAxisAlignment: position == 0
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
+            mainAxisAlignment: position == 0
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.center,
+            children: <Widget>[
+              const MediaWidget(),
+              onPageWidget
+                  ? const SizedBox(width: 800, child: ProgressSlider())
+                  : const Padding(padding: EdgeInsetsGeometry.zero),
+              onPageWidget
+                  ? Padding(
+                      padding: EdgeInsetsDirectional.only(top: 10, start: position == 0 ? 22 : 0, bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: position == 0
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
+                        spacing: 10,
+                        children: const <Widget>[
+                          ShuffleButton(),
+                          PreviousButton(),
+                          PauseButton(),
+                          NextButton(),
+                          RepeatButton(),
+                          QueueButton()
+                        ],
+                      ),
+                    )
+                  : const Padding(padding: EdgeInsetsGeometry.zero),
+            ],
+          ),
         ],
       ),
     );

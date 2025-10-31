@@ -50,9 +50,9 @@ class InfoGetter extends _$InfoGetter {
     currentSong.uri = body['item']['uri'];
 
     final Song? oldSong = state.value;
-    
+
     if (oldSong != null) {
-      isNewSong(currentSong.uri);  
+      isNewSong(currentSong.uri);
     }
 
     return currentSong;
@@ -62,10 +62,35 @@ class InfoGetter extends _$InfoGetter {
     if (state.value!.uri != newURI) {
       ref.read(albumImageProvider.notifier).refreshImage();
       ref.read(appColorSchemeProvider.notifier).refreshColorscheme();
-    } 
+    }
   }
 
   void getNewSong() async {
     ref.invalidateSelf();
+  }
+}
+
+@riverpod
+class isQueueExpanded extends _$isQueueExpanded {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void changeState() {
+    state = !state;
+  }
+}
+
+@riverpod
+class GetPlaybackState extends _$GetPlaybackState {
+  @override
+  Future<dynamic> build() async {
+    ref.watch(refreshTimerProvider);
+    final String currentPlaybackState = await Interactions()
+        .cachedPlaybackStateResponse(functionName: 'Controls');
+
+    final dynamic playbackJson = jsonDecode(currentPlaybackState);
+    return playbackJson;
   }
 }

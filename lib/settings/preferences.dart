@@ -33,6 +33,16 @@ class AsyncPreferences {
     await asyncPrefs.setBool(key, value);
   }
 
+  Future<double?> getDoubleValue(String key) async {
+    final double? value = await asyncPrefs.getDouble(key);
+    return value;
+  }
+
+  Future<void> setDoubleValue(String key, double value) async {
+    await asyncPrefs.remove(key);
+    await asyncPrefs.setDouble(key, value);
+  }
+
   Future<bool?> getBoolValue(String key) async {
     final bool? value = await asyncPrefs.getBool(key);
     return value;
