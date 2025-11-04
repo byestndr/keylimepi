@@ -23,7 +23,6 @@ class _AccessTokenState extends State<AccessToken> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.key),
-      trailing: const Icon(Icons.open_in_new),
       subtitle: const Text('Enter the redirect URL to successfully login.'),
       title: const Text('Spotify access token'),
       onTap: () {
