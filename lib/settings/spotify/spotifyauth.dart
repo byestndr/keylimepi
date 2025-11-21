@@ -34,26 +34,23 @@ String generateRandomString(int length) {
   );
 }
 
-Future<dynamic> parseURL(String url) async {
+Future<int?> GetAccessToken(String url) async {
+  final Uri parsedURI = Uri.parse(url);
+  final Map<String, String> queryParameters = parsedURI.queryParameters;
+
+  // Get stored state code from storage
   String? stateCode = await Preferences.getStringValue('state');
   if (stateCode == null) {
     return 404;
   }
 
-  final String splicedURL = url.replaceAll('http://127.0.0.1:8080/?code=', '');
-
-  if (splicedURL.contains('&state=$stateCode') == false) {
+  if (!queryParameters.containsKey('state') || queryParameters['state'] != stateCode) {
     return 400;
   }
+  
+  final String? authcode = queryParameters['code'];
 
-  final String finalURL = splicedURL.replaceAll('&state=$stateCode', '');
-  return finalURL;
-}
-
-Future<int?> GetAccessToken(String url) async {
-  final dynamic authcode = await parseURL(url);
-
-  if (authcode.runtimeType == int) {
+  if (authcode == null) {
     return 400;
   }
 

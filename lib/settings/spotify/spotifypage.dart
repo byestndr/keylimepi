@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/spotify/spotifytokendialog.dart';
 import 'dart:io';
@@ -42,6 +44,7 @@ class SettingsList extends StatelessWidget {
           leading: const Icon(Icons.qr_code_rounded),
           subtitle: const Text('Use another device to log into Spotify'),
           onTap: () {
+            startServer();
             showQrCodeDialog(context);
           },
         ),
@@ -56,6 +59,24 @@ void launchURL() async {
   if (!await launchUrl(parsedUrl)) {
     throw 'Unable to open authorization page';
   }
+}
+
+Response handler(Request request) {
+  final Uri returnedURL = request.requestedUri;
+
+
+  if (request.requestedUri.queryParameters.containsKey('code') && request.requestedUri.queryParameters.containsKey('code')) {
+      return Response.badRequest(body: 'Error parsing the URL, try again.');
+  }
+
+  return Response.ok('You are now authorized! You may now close this page.');
+
+
+} 
+
+Future<void> startServer() async{
+  print('Starting server');
+  await shelf_io.serve(handler, InternetAddress.anyIPv4, 8080);
 }
 
 void showQrCodeDialog(BuildContext context) {
