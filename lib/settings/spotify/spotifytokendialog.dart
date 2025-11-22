@@ -47,7 +47,7 @@ class _AccessTokenState extends State<AccessToken> {
                         ),
                         TextButton(
                           onPressed: () {
-                            GetAccessToken(URLtextField.text).then((int? value) {
+                            GetAccessToken(URLtextField.text).then((int value) {
                               if (value == 200) {
                                 Navigator.of(context).pop();
                               } else {

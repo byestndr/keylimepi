@@ -34,7 +34,7 @@ String generateRandomString(int length) {
   );
 }
 
-Future<int?> GetAccessToken(String url) async {
+Future<int> GetAccessToken(String url) async {
   final Uri parsedURI = Uri.parse(url);
   final Map<String, String> queryParameters = parsedURI.queryParameters;
 

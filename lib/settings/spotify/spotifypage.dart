@@ -20,6 +20,8 @@ class SpotifyPage extends StatelessWidget {
   }
 }
 
+Server server = Server();
+
 class SettingsList extends StatelessWidget {
   const SettingsList({super.key});
 
@@ -43,8 +45,8 @@ class SettingsList extends StatelessWidget {
           title: const Text('Login via QR code'),
           leading: const Icon(Icons.qr_code_rounded),
           subtitle: const Text('Use another device to log into Spotify'),
-          onTap: () {
-            startServer();
+          onTap: () async {
+            await server.startServer(context);
             showQrCodeDialog(context);
           },
         ),
@@ -61,26 +63,50 @@ void launchURL() async {
   }
 }
 
-Response handler(Request request) {
-  final Uri returnedURL = request.requestedUri;
+class Server {
+  HttpServer? server;
+  late BuildContext newcontext;
 
+  Future<Response> handler(Request request) async {
+    final Uri returnedURL = request.requestedUri;
 
-  if (request.requestedUri.queryParameters.containsKey('code') && request.requestedUri.queryParameters.containsKey('code')) {
+    final int authorizationStatus = await GetAccessToken(
+      returnedURL.toString(),
+    );
+
+    if (authorizationStatus >= 300) {
+      return Response.badRequest(
+        body: 'Error logging into Spotify, try again.',
+      );
+    }
+
+    if (!request.requestedUri.queryParameters.containsKey('code') &&
+        !request.requestedUri.queryParameters.containsKey('code')) {
       return Response.badRequest(body: 'Error parsing the URL, try again.');
+    }
+
+    Future.delayed(Duration(seconds: 1), () {
+      server!.close(force: true);
+      Navigator.of(newcontext).pop();
+    });
+    return Response.ok('Authorized! You may now close this page.');
   }
 
-  return Response.ok('You are now authorized! You may now close this page.');
+  void stopServer() {
+    server!.close(force: true);
+    return;
+  }
 
-
-} 
-
-Future<void> startServer() async{
-  print('Starting server');
-  await shelf_io.serve(handler, InternetAddress.anyIPv4, 8080);
+  Future<void> startServer(BuildContext context) async {
+    server = await shelf_io.serve(handler, InternetAddress.anyIPv4, 8080);
+    
+    newcontext = context;
+    return;
+  }
 }
 
-void showQrCodeDialog(BuildContext context) {
-  showDialog(
+Future<void> showQrCodeDialog(BuildContext context) async {
+  final result = showDialog(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
@@ -111,7 +137,7 @@ void showQrCodeDialog(BuildContext context) {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.of(context).pop(true);
                           showQrCodeDirections(context);
                         },
                         child: const Text('Next'),
@@ -124,11 +150,16 @@ void showQrCodeDialog(BuildContext context) {
       );
     },
   );
+  final bool? isNext = await result;
+
+  if (isNext == null) {
+    server.stopServer();
+  }
 }
 
 void showQrCodeDirections(BuildContext context) async {
   final String? localIP = await NetworkInfo().getWifiIP();
-  showDialog(
+  final result = showDialog(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
@@ -138,7 +169,7 @@ void showQrCodeDirections(BuildContext context) async {
               fit: BoxFit.scaleDown,
               child: AlertDialog(
                 title: const Text('Login via QR code'),
-                content:  Column(
+                content: Column(
                   children: [
                     const ListTile(
                       leading: Text(
@@ -163,7 +194,9 @@ void showQrCodeDirections(BuildContext context) async {
                       title: Text(
                         'Change the redirect url from 127.0.0.1 to $localIP',
                       ),
-                      subtitle: Text('For example, change http://127.0.0.1:8080/... to http://$localIP:8080/...'),
+                      subtitle: Text(
+                        'For example, change http://127.0.0.1:8080/... to http://$localIP:8080/...',
+                      ),
                     ),
                     const ListTile(
                       leading: Text(
@@ -195,4 +228,7 @@ void showQrCodeDirections(BuildContext context) async {
       );
     },
   );
+
+  await result;
+  server.stopServer();
 }
