@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shelf/shelf.dart';
-import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:spotimmich/settings/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/spotify/spotifytokendialog.dart';
-import 'dart:io';
+import 'package:spotimmich/settings/spotify/spotifyauthserver.dart';
 
 class SpotifyPage extends StatelessWidget {
   const SpotifyPage({super.key});
@@ -63,47 +61,7 @@ void launchURL() async {
   }
 }
 
-class Server {
-  HttpServer? server;
-  late BuildContext newcontext;
 
-  Future<Response> handler(Request request) async {
-    final Uri returnedURL = request.requestedUri;
-
-    final int authorizationStatus = await GetAccessToken(
-      returnedURL.toString(),
-    );
-
-    if (authorizationStatus >= 300) {
-      return Response.badRequest(
-        body: 'Error logging into Spotify, try again.',
-      );
-    }
-
-    if (!request.requestedUri.queryParameters.containsKey('code') &&
-        !request.requestedUri.queryParameters.containsKey('code')) {
-      return Response.badRequest(body: 'Error parsing the URL, try again.');
-    }
-
-    Future.delayed(Duration(seconds: 1), () {
-      server!.close(force: true);
-      Navigator.of(newcontext).pop();
-    });
-    return Response.ok('Authorized! You may now close this page.');
-  }
-
-  void stopServer() {
-    server!.close(force: true);
-    return;
-  }
-
-  Future<void> startServer(BuildContext context) async {
-    server = await shelf_io.serve(handler, InternetAddress.anyIPv4, 8080);
-    
-    newcontext = context;
-    return;
-  }
-}
 
 Future<void> showQrCodeDialog(BuildContext context) async {
   final result = showDialog(
