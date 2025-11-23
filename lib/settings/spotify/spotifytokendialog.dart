@@ -23,7 +23,6 @@ class _AccessTokenState extends State<AccessToken> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.key),
-      trailing: const Icon(Icons.open_in_new),
       subtitle: const Text('Enter the redirect URL to successfully login.'),
       title: const Text('Spotify access token'),
       onTap: () {
@@ -48,7 +47,7 @@ class _AccessTokenState extends State<AccessToken> {
                         ),
                         TextButton(
                           onPressed: () {
-                            GetAccessToken(URLtextField.text).then((int? value) {
+                            GetAccessToken(URLtextField.text).then((int value) {
                               if (value == 200) {
                                 Navigator.of(context).pop();
                               } else {
