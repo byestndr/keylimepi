@@ -35,3 +35,7 @@ flutter:
   uses-material-design: true
   assets:
      - assets/imagePlaceholder.png
+  fonts:
+    - family: RobotoFlexVariable
+      fonts:
+        - asset: assets/RobotoFlex-VariableFont.ttf
