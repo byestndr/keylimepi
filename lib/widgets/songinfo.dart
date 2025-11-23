@@ -48,7 +48,7 @@ class SongTitleInfo extends ConsumerWidget {
             ],
             fontSize: 64.0,
             fontWeight: FontWeight.w900,
-            fontFamilyFallback: <String>['Noto Sans'],
+            fontFamilyFallback: <String>['NotoSansJP'],
             fontFamily: 'RobotoFlexVariable',
             fontVariations: [
               FontVariation.width(110),
@@ -97,7 +97,7 @@ class SongArtistInfo extends ConsumerWidget {
         ],
         fontSize: 26.0,
         fontWeight: FontWeight.w400,
-        fontFamilyFallback: <String>['Noto Sans'],
+        fontFamilyFallback: <String>['NotoSansJP'],
         fontFamily: 'RobotoFlexVariable',
         fontVariations: [
           FontVariation.width(25),
