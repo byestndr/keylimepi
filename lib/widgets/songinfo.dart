@@ -39,11 +39,22 @@ class SongTitleInfo extends ConsumerWidget {
             },
           ),
           style: const TextStyle(
-            shadows: <Shadow>[Shadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))],
+            shadows: <Shadow>[
+              Shadow(
+                color: Colors.black26,
+                blurRadius: 3,
+                offset: Offset(0, 2),
+              ),
+            ],
             fontSize: 64.0,
-            fontFamilyFallback: <String>['Noto Sans'],
-            fontWeight: FontWeight.w800,
-            fontFamily: 'Roboto Flex',
+            fontWeight: FontWeight.w900,
+            fontFamilyFallback: <String>['NotoSansJP'],
+            fontFamily: 'RobotoFlexVariable',
+            fontVariations: [
+              FontVariation.width(110),
+              FontVariation.weight(900),
+              FontVariation('GRAD', 150),
+            ],
             color: Colors.white,
           ),
           maxLines: 1,
@@ -81,11 +92,17 @@ class SongArtistInfo extends ConsumerWidget {
         loading: () => ref.read(oldSongProvider).artist,
       ),
       style: const TextStyle(
-        shadows: <Shadow>[Shadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2))],
+        shadows: <Shadow>[
+          Shadow(color: Colors.black26, blurRadius: 3, offset: Offset(0, 2)),
+        ],
         fontSize: 26.0,
         fontWeight: FontWeight.w400,
-        fontFamilyFallback: <String>['Noto Sans'],
-        fontFamily: 'Roboto Flex',
+        fontFamilyFallback: <String>['NotoSansJP'],
+        fontFamily: 'RobotoFlexVariable',
+        fontVariations: [
+          FontVariation.width(25),
+          FontVariation('GRAD', 150),
+        ],
         color: Colors.white,
       ),
       maxLines: 1,

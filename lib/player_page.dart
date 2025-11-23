@@ -309,7 +309,7 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
           ),
           ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(28),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
+            clipBehavior: Clip.hardEdge,
             child: BackdropFilter(
               filter: ImageFilter.blur(
                 sigmaX: backgroundBlur,
