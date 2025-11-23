@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotimmich/widgets/controls.dart';
 import 'package:spotimmich/widgets/songimage.dart';
 import 'package:spotimmich/widgets/songinfo.dart';
 
@@ -50,6 +51,25 @@ class CenteredInfo extends StatelessWidget {
 
             const SongTitleInfo(),
             const SongArtistInfo(),
+            const Padding(
+              padding: EdgeInsetsDirectional.only(
+                top: 10,
+                start: 22,
+                bottom: 20,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                spacing: 10,
+                children: <Widget>[
+                  ShuffleButton(),
+                  PreviousButton(),
+                  PauseButton(),
+                  NextButton(),
+                  RepeatButton(),
+                  QueueButton(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -97,7 +117,29 @@ class BottomLeftInfo extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [const SongTitleInfo(), const SongArtistInfo()],
+              children: [
+                SongTitleInfo(),
+                SongArtistInfo(),
+                Padding(
+                  padding: EdgeInsetsDirectional.only(
+                    top: 10,
+                    start: 0,
+                    bottom: 3,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    spacing: 5,
+                    children: <Widget>[
+                      ShuffleButton(),
+                      PreviousButton(),
+                      PauseButton(),
+                      NextButton(),
+                      RepeatButton(),
+                      QueueButton(),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),

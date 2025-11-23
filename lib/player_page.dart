@@ -330,25 +330,6 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
               onPageWidget
                   ? const SizedBox(width: 800, child: ProgressSlider())
                   : const Padding(padding: EdgeInsetsGeometry.zero),
-              onPageWidget
-                  ? Padding(
-                      padding: EdgeInsetsDirectional.only(top: 10, start: position == 0 ? 22 : 0, bottom: 20),
-                      child: Row(
-                        mainAxisAlignment: position == 0
-                            ? MainAxisAlignment.start
-                            : MainAxisAlignment.center,
-                        spacing: 10,
-                        children: const <Widget>[
-                          ShuffleButton(),
-                          PreviousButton(),
-                          PauseButton(),
-                          NextButton(),
-                          RepeatButton(),
-                          QueueButton()
-                        ],
-                      ),
-                    )
-                  : const Padding(padding: EdgeInsetsGeometry.zero),
             ],
           ),
         ],
