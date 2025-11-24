@@ -342,7 +342,10 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
             children: <Widget>[
               const MediaWidget(),
               onPageWidget
-                  ? const SizedBox(width: 800, child: ProgressSlider())
+                  ? const Padding(
+                    padding: EdgeInsetsDirectional.only(bottom: 5),
+                    child: SizedBox(width: 800, child: ProgressSlider()),
+                  )
                   : const Padding(padding: EdgeInsetsGeometry.zero),
             ],
           ),
