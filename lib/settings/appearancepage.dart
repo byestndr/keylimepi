@@ -152,7 +152,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
                   value,
                 );
               },
-              divisions: 8,
+              divisions: 32,
               year2023: false,
               padding: const EdgeInsets.all(0),
               label: sliderValue.toString(),
