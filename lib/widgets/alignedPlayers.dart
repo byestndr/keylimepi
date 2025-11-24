@@ -7,7 +7,8 @@ const int _imageBreakpoint = 360;
 const double _imageRadius = 15;
 
 class CenteredInfo extends StatelessWidget {
-  const CenteredInfo({super.key});
+  final bool onPageControls;
+  const CenteredInfo({super.key, required this.onPageControls});
 
   @override
   Widget build(BuildContext context) {
@@ -51,25 +52,27 @@ class CenteredInfo extends StatelessWidget {
 
             const SongTitleInfo(),
             const SongArtistInfo(),
-            const Padding(
-              padding: EdgeInsetsDirectional.only(
-                top: 10,
-                start: 22,
-                bottom: 20,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                spacing: 10,
-                children: <Widget>[
-                  ShuffleButton(),
-                  PreviousButton(),
-                  PauseButton(),
-                  NextButton(),
-                  RepeatButton(),
-                  QueueButton(),
-                ],
-              ),
-            ),
+            onPageControls
+                ? const Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      top: 10,
+                      start: 22,
+                      bottom: 20,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      spacing: 10,
+                      children: <Widget>[
+                        ShuffleButton(),
+                        PreviousButton(),
+                        PauseButton(),
+                        NextButton(),
+                        RepeatButton(),
+                        QueueButton(),
+                      ],
+                    ),
+                  )
+                : const Padding(padding: EdgeInsetsGeometry.zero),
           ],
         ),
       ),
@@ -78,7 +81,8 @@ class CenteredInfo extends StatelessWidget {
 }
 
 class BottomLeftInfo extends StatelessWidget {
-  const BottomLeftInfo({super.key});
+  final bool onPageControls;
+  const BottomLeftInfo({super.key, required this.onPageControls});
 
   @override
   Widget build(BuildContext context) {
@@ -111,34 +115,36 @@ class BottomLeftInfo extends StatelessWidget {
                 ),
               )
             : const Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
-        const Expanded(
+        Expanded(
           child: Padding(
-            padding: EdgeInsetsGeometry.directional(bottom: 10),
+            padding: const EdgeInsetsGeometry.directional(bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SongTitleInfo(),
-                SongArtistInfo(),
-                Padding(
-                  padding: EdgeInsetsDirectional.only(
-                    top: 10,
-                    start: 0,
-                    bottom: 3,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    spacing: 5,
-                    children: <Widget>[
-                      ShuffleButton(),
-                      PreviousButton(),
-                      PauseButton(),
-                      NextButton(),
-                      RepeatButton(),
-                      QueueButton(),
-                    ],
-                  ),
-                ),
+                const SongTitleInfo(),
+                const SongArtistInfo(),
+                onPageControls
+                    ? const Padding(
+                        padding: EdgeInsetsDirectional.only(
+                          top: 10,
+                          start: 0,
+                          bottom: 3,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          spacing: 5,
+                          children: <Widget>[
+                            ShuffleButton(),
+                            PreviousButton(),
+                            PauseButton(),
+                            NextButton(),
+                            RepeatButton(),
+                            QueueButton(),
+                          ],
+                        ),
+                      )
+                    : const Padding(padding: EdgeInsetsGeometry.zero),
               ],
             ),
           ),

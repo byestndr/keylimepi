@@ -22,11 +22,25 @@ class MediaWidget extends StatefulWidget {
 
 class _MediaWidgetState extends State<MediaWidget> {
   int position = 0;
+  bool onPageWidget = false;
 
   @override
   void initState() {
     super.initState();
     getPosition();
+    getOnPageControls();
+  }
+
+  Future<void> getOnPageControls() async {
+    final int? isOnPageWidget = await AsyncPreferences().getIntValue(
+      'playback_bar_position',
+    );
+
+    if (isOnPageWidget == 1) {
+      onPageWidget = true;
+    }
+
+    return;
   }
 
   Future<void> getPosition() async {
@@ -49,7 +63,7 @@ class _MediaWidgetState extends State<MediaWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return position != 0 ? const CenteredInfo() : const BottomLeftInfo();
+    return position != 0 ? CenteredInfo(onPageControls: onPageWidget,) : BottomLeftInfo(onPageControls: onPageWidget,);
   }
 }
 
