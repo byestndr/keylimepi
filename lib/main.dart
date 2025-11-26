@@ -11,26 +11,12 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:spotimmich/widgets/song_queue.dart';
 import 'package:spotimmich/providers/colorscheme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await isLoggedIn();
   await AsyncPreferences().removeIntValue('playback_state_counter');
-
-  final SharedPreferencesWithCache cachedPrefs =
-      await SharedPreferencesWithCache.create(
-        cacheOptions: const SharedPreferencesWithCacheOptions(
-          allowList: {'immich_background', 'player_alignment'},
-        ),
-      );
-
-  runApp(
-    ProviderScope(
-      overrides: [sharedPrefsProvider.overrideWithValue(cachedPrefs)],
-      child: const App(),
-    ),
-  );
+  runApp(const ProviderScope(child: App()));
 
   Timer.periodic(const Duration(minutes: 15), (Timer timer) {
     isLoggedIn();
@@ -134,14 +120,19 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       bottomNavigationBar: BottomPlaybar(isQueueExpanded: queueExpandedButton),
       appBar: MediaQuery.of(context).size.width <= navigationRailBreakpoint
           ? PreferredSize(
-              preferredSize: Size(double.infinity, !navibarState ? kToolbarHeight : 100),
+              preferredSize: Size(
+                double.infinity,
+                !navibarState ? kToolbarHeight : 100,
+              ),
               child: NavigationBar(
                 onDestinationSelected: (int newPageIndex) {
                   setState(() {
                     currentPageIndex = newPageIndex;
                   });
                 },
-                backgroundColor: !navibarState ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
+                backgroundColor: !navibarState
+                    ? Theme.of(context).colorScheme.surfaceContainer
+                    : Colors.transparent,
                 destinations: <NavigationDestination>[
                   const NavigationDestination(
                     icon: Icon(Icons.music_note),

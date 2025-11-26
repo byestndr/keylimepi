@@ -18,6 +18,7 @@ class SongTitleInfo extends ConsumerWidget {
           child: Marquee(
             text: currentSongInfo.when(
               data: (Song data) {
+                print(data.title);
                 if (data.title == null) {
                   return 'Nothing currently playing...';
                 } else {
