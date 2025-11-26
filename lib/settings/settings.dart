@@ -26,7 +26,7 @@ class SettingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: [
+      children: <Widget>[
         ListTile(
           leading: const Icon(Icons.palette_rounded),
           title: const Text('Appearance'),
@@ -103,7 +103,7 @@ class SettingsList extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        AsyncPreferences().ClearPreferences();
+                        AsyncPreferences().clearPreferences();
                         ScaffoldMessenger.of(
                           context,
                         ).showSnackBar(resetSnackBar);

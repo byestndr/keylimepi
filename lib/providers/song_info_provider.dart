@@ -8,7 +8,7 @@ part 'song_info_provider.g.dart';
 
 @riverpod
 Stream<void> refreshTimer(Ref ref) {
-  return Stream.periodic(const Duration(seconds: 5), (_) => {});
+  return Stream.periodic(const Duration(seconds: 5), (_) => <dynamic, dynamic>{});
 }
 
 class Song {

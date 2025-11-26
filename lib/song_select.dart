@@ -107,9 +107,9 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const SongTitleInfo(),
-                                    const SongArtistInfo(),
+                                  children: <Widget>[
+                                    SongTitleInfo(),
+                                    SongArtistInfo(),
                                   ],
                                 ),
                               ),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -52,7 +51,7 @@ class QueueContent extends StatefulWidget {
 }
 
 class _QueueContentState extends State<QueueContent> {
-  List<dynamic> currentQueue = [];
+  List<dynamic> currentQueue = <dynamic>[];
   Timer? timer;
 
   Future<void> getQueueItems() async {
@@ -79,13 +78,13 @@ class _QueueContentState extends State<QueueContent> {
   }
 
   Future<List<dynamic>> returnQueue() async {
-    if (currentQueue != []) {
+    if (currentQueue != <dynamic>[]) {
       return currentQueue;
     } else {
       return const <dynamic>[
-        {
-          'queue': [
-            {'name': 'Nothing is playing'},
+        <String, List<Map<String, String>>>{
+          'queue': <Map<String, String>>[
+            <String, String>{'name': 'Nothing is playing'},
           ],
         },
       ];

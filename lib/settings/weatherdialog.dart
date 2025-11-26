@@ -60,7 +60,7 @@ class _WeatherLocationState extends State<WeatherLocation> {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
-                          WeatherPreferences().SaveLocation(
+                          WeatherPreferences().saveLocation(
                             items[index]['latitude'],
                             items[index]['longitude'],
                           );
@@ -102,19 +102,19 @@ class _WeatherLocationState extends State<WeatherLocation> {
 
 class WeatherPreferences {
   final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-  Future<void> SaveLocation(double latitude, double longitude) async {
+  Future<void> saveLocation(double latitude, double longitude) async {
     await prefs.remove('latitude');
     await prefs.remove('longitude');
     await prefs.setDouble('latitude', latitude);
     await prefs.setDouble('longitude', longitude);
   }
 
-  Future<double?> GetLatitude() async {
+  Future<double?> getLatitude() async {
     final double? latitude = await prefs.getDouble('latitude');
     return latitude;
   }
 
-  Future<double?> GetLongitude() async {
+  Future<double?> getLongitude() async {
     final double? longitude = await prefs.getDouble('longitude');
     return longitude;
   }

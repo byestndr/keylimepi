@@ -48,7 +48,7 @@ class AsyncPreferences {
     return value;
   }
 
-  Future<void> ClearPreferences() async {
+  Future<void> clearPreferences() async {
     await asyncPrefs.clear();
   }
 }

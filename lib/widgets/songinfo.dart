@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marquee/marquee.dart';
-import 'package:spotimmich/providers/album_art_provider.dart';
-import 'package:spotimmich/providers/colorscheme.dart';
 import 'package:spotimmich/providers/song_info_provider.dart';
 
 class SongTitleInfo extends ConsumerWidget {

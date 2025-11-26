@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:collection';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/providers/song_info_provider.dart';
@@ -74,7 +70,7 @@ class RepeatButton extends ConsumerWidget {
         playbackStateResponse.when(
           skipLoadingOnRefresh: true,
           skipLoadingOnReload: true,
-          data: (data) {
+          data: (dynamic data) {
             final String? iconState = data['repeat_state'];
 
             if (iconState == null) {
@@ -86,7 +82,7 @@ class RepeatButton extends ConsumerWidget {
             );
             return currentIcon;
           },
-          error: (error, stack) {
+          error: (Object error, StackTrace stack) {
             return Icons.repeat;
           },
           loading: () {
@@ -194,12 +190,12 @@ class ShuffleButton extends ConsumerWidget {
         playbackStateResponse.when(
           skipLoadingOnRefresh: true,
           skipLoadingOnReload: true,
-          data: (data) {
+          data: (dynamic data) {
             return data['shuffle_state'] == false
                 ? Icons.shuffle
                 : Icons.shuffle_on_rounded;
           },
-          error: (error, stack) {
+          error: (Object error, StackTrace stack) {
             return Icons.shuffle;
           },
           loading: () {
@@ -238,10 +234,10 @@ class PauseButton extends ConsumerWidget {
         playbackStateResponse.when(
           skipLoadingOnRefresh: true,
           skipLoadingOnReload: true,
-          data: (data) {
+          data: (dynamic data) {
             return data['is_playing'] == false ? Icons.play_arrow : Icons.pause;
           },
-          error: (error, stack) {
+          error: (Object error, StackTrace stack) {
             return Icons.play_arrow;
           },
           loading: () {

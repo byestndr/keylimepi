@@ -8,7 +8,6 @@ import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'dart:async';
 
-import 'package:spotimmich/widgets/controls.dart';
 import 'package:spotimmich/widgets/seekbar.dart';
 
 const int imageBreakpoint = 600;
@@ -172,7 +171,7 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
                   child: image1.when(
                     data: (Image data) => data,
                     error: (Object error, StackTrace stack) {
-                      Image.asset('assets/imagePlaceholder.png');
+                      return Image.asset('assets/imagePlaceholder.png');
                     },
                     loading: () => const Padding(
                       padding: EdgeInsets.all(150.0),
@@ -188,7 +187,7 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
                   child: image2.when(
                     data: (Image data) => data,
                     error: (Object error, StackTrace stack) {
-                      Image.asset('assets/imagePlaceholder.png');
+                      return Image.asset('assets/imagePlaceholder.png');
                     },
                     loading: () => const Padding(
                       padding: EdgeInsets.all(150.0),
@@ -204,7 +203,7 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
                   child: image3.when(
                     data: (Image data) => data,
                     error: (Object error, StackTrace stack) {
-                      Image.asset('assets/imagePlaceholder.png');
+                      return Image.asset('assets/imagePlaceholder.png');
                     },
                     loading: () => const Padding(
                       padding: EdgeInsets.all(150.0),
