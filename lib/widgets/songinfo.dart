@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:marquee/marquee.dart';
 import 'package:spotimmich/providers/album_art_provider.dart';
 import 'package:spotimmich/providers/colorscheme.dart';
 import 'package:spotimmich/providers/song_info_provider.dart';
@@ -14,52 +15,57 @@ class SongTitleInfo extends ConsumerWidget {
     return Column(
       spacing: 0.0,
       children: <Widget>[
-        Text(
-          currentSongInfo.when(
-            data: (Song data) {
-              if (data.title == null) {
-                return 'Nothing currently playing...';
-              } else {
-                Future.microtask(() {
-                  ref.read(oldSongProvider.notifier).setOldSong(oldSong: data);
-                });
+        SizedBox(
+          height: 100,
+          child: Marquee(
+            text: currentSongInfo.when(
+              data: (Song data) {
+                if (data.title == null) {
+                  return 'Nothing currently playing...';
+                } else {
+                  Future.microtask(() {
+                    ref
+                        .read(oldSongProvider.notifier)
+                        .setOldSong(oldSong: data);
+                  });
 
-                return data.title!;
-              }
-            },
-            error: (Object error, StackTrace trace) {
-              if (error.toString().contains('FormatException')) {
-                return "Nothing currently playing...";
-              } else {
-                return error.toString();
-              }
-            },
-            loading: () {
-              return ref.read(oldSongProvider).title;
-            },
+                  return data.title!;
+                }
+              },
+              error: (Object error, StackTrace trace) {
+                if (error.toString().contains('FormatException')) {
+                  return "Nothing currently playing...";
+                } else {
+                  return error.toString();
+                }
+              },
+              loading: () {
+                return ref.read(oldSongProvider).title;
+              },
+            ),
+            velocity: 50,
+            blankSpace: 100,
+            fadingEdgeStartFraction: .1,
+            style: const TextStyle(
+              shadows: <Shadow>[
+                Shadow(
+                  color: Colors.black26,
+                  blurRadius: 3,
+                  offset: Offset(0, 2),
+                ),
+              ],
+              fontSize: 64.0,
+              fontWeight: FontWeight.w900,
+              fontFamilyFallback: <String>['NotoSansJP'],
+              fontFamily: 'RobotoFlexVariable',
+              fontVariations: [
+                FontVariation.width(110),
+                FontVariation.weight(900),
+                FontVariation('GRAD', 150),
+              ],
+              color: Colors.white,
+            ),
           ),
-          style: const TextStyle(
-            shadows: <Shadow>[
-              Shadow(
-                color: Colors.black26,
-                blurRadius: 3,
-                offset: Offset(0, 2),
-              ),
-            ],
-            fontSize: 64.0,
-            fontWeight: FontWeight.w900,
-            fontFamilyFallback: <String>['NotoSansJP'],
-            fontFamily: 'RobotoFlexVariable',
-            fontVariations: [
-              FontVariation.width(110),
-              FontVariation.weight(900),
-              FontVariation('GRAD', 150),
-            ],
-            color: Colors.white,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.fade,
-          softWrap: false,
         ),
       ],
     );
@@ -99,10 +105,7 @@ class SongArtistInfo extends ConsumerWidget {
         fontWeight: FontWeight.w400,
         fontFamilyFallback: <String>['NotoSansJP'],
         fontFamily: 'RobotoFlexVariable',
-        fontVariations: [
-          FontVariation.width(25),
-          FontVariation('GRAD', 150),
-        ],
+        fontVariations: [FontVariation.width(25), FontVariation('GRAD', 150)],
         color: Colors.white,
       ),
       maxLines: 1,
