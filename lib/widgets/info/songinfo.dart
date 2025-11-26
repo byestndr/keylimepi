@@ -17,29 +17,25 @@ class SongTitleInfo extends ConsumerWidget {
           height: 100,
           child: Marquee(
             text: currentSongInfo.when(
+              skipLoadingOnRefresh: true,
+              skipLoadingOnReload: true,
               data: (Song data) {
-                print(data.title);
-                if (data.title == null) {
-                  return 'Nothing currently playing...';
-                } else {
-                  Future.microtask(() {
-                    ref
-                        .read(oldSongProvider.notifier)
-                        .setOldSong(oldSong: data);
-                  });
-
-                  return data.title!;
-                }
+                return data.title;
               },
               error: (Object error, StackTrace trace) {
-                if (error.toString().contains('FormatException')) {
+                if (error.runtimeType == NoSuchMethodError) {
+                  return 'You are not logged in...';
+                }
+
+                if (error.runtimeType == FormatException) {
                   return "Nothing currently playing...";
                 } else {
-                  return error.toString();
+                  print(error.toString());
+                  return 'An error has occured...';
                 }
               },
               loading: () {
-                return ref.read(oldSongProvider).title;
+                return 'Nothing currently playing...';
               },
             ),
             velocity: 50,
@@ -80,21 +76,24 @@ class SongArtistInfo extends ConsumerWidget {
 
     return Text(
       currentSongInfo.when(
+        skipLoadingOnRefresh: true,
+        skipLoadingOnReload: true,
         data: (Song data) {
-          if (data.title == null) {
-            return "Start playing a song to control playback";
-          } else {
-            return data.artist!;
-          }
+          return data.artist;
         },
         error: (Object error, StackTrace trace) {
-          if (error.toString().contains('FormatException')) {
+          if (error.runtimeType == NoSuchMethodError) {
+            return 'Log into Spotify via settings';
+          }
+
+          if (error.runtimeType == FormatException) {
             return "Start playing a song to control playback";
           } else {
-            return error.toString();
+            print(error.toString());
+            return 'Check the console log for details';
           }
         },
-        loading: () => ref.read(oldSongProvider).artist,
+        loading: () => 'Start playing a song to control playback',
       ),
       style: const TextStyle(
         shadows: <Shadow>[

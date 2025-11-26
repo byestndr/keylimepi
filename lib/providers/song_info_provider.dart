@@ -18,20 +18,6 @@ class Song {
 }
 
 @riverpod
-class OldSong extends _$OldSong {
-  @override
-  Song build() {
-    ref.keepAlive();
-    return Song();
-  }
-
-  void setOldSong({required Song oldSong}) {
-    state = oldSong;
-    return;
-  }
-}
-
-@riverpod
 class InfoGetter extends _$InfoGetter {
   @override
   Future<Song> build() {

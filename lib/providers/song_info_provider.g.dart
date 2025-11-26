@@ -42,58 +42,6 @@ final class RefreshTimerProvider
 
 String _$refreshTimerHash() => r'7719fa0adc9be94cc07f2950d8283b2b701d2338';
 
-@ProviderFor(OldSong)
-const oldSongProvider = OldSongProvider._();
-
-final class OldSongProvider extends $NotifierProvider<OldSong, Song> {
-  const OldSongProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'oldSongProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$oldSongHash();
-
-  @$internal
-  @override
-  OldSong create() => OldSong();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Song value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<Song>(value),
-    );
-  }
-}
-
-String _$oldSongHash() => r'f86a6c74580a994168098f606b06163dd5b9b75b';
-
-abstract class _$OldSong extends $Notifier<Song> {
-  Song build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<Song, Song>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<Song, Song>,
-              Song,
-              Object?,
-              Object?
-            >;
-    element.handleValue(ref, created);
-  }
-}
-
 @ProviderFor(InfoGetter)
 const infoGetterProvider = InfoGetterProvider._();
 
