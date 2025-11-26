@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AsyncPreferences {
@@ -48,11 +47,7 @@ class AsyncPreferences {
     return value;
   }
 
-  Future<void> ClearPreferences() async {
+  Future<void> clearPreferences() async {
     await asyncPrefs.clear();
   }
 }
-
-final sharedPrefsProvider = Provider<SharedPreferencesWithCache>((ref) {
-  throw UnimplementedError(); 
-});

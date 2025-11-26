@@ -28,7 +28,7 @@ class Server {
       return Response.badRequest(body: 'Error parsing the URL, try again.');
     }
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       server!.close(force: true);
       Navigator.of(newcontext).pop();
     });

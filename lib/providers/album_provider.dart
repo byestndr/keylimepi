@@ -25,7 +25,7 @@ class AlbumProvider extends _$AlbumProvider {
     return;
   }
 
-  Future<void> startAlbum(albumIndex) async {
+  Future<void> startAlbum(int albumIndex) async {
     final List<dynamic> playlists = await getAlbums();
     final String albumID = playlists[albumIndex]['album']['uri'];
     await Interactions().resumePlayback(context_uri: albumID);

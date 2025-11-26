@@ -9,11 +9,11 @@ part of 'background_getter.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(background1)
+@ProviderFor(Background1)
 const background1Provider = Background1Family._();
 
 final class Background1Provider
-    extends $AsyncNotifierProvider<background1, Image> {
+    extends $AsyncNotifierProvider<Background1, Image> {
   const Background1Provider._({
     required Background1Family super.from,
     required double super.argument,
@@ -37,7 +37,7 @@ final class Background1Provider
 
   @$internal
   @override
-  background1 create() => background1();
+  Background1 create() => Background1();
 
   @override
   bool operator ==(Object other) {
@@ -50,12 +50,12 @@ final class Background1Provider
   }
 }
 
-String _$background1Hash() => r'1ba6334e085ec519f45537203a102b3b39dc398b';
+String _$background1Hash() => r'ea03df2c69fa66e5dd29e7b04f5bfddaae3876e9';
 
 final class Background1Family extends $Family
     with
         $ClassFamilyOverride<
-          background1,
+          Background1,
           AsyncValue<Image>,
           Image,
           FutureOr<Image>,
@@ -77,7 +77,7 @@ final class Background1Family extends $Family
   String toString() => r'background1Provider';
 }
 
-abstract class _$background1 extends $AsyncNotifier<Image> {
+abstract class _$Background1 extends $AsyncNotifier<Image> {
   late final _$args = ref.$arg as double;
   double get pixelRatio => _$args;
 
@@ -99,11 +99,11 @@ abstract class _$background1 extends $AsyncNotifier<Image> {
   }
 }
 
-@ProviderFor(background2)
+@ProviderFor(Background2)
 const background2Provider = Background2Family._();
 
 final class Background2Provider
-    extends $AsyncNotifierProvider<background2, Image> {
+    extends $AsyncNotifierProvider<Background2, Image> {
   const Background2Provider._({
     required Background2Family super.from,
     required double super.argument,
@@ -127,7 +127,7 @@ final class Background2Provider
 
   @$internal
   @override
-  background2 create() => background2();
+  Background2 create() => Background2();
 
   @override
   bool operator ==(Object other) {
@@ -140,12 +140,12 @@ final class Background2Provider
   }
 }
 
-String _$background2Hash() => r'17b5d60f473199b6311a6e9137f093d744f21568';
+String _$background2Hash() => r'9f49ce8c5747da6e0feaa8b93f592d0616883f1e';
 
 final class Background2Family extends $Family
     with
         $ClassFamilyOverride<
-          background2,
+          Background2,
           AsyncValue<Image>,
           Image,
           FutureOr<Image>,
@@ -167,7 +167,7 @@ final class Background2Family extends $Family
   String toString() => r'background2Provider';
 }
 
-abstract class _$background2 extends $AsyncNotifier<Image> {
+abstract class _$Background2 extends $AsyncNotifier<Image> {
   late final _$args = ref.$arg as double;
   double get pixelRatio => _$args;
 
@@ -189,11 +189,11 @@ abstract class _$background2 extends $AsyncNotifier<Image> {
   }
 }
 
-@ProviderFor(background3)
+@ProviderFor(Background3)
 const background3Provider = Background3Family._();
 
 final class Background3Provider
-    extends $AsyncNotifierProvider<background3, Image> {
+    extends $AsyncNotifierProvider<Background3, Image> {
   const Background3Provider._({
     required Background3Family super.from,
     required double super.argument,
@@ -217,7 +217,7 @@ final class Background3Provider
 
   @$internal
   @override
-  background3 create() => background3();
+  Background3 create() => Background3();
 
   @override
   bool operator ==(Object other) {
@@ -230,12 +230,12 @@ final class Background3Provider
   }
 }
 
-String _$background3Hash() => r'928a89b9127060c0b0029c22895fe65359f55c2e';
+String _$background3Hash() => r'e662cf7d1fc4ef9208b82bfb4c12e5b00bb9dbed';
 
 final class Background3Family extends $Family
     with
         $ClassFamilyOverride<
-          background3,
+          Background3,
           AsyncValue<Image>,
           Image,
           FutureOr<Image>,
@@ -257,7 +257,7 @@ final class Background3Family extends $Family
   String toString() => r'background3Provider';
 }
 
-abstract class _$background3 extends $AsyncNotifier<Image> {
+abstract class _$Background3 extends $AsyncNotifier<Image> {
   late final _$args = ref.$arg as double;
   double get pixelRatio => _$args;
 

@@ -121,7 +121,6 @@ class _SettingsListState extends ConsumerState<SettingsList> {
             value: backgroundState,
             onChanged: (bool value) async {
               AsyncPreferences().setBoolValue('immich_background', value);
-              await ref.read(sharedPrefsProvider).reloadCache();
               setState(() {
                 backgroundState = value;
               });

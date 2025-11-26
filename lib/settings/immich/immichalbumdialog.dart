@@ -30,7 +30,7 @@ class _AlbumIDState extends State<AlbumID> {
           context: context,
           builder: (BuildContext context) {
             return StatefulBuilder(
-              builder: (context, setState) {
+              builder: (BuildContext context, setState) {
                 return SizedBox.expand(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,

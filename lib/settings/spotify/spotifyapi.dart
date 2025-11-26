@@ -156,12 +156,12 @@ class Interactions {
     }
 
     if (context_uri != '' && context_uri.contains('track')) {
-      final Map<String, List<String>> bodyMap = {'uris': [context_uri]};
+      final Map<String, List<String>> bodyMap = <String, List<String>>{'uris': <String>[context_uri]};
       body = jsonEncode(bodyMap);
     }
 
     else if (context_uri != '') {
-      final Map<String, String> bodyMap = {'context_uri': context_uri};
+      final Map<String, String> bodyMap = <String, String>{'context_uri': context_uri};
       body = jsonEncode(bodyMap);
     }
 

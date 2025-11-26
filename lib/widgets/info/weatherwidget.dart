@@ -92,8 +92,8 @@ class _WeatherwidgetState extends State<Weatherwidget> {
   }
 
   Future<void> RefreshLoop() async {
-    final double? latitude = await WeatherPreferences().GetLatitude();
-    final double? longitude = await WeatherPreferences().GetLongitude();
+    final double? latitude = await WeatherPreferences().getLatitude();
+    final double? longitude = await WeatherPreferences().getLongitude();
 
     if (latitude == null || longitude == null) {
       return;

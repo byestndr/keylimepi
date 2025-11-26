@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spotimmich/settings/immich/immichpreferences.dart';
@@ -7,7 +5,7 @@ import 'package:spotimmich/settings/immich/immichpreferences.dart';
 part 'background_getter.g.dart';
 
 @riverpod
-class background1 extends _$background1 {
+class Background1 extends _$Background1 {
   @override
   Future<Image> build({required double pixelRatio}) async {
     final Image image = await getBackgroundImage(pixelRatio);
@@ -20,7 +18,7 @@ class background1 extends _$background1 {
 }
 
 @riverpod
-class background2 extends _$background1 {
+class Background2 extends _$Background1 {
   @override
   Future<Image> build({required double pixelRatio}) async {
     final Image image = await getBackgroundImage(pixelRatio);
@@ -33,7 +31,7 @@ class background2 extends _$background1 {
 }
 
 @riverpod
-class background3 extends _$background1 {
+class Background3 extends _$Background1 {
   @override
   Future<Image> build({required double pixelRatio}) async {
     final Image image = await getBackgroundImage(pixelRatio);

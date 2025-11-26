@@ -25,7 +25,7 @@ class SongProvider extends _$SongProvider {
     return;
   }
 
-  Future<void> startSong(songIndex) async {
+  Future<void> startSong(int songIndex) async {
     final List<dynamic> songs = await getSongs();
     final String songID = songs[songIndex]['track']['uri'];
     await Interactions().resumePlayback(context_uri: songID);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -45,7 +47,7 @@ class SettingsList extends StatelessWidget {
           subtitle: const Text('Use another device to log into Spotify'),
           onTap: () async {
             await server.startServer(context);
-            showQrCodeDialog(context);
+            unawaited(showQrCodeDialog(context));
           },
         ),
       ],
@@ -86,7 +88,7 @@ Future<void> showQrCodeDialog(BuildContext context) async {
                       ),
                     ),
 
-                    actions: [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -128,7 +130,7 @@ void showQrCodeDirections(BuildContext context) async {
               child: AlertDialog(
                 title: const Text('Login via QR code'),
                 content: Column(
-                  children: [
+                  children: <Widget>[
                     const ListTile(
                       leading: Text(
                         '1.',
@@ -171,7 +173,7 @@ void showQrCodeDirections(BuildContext context) async {
                   ],
                 ),
 
-                actions: [
+                actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();

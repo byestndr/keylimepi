@@ -9,8 +9,8 @@ import 'package:spotimmich/widgets/carousels/playlist_carousel.dart';
 import 'package:spotimmich/providers/album_provider.dart';
 import 'package:spotimmich/providers/likedSongs_provider.dart';
 import 'package:spotimmich/providers/playlists_provider.dart';
-import 'package:spotimmich/widgets/songimage.dart';
-import 'package:spotimmich/widgets/songinfo.dart';
+import 'package:spotimmich/widgets/info/songimage.dart';
+import 'package:spotimmich/widgets/info/songinfo.dart';
 
 class SongSelect extends ConsumerStatefulWidget {
   const SongSelect({super.key});
@@ -107,9 +107,9 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const SongTitleInfo(),
-                                    const SongArtistInfo(),
+                                  children: <Widget>[
+                                    SongTitleInfo(),
+                                    SongArtistInfo(),
                                   ],
                                 ),
                               ),

@@ -40,7 +40,7 @@ final class RefreshTimerProvider
   }
 }
 
-String _$refreshTimerHash() => r'68a378b7e84726f0022bbe6a0fee81b041cacee7';
+String _$refreshTimerHash() => r'7719fa0adc9be94cc07f2950d8283b2b701d2338';
 
 @ProviderFor(OldSong)
 const oldSongProvider = OldSongProvider._();

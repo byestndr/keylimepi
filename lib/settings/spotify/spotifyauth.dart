@@ -90,7 +90,7 @@ Future<int> GetAccessToken(String url) async {
 Future<void> isLoggedIn() async {
   final String? token = await Preferences.getStringValue('token');
   final Uri uri = Uri.https('api.spotify.com', 'v1/me');
-  const int StatusCodeError = 400;
+  const int statusCodeError = 400;
 
   final http.Response response = await http.get(
     uri,
@@ -102,24 +102,24 @@ Future<void> isLoggedIn() async {
     return;
   }
 
-  if (response.statusCode >= StatusCodeError) {
-    final Uri refresh_uri = Uri.https('accounts.spotify.com', 'api/token');
-    final http.Response refresh_response = await http.post(
-      refresh_uri,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: {
+  if (response.statusCode >= statusCodeError) {
+    final Uri refreshUri = Uri.https('accounts.spotify.com', 'api/token');
+    final http.Response refreshResponse = await http.post(
+      refreshUri,
+      headers: <String, String>{'Content-Type': 'application/x-www-form-urlencoded'},
+      body: <String, String>{
         'grant_type': 'refresh_token',
         'refresh_token': rtoken,
         'client_id': 'c92fab18b6924cf7872ed2965644cb25',
       },
     );
 
-    final dynamic refresh_body = jsonDecode(refresh_response.body);
+    final dynamic refreshBody = jsonDecode(refreshResponse.body);
 
-    final String access_token = refresh_body['access_token'];
-    final String new_rtoken = refresh_body['refresh_token'];
+    final String accessToken = refreshBody['access_token'];
+    final String newRtoken = refreshBody['refresh_token'];
 
-    await Preferences.setStringValue('token', access_token);
-    await Preferences.setStringValue('refresh_token', new_rtoken);
+    await Preferences.setStringValue('token', accessToken);
+    await Preferences.setStringValue('refresh_token', newRtoken);
   }
 }

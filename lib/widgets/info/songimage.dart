@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:spotimmich/providers/album_art_provider.dart';
-import 'package:spotimmich/providers/song_info_provider.dart';
 
 class SongImage extends ConsumerStatefulWidget {
   final int imageMultiplier;
@@ -41,7 +40,7 @@ class _SongImageState extends ConsumerState<SongImage> {
                   .toInt(),
         );
       },
-      error: (error, trace) {
+      error: (Object error, StackTrace trace) {
         return Image.asset(
           'assets/imagePlaceholder.png',
           cacheHeight:
