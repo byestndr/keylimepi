@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/widgets/album_art_background.dart';
-import 'package:spotimmich/widgets/alignedPlayers.dart';
+import 'package:spotimmich/widgets/background/album_art_background.dart';
+import 'package:spotimmich/widgets/control/alignedPlayers.dart';
 import 'package:spotimmich/settings/preferences.dart';
-import 'package:spotimmich/widgets/immich_background_carousel.dart';
+import 'package:spotimmich/widgets/background/immich_background_carousel.dart';
 import 'dart:async';
 
 const int imageBreakpoint = 600;

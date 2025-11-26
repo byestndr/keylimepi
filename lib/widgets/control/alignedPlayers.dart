@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/widgets/controls.dart';
-import 'package:spotimmich/widgets/songimage.dart';
-import 'package:spotimmich/widgets/songinfo.dart';
+import 'package:spotimmich/widgets/control/controls.dart';
+import 'package:spotimmich/widgets/info/songimage.dart';
+import 'package:spotimmich/widgets/info/songinfo.dart';
 
 const int _imageBreakpoint = 360;
 const double _imageRadius = 15;

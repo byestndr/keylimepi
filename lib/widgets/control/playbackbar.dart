@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/settings/preferences.dart';
-import 'package:spotimmich/widgets/controls.dart';
-import 'package:spotimmich/widgets/weatherwidget.dart';
-import 'package:spotimmich/widgets/seekbar.dart';
+import 'package:spotimmich/widgets/control/controls.dart';
+import 'package:spotimmich/widgets/info/weatherwidget.dart';
+import 'package:spotimmich/widgets/control/seekbar.dart';
 
 class BottomPlaybar extends ConsumerStatefulWidget {
   final Function(bool) isQueueExpanded;
