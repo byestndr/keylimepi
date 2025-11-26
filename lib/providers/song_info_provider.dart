@@ -8,7 +8,10 @@ part 'song_info_provider.g.dart';
 
 @riverpod
 Stream<void> refreshTimer(Ref ref) {
-  return Stream.periodic(const Duration(seconds: 5), (_) => <dynamic, dynamic>{});
+  return Stream.periodic(
+    const Duration(seconds: 5),
+    (_) => <dynamic, dynamic>{},
+  );
 }
 
 class Song {
@@ -39,6 +42,12 @@ class InfoGetter extends _$InfoGetter {
 
     if (oldSong != null) {
       isNewSong(currentSong.uri);
+    }  
+    
+    // If no previous song is found, it should still refresh colorscheme and images.
+    if (oldSong == null) {
+      ref.read(albumImageProvider.notifier).refreshImage();
+      ref.read(appColorSchemeProvider.notifier).refreshColorscheme();
     }
 
     return currentSong;
