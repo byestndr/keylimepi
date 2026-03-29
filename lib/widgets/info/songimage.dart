@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:spotimmich/providers/album_art_provider.dart';
+import 'package:spotimmich/providers/theme/album_art_provider.dart';
 
 class SongImage extends ConsumerStatefulWidget {
   final int imageMultiplier;

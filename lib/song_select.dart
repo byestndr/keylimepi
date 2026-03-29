@@ -6,9 +6,9 @@ import 'package:spotimmich/widgets/carousels/album_carousel.dart';
 import 'package:spotimmich/widgets/carousels/liked_songs.dart';
 import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/widgets/carousels/playlist_carousel.dart';
-import 'package:spotimmich/providers/album_provider.dart';
-import 'package:spotimmich/providers/likedSongs_provider.dart';
-import 'package:spotimmich/providers/playlists_provider.dart';
+import 'package:spotimmich/providers/spotify/album_provider.dart';
+import 'package:spotimmich/providers/spotify/likedSongs_provider.dart';
+import 'package:spotimmich/providers/spotify/playlists_provider.dart';
 import 'package:spotimmich/widgets/info/songimage.dart';
 import 'package:spotimmich/widgets/info/songinfo.dart';
 

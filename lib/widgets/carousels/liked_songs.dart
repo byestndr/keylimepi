@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/likedSongs_provider.dart';
+import 'package:spotimmich/providers/spotify/likedSongs_provider.dart';
 
 class SongCarousel extends ConsumerStatefulWidget {
   const SongCarousel({super.key});

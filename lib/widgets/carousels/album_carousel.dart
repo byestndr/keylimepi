@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/album_provider.dart';
+import 'package:spotimmich/providers/spotify/album_provider.dart';
 
 class AlbumCarousel extends ConsumerStatefulWidget {
   const AlbumCarousel({super.key});

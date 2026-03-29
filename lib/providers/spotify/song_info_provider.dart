@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'dart:convert';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
-import 'package:spotimmich/providers/colorscheme.dart';
-import 'package:spotimmich/providers/album_art_provider.dart';
+import 'package:spotimmich/providers/theme/colorscheme.dart';
+import 'package:spotimmich/providers/theme/album_art_provider.dart';
 
 part 'song_info_provider.g.dart';
 

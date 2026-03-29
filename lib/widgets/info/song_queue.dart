@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/song_info_provider.dart';
+import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 import 'dart:async';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 import 'package:spotimmich/backend/spotify/spotifyauth.dart';
