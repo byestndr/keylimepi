@@ -4,7 +4,7 @@ import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/providers/background_getter.dart';
 import 'package:spotimmich/song_select.dart';
 import 'package:spotimmich/widgets/control/playbackbar.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/backend/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/settings/settings.dart';
 import 'dart:async';

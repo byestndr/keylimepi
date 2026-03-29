@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 
 part 'likedSongs_provider.g.dart';
 

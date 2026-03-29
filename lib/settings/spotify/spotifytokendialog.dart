@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/backend/spotify/spotifyauth.dart';
 
 class AccessToken extends StatefulWidget {
   const AccessToken({super.key});

@@ -3,7 +3,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'dart:io';
 
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/backend/spotify/spotifyauth.dart';
 
 
 class Server {

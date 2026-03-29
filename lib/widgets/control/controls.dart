@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/providers/song_info_provider.dart';
-import 'package:spotimmich/settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 
 const double iconButtonDensityHorizontal = 1;
 const double iconButtonDensityVertical = 1;

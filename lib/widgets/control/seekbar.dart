@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:spotimmich/settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 
 class ProgressSlider extends StatefulWidget {
   const ProgressSlider({super.key});
