@@ -10,11 +10,11 @@ part of 'background_getter.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(Background1)
-const background1Provider = Background1Family._();
+final background1Provider = Background1Family._();
 
 final class Background1Provider
     extends $AsyncNotifierProvider<Background1, Image> {
-  const Background1Provider._({
+  Background1Provider._({
     required Background1Family super.from,
     required double super.argument,
   }) : super(
@@ -61,7 +61,7 @@ final class Background1Family extends $Family
           FutureOr<Image>,
           double
         > {
-  const Background1Family._()
+  Background1Family._()
     : super(
         retry: null,
         name: r'background1Provider',
@@ -85,7 +85,6 @@ abstract class _$Background1 extends $AsyncNotifier<Image> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(pixelRatio: _$args);
     final ref = this.ref as $Ref<AsyncValue<Image>, Image>;
     final element =
         ref.element
@@ -95,16 +94,16 @@ abstract class _$Background1 extends $AsyncNotifier<Image> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(pixelRatio: _$args));
   }
 }
 
 @ProviderFor(Background2)
-const background2Provider = Background2Family._();
+final background2Provider = Background2Family._();
 
 final class Background2Provider
     extends $AsyncNotifierProvider<Background2, Image> {
-  const Background2Provider._({
+  Background2Provider._({
     required Background2Family super.from,
     required double super.argument,
   }) : super(
@@ -151,7 +150,7 @@ final class Background2Family extends $Family
           FutureOr<Image>,
           double
         > {
-  const Background2Family._()
+  Background2Family._()
     : super(
         retry: null,
         name: r'background2Provider',
@@ -175,7 +174,6 @@ abstract class _$Background2 extends $AsyncNotifier<Image> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(pixelRatio: _$args);
     final ref = this.ref as $Ref<AsyncValue<Image>, Image>;
     final element =
         ref.element
@@ -185,16 +183,16 @@ abstract class _$Background2 extends $AsyncNotifier<Image> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(pixelRatio: _$args));
   }
 }
 
 @ProviderFor(Background3)
-const background3Provider = Background3Family._();
+final background3Provider = Background3Family._();
 
 final class Background3Provider
     extends $AsyncNotifierProvider<Background3, Image> {
-  const Background3Provider._({
+  Background3Provider._({
     required Background3Family super.from,
     required double super.argument,
   }) : super(
@@ -241,7 +239,7 @@ final class Background3Family extends $Family
           FutureOr<Image>,
           double
         > {
-  const Background3Family._()
+  Background3Family._()
     : super(
         retry: null,
         name: r'background3Provider',
@@ -265,7 +263,6 @@ abstract class _$Background3 extends $AsyncNotifier<Image> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(pixelRatio: _$args);
     final ref = this.ref as $Ref<AsyncValue<Image>, Image>;
     final element =
         ref.element
@@ -275,15 +272,15 @@ abstract class _$Background3 extends $AsyncNotifier<Image> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(pixelRatio: _$args));
   }
 }
 
 @ProviderFor(BarPosition)
-const barPositionProvider = BarPositionProvider._();
+final barPositionProvider = BarPositionProvider._();
 
 final class BarPositionProvider extends $NotifierProvider<BarPosition, int> {
-  const BarPositionProvider._()
+  BarPositionProvider._()
     : super(
         from: null,
         argument: null,
@@ -317,7 +314,6 @@ abstract class _$BarPosition extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -327,16 +323,16 @@ abstract class _$BarPosition extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(NavigationBarColor)
-const navigationBarColorProvider = NavigationBarColorProvider._();
+final navigationBarColorProvider = NavigationBarColorProvider._();
 
 final class NavigationBarColorProvider
     extends $NotifierProvider<NavigationBarColor, bool> {
-  const NavigationBarColorProvider._()
+  NavigationBarColorProvider._()
     : super(
         from: null,
         argument: null,
@@ -371,7 +367,6 @@ abstract class _$NavigationBarColor extends $Notifier<bool> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<bool, bool>;
     final element =
         ref.element
@@ -381,6 +376,6 @@ abstract class _$NavigationBarColor extends $Notifier<bool> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

@@ -10,11 +10,11 @@ part of 'likedSongs_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(SongProvider)
-const songProviderProvider = SongProviderProvider._();
+final songProviderProvider = SongProviderProvider._();
 
 final class SongProviderProvider
     extends $AsyncNotifierProvider<SongProvider, List<dynamic>> {
-  const SongProviderProvider._()
+  SongProviderProvider._()
     : super(
         from: null,
         argument: null,
@@ -40,7 +40,6 @@ abstract class _$SongProvider extends $AsyncNotifier<List<dynamic>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<dynamic>>, List<dynamic>>;
     final element =
         ref.element
@@ -50,6 +49,6 @@ abstract class _$SongProvider extends $AsyncNotifier<List<dynamic>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

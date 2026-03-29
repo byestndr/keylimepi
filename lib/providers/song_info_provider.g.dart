@@ -10,12 +10,12 @@ part of 'song_info_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(refreshTimer)
-const refreshTimerProvider = RefreshTimerProvider._();
+final refreshTimerProvider = RefreshTimerProvider._();
 
 final class RefreshTimerProvider
     extends $FunctionalProvider<AsyncValue<void>, void, Stream<void>>
     with $FutureModifier<void>, $StreamProvider<void> {
-  const RefreshTimerProvider._()
+  RefreshTimerProvider._()
     : super(
         from: null,
         argument: null,
@@ -43,11 +43,11 @@ final class RefreshTimerProvider
 String _$refreshTimerHash() => r'7719fa0adc9be94cc07f2950d8283b2b701d2338';
 
 @ProviderFor(InfoGetter)
-const infoGetterProvider = InfoGetterProvider._();
+final infoGetterProvider = InfoGetterProvider._();
 
 final class InfoGetterProvider
     extends $AsyncNotifierProvider<InfoGetter, Song> {
-  const InfoGetterProvider._()
+  InfoGetterProvider._()
     : super(
         from: null,
         argument: null,
@@ -73,7 +73,6 @@ abstract class _$InfoGetter extends $AsyncNotifier<Song> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<Song>, Song>;
     final element =
         ref.element
@@ -83,16 +82,16 @@ abstract class _$InfoGetter extends $AsyncNotifier<Song> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(isQueueExpanded)
-const isQueueExpandedProvider = IsQueueExpandedProvider._();
+final isQueueExpandedProvider = IsQueueExpandedProvider._();
 
 final class IsQueueExpandedProvider
     extends $NotifierProvider<isQueueExpanded, bool> {
-  const IsQueueExpandedProvider._()
+  IsQueueExpandedProvider._()
     : super(
         from: null,
         argument: null,
@@ -126,7 +125,6 @@ abstract class _$isQueueExpanded extends $Notifier<bool> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<bool, bool>;
     final element =
         ref.element
@@ -136,16 +134,16 @@ abstract class _$isQueueExpanded extends $Notifier<bool> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(GetPlaybackState)
-const getPlaybackStateProvider = GetPlaybackStateProvider._();
+final getPlaybackStateProvider = GetPlaybackStateProvider._();
 
 final class GetPlaybackStateProvider
     extends $AsyncNotifierProvider<GetPlaybackState, dynamic> {
-  const GetPlaybackStateProvider._()
+  GetPlaybackStateProvider._()
     : super(
         from: null,
         argument: null,
@@ -171,7 +169,6 @@ abstract class _$GetPlaybackState extends $AsyncNotifier<dynamic> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<dynamic>, dynamic>;
     final element =
         ref.element
@@ -181,6 +178,6 @@ abstract class _$GetPlaybackState extends $AsyncNotifier<dynamic> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
