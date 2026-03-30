@@ -17,6 +17,7 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
   double maxPos = 3600000;
   Timer? timer;
   int refreshCount = 20;
+  bool _isPaused = true;
 
   @override
   void initState() {
@@ -30,7 +31,7 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
   }
 
   Future<void> RefreshLoop() async {
-    if (refreshCount < 30) {
+    if (refreshCount < 30 && _isPaused) {
       refreshCount++;
       setState(() {
         if (sliderPos + 200 <= maxPos) {
@@ -41,7 +42,9 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
     }
 
     try {
-      final dynamic currentPlaybackState = await ref.watch(spotifyPlaybackstateProvider.future);
+      final dynamic currentPlaybackState = await ref.watch(
+        spotifyPlaybackstateProvider.future,
+      );
 
       if (currentPlaybackState.statusCode == 204) {
         maxPos = 1;
@@ -55,11 +58,13 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
 
       setState(() {
         try {
+          _isPaused = false;
           int pos = currentPlaybackState.body['item']['duration_ms'];
           maxPos = pos.toDouble();
           int currentpos = currentPlaybackState.body['progress_ms'];
           sliderPos = currentpos.toDouble();
           refreshCount = 0;
+          _isPaused = currentPlaybackState.body['is_playing'];
         } on NoSuchMethodError {
           maxPos = 1;
           sliderPos = 0;
