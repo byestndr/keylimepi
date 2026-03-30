@@ -10,7 +10,7 @@ class AlbumImage extends _$AlbumImage {
   Future<String> build() async {
     final dynamic currentPlaybackState = await ref.watch(spotifyPlaybackstateProvider.future);
 
-    return getAlbumArt(currentPlaybackState);
+    return getAlbumArt(currentPlaybackState.body);
   }
 
   Future<String> getAlbumArt(dynamic currentPlaybackState) async {

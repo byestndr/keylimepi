@@ -8,16 +8,16 @@ part 'spotify_playbackstate.g.dart';
 @Riverpod(keepAlive: true)
 class SpotifyPlaybackstate extends _$SpotifyPlaybackstate {
   @override
-  Future<Map<String, dynamic>> build() async {
+  Future<Response> build() async {
     ref.watch(refreshTimerProvider);
 
     return getNewPlaybackState();
   }
 
-  Future<Map<String, dynamic>> getNewPlaybackState() async {
+  Future<Response> getNewPlaybackState() async {
     final SpotifyUserService spotifyAPI = SpotifyUserService.create();
     final Response<dynamic> spotifyResponse = await spotifyAPI.getPlayerState();
 
-    return spotifyResponse.body;
+    return spotifyResponse;
   }
 }

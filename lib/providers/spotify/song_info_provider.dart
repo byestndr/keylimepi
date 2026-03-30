@@ -23,15 +23,22 @@ class Song {
 class InfoGetter extends _$InfoGetter {
   @override
   Future<Song> build() async {
-    final dynamic currentPlaybackState = await ref.watch(spotifyPlaybackstateProvider.future);
+    final dynamic currentPlaybackState = await ref.watch(
+      spotifyPlaybackstateProvider.future,
+    );
 
-    return getCurrentSong(currentPlaybackState);
+    if (currentPlaybackState.statusCode == 204) {
+      return Song();
+    }
+
+    return getCurrentSong(currentPlaybackState.body);
   }
 
   Future<Song> getCurrentSong(dynamic currentPlaybackState) async {
     Song currentSong = Song();
     currentSong.title = currentPlaybackState['item']['name'];
-    currentSong.artist = currentPlaybackState['item']['album']['artists'][0]['name'];
+    currentSong.artist =
+        currentPlaybackState['item']['album']['artists'][0]['name'];
     currentSong.uri = currentPlaybackState['item']['uri'];
 
     final Song? oldSong = state.value;

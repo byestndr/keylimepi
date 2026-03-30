@@ -33,7 +33,7 @@ final class AlbumImageProvider
   AlbumImage create() => AlbumImage();
 }
 
-String _$albumImageHash() => r'aecc5c0bf302a30abfaef4103875e541fae1f938';
+String _$albumImageHash() => r'e20e6f383003903ca93ecdc97884fa98ca87b295';
 
 abstract class _$AlbumImage extends $AsyncNotifier<String> {
   FutureOr<String> build();

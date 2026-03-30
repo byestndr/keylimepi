@@ -41,9 +41,9 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
     }
 
     try {
-      final Map<String, dynamic> body = await ref.watch(spotifyPlaybackstateProvider.future);
+      final dynamic body = await ref.watch(spotifyPlaybackstateProvider.future);
 
-      if (body['is_playing'] == false) {
+      if (body.statusCode == 204) {
         return;
       }
 

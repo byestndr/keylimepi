@@ -29,7 +29,9 @@ abstract class SpotifyUserService extends ChopperService {
       services: [_$SpotifyUserService()],
       converter: const JsonConverter(),
       authenticator: SpotifyChopperReauthentication(),
-      interceptors: [SpotifyChopperAuthInterceptor()],
+      interceptors: [
+        SpotifyChopperAuthInterceptor(),
+      ],
     );
     return _$SpotifyUserService(client);
   }

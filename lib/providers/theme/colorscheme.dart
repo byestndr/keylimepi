@@ -12,7 +12,14 @@ class appColorScheme extends _$appColorScheme {
       spotifyPlaybackstateProvider.future,
     );
 
-    return await updateColorScheme(currentPlaybackState);
+    if (currentPlaybackState.statusCode == 204) {
+      return ColorScheme.fromSeed(
+        seedColor: Colors.lightGreen,
+        brightness: Brightness.dark,
+      );
+    }
+
+    return await updateColorScheme(currentPlaybackState.body);
   }
 
   Future<ColorScheme> updateColorScheme(dynamic currentPlaybackState) async {

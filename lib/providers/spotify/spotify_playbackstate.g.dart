@@ -13,7 +13,7 @@ part of 'spotify_playbackstate.dart';
 final spotifyPlaybackstateProvider = SpotifyPlaybackstateProvider._();
 
 final class SpotifyPlaybackstateProvider
-    extends $AsyncNotifierProvider<SpotifyPlaybackstate, Map<String, dynamic>> {
+    extends $AsyncNotifierProvider<SpotifyPlaybackstate, Response<dynamic>> {
   SpotifyPlaybackstateProvider._()
     : super(
         from: null,
@@ -34,25 +34,21 @@ final class SpotifyPlaybackstateProvider
 }
 
 String _$spotifyPlaybackstateHash() =>
-    r'0a3b14909aedb91846d6a53471be51e3211cd313';
+    r'57793abbbb4240dd3ec31e339b9ffb6fd0385297';
 
 abstract class _$SpotifyPlaybackstate
-    extends $AsyncNotifier<Map<String, dynamic>> {
-  FutureOr<Map<String, dynamic>> build();
+    extends $AsyncNotifier<Response<dynamic>> {
+  FutureOr<Response<dynamic>> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final ref =
-        this.ref
-            as $Ref<AsyncValue<Map<String, dynamic>>, Map<String, dynamic>>;
+        this.ref as $Ref<AsyncValue<Response<dynamic>>, Response<dynamic>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<
-                AsyncValue<Map<String, dynamic>>,
-                Map<String, dynamic>
-              >,
-              AsyncValue<Map<String, dynamic>>,
+              AnyNotifier<AsyncValue<Response<dynamic>>, Response<dynamic>>,
+              AsyncValue<Response<dynamic>>,
               Object?,
               Object?
             >;

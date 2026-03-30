@@ -72,7 +72,11 @@ class RepeatButton extends ConsumerWidget {
           skipLoadingOnRefresh: true,
           skipLoadingOnReload: true,
           data: (dynamic data) {
-            final String? iconState = data['repeat_state'];
+            if (data.statusCode == 204) {
+              return Icons.repeat;
+            }
+
+            final String? iconState = data.body['repeat_state'];
 
             if (iconState == null) {
               return Icons.repeat;
@@ -192,7 +196,11 @@ class ShuffleButton extends ConsumerWidget {
           skipLoadingOnRefresh: true,
           skipLoadingOnReload: true,
           data: (dynamic data) {
-            return data['shuffle_state'] == false
+            if (data.statusCode == 204) {
+              return Icons.shuffle;
+            }
+
+            return data.body['shuffle_state'] == false
                 ? Icons.shuffle
                 : Icons.shuffle_on_rounded;
           },
@@ -236,7 +244,11 @@ class PauseButton extends ConsumerWidget {
           skipLoadingOnRefresh: true,
           skipLoadingOnReload: true,
           data: (dynamic data) {
-            return data['is_playing'] == false ? Icons.play_arrow : Icons.pause;
+            if (data.statusCode == 204) {
+              return Icons.shuffle;
+            }
+
+            return data.body['is_playing'] == false ? Icons.play_arrow : Icons.pause;
           },
           error: (Object error, StackTrace stack) {
             return Icons.play_arrow;
