@@ -46,12 +46,6 @@ class Interactions {
     return response.body;
   }
 
-  Future<String> getUserPlaylists() async {
-    final http.Response response = await _getRequest('playlists');
-    await AsyncPreferences().setStringValue('playlists', response.body);
-    return response.body;
-  }
-
   Future<String> getSavedAlbums() async {
     final http.Response response = await _getRequest('albums');
     await AsyncPreferences().setStringValue('saved_albums', response.body);
@@ -78,16 +72,6 @@ class Interactions {
       return await getLikedSongs();
     }
     return songs;
-  }
-
-  Future<String> getCachedPlaylists() async {
-    String? playlists = await AsyncPreferences().getStringValue('playlists');
-
-    if (playlists == null) {
-      return await getUserPlaylists();
-    }
-
-    return playlists;
   }
 
   Future<String> getQueue() async {

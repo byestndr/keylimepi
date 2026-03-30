@@ -20,7 +20,7 @@ final class PlaylistsProviderProvider
         argument: null,
         retry: null,
         name: r'playlistsProviderProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -33,7 +33,7 @@ final class PlaylistsProviderProvider
   PlaylistsProvider create() => PlaylistsProvider();
 }
 
-String _$playlistsProviderHash() => r'e55740b018c4014f510c9188e6afb795419960e5';
+String _$playlistsProviderHash() => r'664ae5d9a3c6f6effb54ae1a81390e9d606026c1';
 
 abstract class _$PlaylistsProvider extends $AsyncNotifier<List<dynamic>> {
   FutureOr<List<dynamic>> build();

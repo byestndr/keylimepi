@@ -166,9 +166,8 @@ class _SongSelectState extends ConsumerState<SongSelect> {
             final Future<void> refreshSongs = ref
                 .read(songProviderProvider.notifier)
                 .refreshSongs();
-            final Future<void> refreshPlaylists = ref
-                .read(playlistsProviderProvider.notifier)
-                .refreshPlaylists();
+            final Future<List<dynamic>> refreshPlaylists = ref
+                .refresh(playlistsProviderProvider.future);
 
             await Future.wait(<Future<void>>[
               refreshAlbums,

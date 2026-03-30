@@ -11,6 +11,18 @@ abstract class SpotifyUserService extends ChopperService {
   @GET(path: "/player")
   Future<Response> getPlayerState();
 
+  @GET(path: "/playlists")
+  Future<Response> getPlaylists();
+
+  @GET(path: '/albums')
+  Future<Response> getAlbums();
+
+  @GET(path: '/tracks')
+  Future<Response> getLikedSongs();
+
+  @GET(path: '/player/queue')
+  Future<Response> getQueue();
+
   static SpotifyUserService create() {
     final client = ChopperClient(
       baseUrl: Uri.parse('https://api.spotify.com'),
