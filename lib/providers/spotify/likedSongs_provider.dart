@@ -1,28 +1,25 @@
 import 'dart:convert';
 
+import 'package:chopper/chopper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 
 part 'likedSongs_provider.g.dart';
 
 @riverpod
 class SongProvider extends _$SongProvider {
+  final SpotifyUserService _spotifyAPI = SpotifyUserService.create();
+
   @override
   Future<List<dynamic>> build() {
     return getSongs();
   }
 
   Future<List<dynamic>> getSongs() async {
-    final dynamic response = await Interactions().getCachedSongs();
-    final Map<dynamic, dynamic> body = jsonDecode(response);
-    final List<dynamic> songs = body['items'];
+    final Response<dynamic> spotifyResponse = await _spotifyAPI.getLikedSongs();
+    final List<dynamic> songs = spotifyResponse.body['items'];
     return songs;
-  }
-
-  Future<void> refreshSongs() async {
-    await Interactions().getLikedSongs();
-    ref.invalidateSelf();
-    return;
   }
 
   Future<void> startSong(int songIndex) async {
@@ -31,4 +28,3 @@ class SongProvider extends _$SongProvider {
     await Interactions().resumePlayback(context_uri: songID);
   }
 }
-

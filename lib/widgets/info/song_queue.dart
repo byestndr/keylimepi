@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 import 'dart:async';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
@@ -15,7 +17,6 @@ class QueueSideSheet extends ConsumerStatefulWidget {
 }
 
 class _QueueSideSheetState extends ConsumerState<QueueSideSheet> {
-
   @override
   void initState() {
     super.initState();
@@ -55,9 +56,10 @@ class _QueueContentState extends State<QueueContent> {
   Timer? timer;
 
   Future<void> getQueueItems() async {
-    final String response = await Interactions().getQueue();
+    final SpotifyUserService spotifyAPI = SpotifyUserService.create();
 
-    final Map<String, dynamic> body = jsonDecode(response);
+    final Response spotifyResponse = await spotifyAPI.getQueue();
+    final dynamic body = spotifyResponse.body;
 
     if (!mounted) {
       return;

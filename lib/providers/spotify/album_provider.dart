@@ -1,35 +1,31 @@
 import 'dart:convert';
 
+import 'package:chopper/chopper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 part 'album_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AlbumProvider extends _$AlbumProvider {
+  final SpotifyUserService _spotifyAPI = SpotifyUserService.create();
+
   @override
   Future<List<dynamic>> build() {
     return getAlbums();
   }
 
   Future<List<dynamic>> getAlbums() async {
-    final dynamic response = await Interactions().getCachedAlbums();
-    final Map<dynamic, dynamic> body = jsonDecode(response);
-    final List<dynamic> albums = body['items'];
+    final Response<dynamic> spotifyResponse = await _spotifyAPI.getAlbums();
+    final List<dynamic> albums = spotifyResponse.body['items'];
     return albums;
   }
 
-  Future<void> refreshAlbums() async {
-    await Interactions().getSavedAlbums();
-    ref.invalidateSelf();
-    return;
-  }
-
+  
   Future<void> startAlbum(int albumIndex) async {
     final List<dynamic> playlists = await getAlbums();
     final String albumID = playlists[albumIndex]['album']['uri'];
     await Interactions().resumePlayback(context_uri: albumID);
   }
 }
-

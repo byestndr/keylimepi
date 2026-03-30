@@ -46,39 +46,6 @@ class Interactions {
     return response.body;
   }
 
-  Future<String> getSavedAlbums() async {
-    final http.Response response = await _getRequest('albums');
-    await AsyncPreferences().setStringValue('saved_albums', response.body);
-    return response.body;
-  }
-
-  Future<String> getCachedAlbums() async {
-    String? albums = await AsyncPreferences().getStringValue('saved_albums');
-    if (albums == null) {
-      return await getSavedAlbums();
-    }
-    return albums;
-  }
-
-  Future<String> getLikedSongs() async {
-    final http.Response response = await _getRequest('tracks');
-    await AsyncPreferences().setStringValue('liked_songs', response.body);
-    return response.body;
-  }
-
-  Future<String> getCachedSongs() async {
-    String? songs = await AsyncPreferences().getStringValue('liked_songs');
-    if (songs == null) {
-      return await getLikedSongs();
-    }
-    return songs;
-  }
-
-  Future<String> getQueue() async {
-    final http.Response response = await _getRequest('player/queue');
-    return response.body;
-  }
-
   Future<void> pausePlayback() async {
     await _putRequest('player/pause');
   }

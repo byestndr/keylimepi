@@ -20,7 +20,7 @@ final class AlbumProviderProvider
         argument: null,
         retry: null,
         name: r'albumProviderProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -33,7 +33,7 @@ final class AlbumProviderProvider
   AlbumProvider create() => AlbumProvider();
 }
 
-String _$albumProviderHash() => r'036255fc2bca7726848cf3fd4b83514c984b77d1';
+String _$albumProviderHash() => r'f1b9245329fbd767c0e17de4d197e33d58ad0a8e';
 
 abstract class _$AlbumProvider extends $AsyncNotifier<List<dynamic>> {
   FutureOr<List<dynamic>> build();

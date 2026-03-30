@@ -160,12 +160,10 @@ class _SongSelectState extends ConsumerState<SongSelect> {
             ],
           ),
           onRefresh: () async {
-            final Future<void> refreshAlbums = ref
-                .read(albumProviderProvider.notifier)
-                .refreshAlbums();
-            final Future<void> refreshSongs = ref
-                .read(songProviderProvider.notifier)
-                .refreshSongs();
+            final Future<List<dynamic>> refreshAlbums = ref
+                .read(albumProviderProvider.future);
+            final Future<List<dynamic>> refreshSongs = ref
+                .read(songProviderProvider.future);
             final Future<List<dynamic>> refreshPlaylists = ref
                 .refresh(playlistsProviderProvider.future);
 
