@@ -41,9 +41,11 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
     }
 
     try {
-      final dynamic body = await ref.watch(spotifyPlaybackstateProvider.future);
+      final dynamic currentPlaybackState = await ref.watch(spotifyPlaybackstateProvider.future);
 
-      if (body.statusCode == 204) {
+      if (currentPlaybackState.statusCode == 204) {
+        maxPos = 1;
+        sliderPos = 0;
         return;
       }
 
@@ -53,9 +55,9 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
 
       setState(() {
         try {
-          int pos = body['item']['duration_ms'];
+          int pos = currentPlaybackState.body['item']['duration_ms'];
           maxPos = pos.toDouble();
-          int currentpos = body['progress_ms'];
+          int currentpos = currentPlaybackState.body['progress_ms'];
           sliderPos = currentpos.toDouble();
           refreshCount = 0;
         } on NoSuchMethodError {
