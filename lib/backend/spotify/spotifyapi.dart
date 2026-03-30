@@ -9,12 +9,18 @@ class Interactions {
 
   Future<Map<String, String>> _getHeaders() async {
     final String? token = await AsyncPreferences().getStringValue('token');
-    final Map<String, String> headers = <String, String>{'Authorization': 'Bearer $token'};
+    final Map<String, String> headers = <String, String>{
+      'Authorization': 'Bearer $token',
+    };
 
     return headers;
   }
 
-  Future<void> _putRequest(String endpoint, {Map<String, dynamic>? params, String? body}) async {
+  Future<void> _putRequest(
+    String endpoint, {
+    Map<String, dynamic>? params,
+    String? body,
+  }) async {
     final Uri uri = Uri.https(base, '$path/$endpoint', params);
     final Map<String, String> headers = await _getHeaders();
     await http.put(uri, headers: headers, body: body);
@@ -33,60 +39,6 @@ class Interactions {
     final Map<String, String> headers = await _getHeaders();
 
     await http.post(uri, headers: headers);
-  }
-
-  Future<String> cachedPlaybackStateResponse({
-    required String functionName,
-  }) async {
-    // Rankings, 0 -> New Response only, 1 -> Pull responses sometimes, 2 -> Only use old responses
-    const Map<String, int> functionImportance = <String, int>{
-      'ProgressSlider': 0,
-      'SongImage': 1,
-      'SongInfo': 1,
-      'Controls': 0,
-      'ColorScheme': 2,
-    };
-
-    const int maxBeforeNewRequest = 15;
-
-    switch (functionImportance[functionName]) {
-      case 0:
-        final String response = await getPlaybackState();
-        await AsyncPreferences().setStringValue('response', response);
-        return response;
-      case 2:
-        String? response = await AsyncPreferences().getStringValue('response');
-        if (response == null) {
-          final String newResponse = await getPlaybackState();
-          await AsyncPreferences().setStringValue('response', newResponse);
-          return newResponse;
-        } else {
-          return response;
-        }
-      default:
-        int? counter = await AsyncPreferences().getIntValue(
-          'playback_state_counter',
-        );
-
-        if (counter == null || counter == maxBeforeNewRequest) {
-          const int newCounter = 1;
-          await AsyncPreferences().setIntValue('playback_state_counter', newCounter);
-          final String response = await getPlaybackState();
-          return response;
-        }
-
-        final int newCounter = counter++;
-        await AsyncPreferences().setIntValue('playback_state_counter', newCounter);
-
-        String? response = await AsyncPreferences().getStringValue('response');
-        if (response == null) {
-          final http.Response newResponse = await _getRequest('');
-          await AsyncPreferences().setStringValue('response', newResponse.body);
-          return newResponse.body;
-        } else {
-          return response;
-        }
-    }
   }
 
   Future<String> getPlaybackState() async {
@@ -130,11 +82,11 @@ class Interactions {
 
   Future<String> getCachedPlaylists() async {
     String? playlists = await AsyncPreferences().getStringValue('playlists');
-    
+
     if (playlists == null) {
       return await getUserPlaylists();
     }
-    
+
     return playlists;
   }
 
@@ -156,12 +108,14 @@ class Interactions {
     }
 
     if (context_uri != '' && context_uri.contains('track')) {
-      final Map<String, List<String>> bodyMap = <String, List<String>>{'uris': <String>[context_uri]};
+      final Map<String, List<String>> bodyMap = <String, List<String>>{
+        'uris': <String>[context_uri],
+      };
       body = jsonEncode(bodyMap);
-    }
-
-    else if (context_uri != '') {
-      final Map<String, String> bodyMap = <String, String>{'context_uri': context_uri};
+    } else if (context_uri != '') {
+      final Map<String, String> bodyMap = <String, String>{
+        'context_uri': context_uri,
+      };
       body = jsonEncode(bodyMap);
     }
 
@@ -177,7 +131,9 @@ class Interactions {
   }
 
   Future<void> seekSong(int position) async {
-    final Map<String, String> parameters = <String, String>{'position_ms': '$position'};
+    final Map<String, String> parameters = <String, String>{
+      'position_ms': '$position',
+    };
     await _putRequest('player/seek', params: parameters);
   }
 
@@ -193,7 +149,9 @@ class Interactions {
       newState = false;
     }
 
-    final Map<String, String> parameters = <String, String>{'state': '$newState'};
+    final Map<String, String> parameters = <String, String>{
+      'state': '$newState',
+    };
     await _putRequest('player/shuffle', params: parameters);
 
     return newState;
@@ -235,7 +193,9 @@ class Interactions {
         break;
     }
 
-    final Map<String, String> parameters = <String, String>{'state': '$newState'};
+    final Map<String, String> parameters = <String, String>{
+      'state': '$newState',
+    };
     await _putRequest('player/repeat', params: parameters);
 
     return newState;

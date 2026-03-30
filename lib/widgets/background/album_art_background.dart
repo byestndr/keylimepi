@@ -91,6 +91,9 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: backgroundImage.when(
+                  skipError: true,
+                  skipLoadingOnRefresh: true,
+                  skipLoadingOnReload: true,
                   data: (String data) {
                     return NetworkImage(data);
                   },

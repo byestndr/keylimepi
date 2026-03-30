@@ -48,6 +48,9 @@ class App extends ConsumerWidget {
       home: const MusicPage(),
       theme: ThemeData(
         colorScheme: appColorScheme.when(
+          skipError: true,
+          skipLoadingOnRefresh: true,
+          skipLoadingOnReload: true,
           data: (ColorScheme appscheme) => appscheme,
           error: (Object error, StackTrace stacktrace) {
             ColorScheme.fromSeed(

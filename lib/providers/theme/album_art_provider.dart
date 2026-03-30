@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'dart:convert';
-import 'package:spotimmich/backend/spotify/spotifyapi.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 part 'album_art_provider.g.dart';
 
@@ -8,15 +8,13 @@ part 'album_art_provider.g.dart';
 class AlbumImage extends _$AlbumImage {
   @override
   Future<String> build() async {
-    return getAlbumArt();
+    final dynamic currentPlaybackState = await ref.watch(spotifyPlaybackstateProvider.future);
+
+    return getAlbumArt(currentPlaybackState);
   }
 
-  Future<String> getAlbumArt() async {
-    final String currentPlaybackState = await Interactions()
-        .cachedPlaybackStateResponse(functionName: 'SongImage');
-
-    final dynamic body = jsonDecode(currentPlaybackState);
-    final String imageURL = body['item']['album']['images'][0]['url'];
+  Future<String> getAlbumArt(dynamic currentPlaybackState) async {
+    final String imageURL = currentPlaybackState['item']['album']['images'][0]['url'];
     return imageURL;
   }
 

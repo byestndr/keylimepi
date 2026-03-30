@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 const double iconButtonDensityHorizontal = 1;
 const double iconButtonDensityVertical = 1;
@@ -59,7 +60,7 @@ class RepeatButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<dynamic> playbackStateResponse = ref.watch(
-      getPlaybackStateProvider,
+      spotifyPlaybackstateProvider
     );
 
     return IconButton.filled(
@@ -179,7 +180,7 @@ class ShuffleButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<dynamic> playbackStateResponse = ref.watch(
-      getPlaybackStateProvider,
+      spotifyPlaybackstateProvider,
     );
 
     return IconButton.filled(
@@ -223,7 +224,7 @@ class PauseButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<dynamic> playbackStateResponse = ref.watch(
-      getPlaybackStateProvider,
+      spotifyPlaybackstateProvider,
     );
 
     return FloatingActionButton(

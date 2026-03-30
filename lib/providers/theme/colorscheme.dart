@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'dart:convert';
-import 'package:spotimmich/backend/spotify/spotifyapi.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 part 'colorscheme.g.dart';
 
@@ -9,17 +8,17 @@ part 'colorscheme.g.dart';
 class appColorScheme extends _$appColorScheme {
   @override
   Future<ColorScheme> build() async {
-    return await updateColorScheme();
-  }
-
-  Future<ColorScheme> updateColorScheme() async {
-    final String playstate = await Interactions().cachedPlaybackStateResponse(
-      functionName: 'ColorScheme',
+    final dynamic currentPlaybackState = await ref.watch(
+      spotifyPlaybackstateProvider.future,
     );
 
+    return await updateColorScheme(currentPlaybackState);
+  }
+
+  Future<ColorScheme> updateColorScheme(dynamic currentPlaybackState) async {
     try {
-      final dynamic body = jsonDecode(playstate);
-      final String imageURL = body['item']['album']['images'][0]['url'];
+      final String imageURL =
+          currentPlaybackState['item']['album']['images'][0]['url'];
       return ColorScheme.fromImageProvider(
         brightness: Brightness.dark,
         provider: NetworkImage(imageURL),

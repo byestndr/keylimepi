@@ -77,10 +77,13 @@ class SpotifyChopperAuthInterceptor implements Interceptor {
     final AsyncPreferences Preferences = AsyncPreferences();
     final String? token = await Preferences.getStringValue('token');
 
-    final request = chain.request.copyWith(
-      headers: {...chain.request.headers, 'Authorization': 'Bearer $token'},
-    );
+    if (token != null) {
+      final request = chain.request.copyWith(
+        headers: {...chain.request.headers, 'Authorization': 'Bearer $token'},
+      );
+      return chain.proceed(request);
+    }
 
-    return chain.proceed(request);
+    throw Exception('Not authenticated, please log in.');
   }
 }

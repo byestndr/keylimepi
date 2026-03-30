@@ -66,7 +66,7 @@ final class InfoGetterProvider
   InfoGetter create() => InfoGetter();
 }
 
-String _$infoGetterHash() => r'3ad37af1313c4fd5e1770342e032993523730701';
+String _$infoGetterHash() => r'fef0ae73a4cf5d52def639c9485c3d7568485dbf';
 
 abstract class _$InfoGetter extends $AsyncNotifier<Song> {
   FutureOr<Song> build();
@@ -131,50 +131,6 @@ abstract class _$isQueueExpanded extends $Notifier<bool> {
             as $ClassProviderElement<
               AnyNotifier<bool, bool>,
               bool,
-              Object?,
-              Object?
-            >;
-    element.handleCreate(ref, build);
-  }
-}
-
-@ProviderFor(GetPlaybackState)
-final getPlaybackStateProvider = GetPlaybackStateProvider._();
-
-final class GetPlaybackStateProvider
-    extends $AsyncNotifierProvider<GetPlaybackState, dynamic> {
-  GetPlaybackStateProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'getPlaybackStateProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$getPlaybackStateHash();
-
-  @$internal
-  @override
-  GetPlaybackState create() => GetPlaybackState();
-}
-
-String _$getPlaybackStateHash() => r'495f7a0982194255f75803d35778ae5346e0601b';
-
-abstract class _$GetPlaybackState extends $AsyncNotifier<dynamic> {
-  FutureOr<dynamic> build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<dynamic>, dynamic>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<dynamic>, dynamic>,
-              AsyncValue<dynamic>,
               Object?,
               Object?
             >;

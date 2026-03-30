@@ -32,6 +32,9 @@ class _SongImageState extends ConsumerState<SongImage> {
   Widget build(BuildContext context) {
     final AsyncValue<String> imageURL = ref.watch(albumImageProvider);
     return imageURL.when(
+      skipLoadingOnRefresh: true,
+      skipLoadingOnReload: true,
+      skipError: true,
       data: (String data) {
         return Image.network(
           data,

@@ -33,7 +33,7 @@ final class AppColorSchemeProvider
   appColorScheme create() => appColorScheme();
 }
 
-String _$appColorSchemeHash() => r'4f4fdb755684ad7b9582fdaf107bf973c218acc7';
+String _$appColorSchemeHash() => r'58b6eb26dcb3c3228bbbf5e85c28c2b28bd9fbe8';
 
 abstract class _$appColorScheme extends $AsyncNotifier<ColorScheme> {
   FutureOr<ColorScheme> build();

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 part 'album_provider.g.dart';
 

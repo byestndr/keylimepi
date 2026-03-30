@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
-class ProgressSlider extends StatefulWidget {
+class ProgressSlider extends ConsumerStatefulWidget {
   const ProgressSlider({super.key});
 
   @override
-  State<ProgressSlider> createState() => _ProgressSliderState();
+  ConsumerState<ProgressSlider> createState() => _ProgressSliderState();
 }
 
-class _ProgressSliderState extends State<ProgressSlider> {
+class _ProgressSliderState extends ConsumerState<ProgressSlider> {
   double sliderPos = 0;
   double maxPos = 3600000;
   Timer? timer;
@@ -39,11 +41,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
     }
 
     try {
-      final dynamic body = jsonDecode(
-        await Interactions().cachedPlaybackStateResponse(
-          functionName: 'ProgressSlider',
-        ),
-      );
+      final Map<String, dynamic> body = await ref.watch(spotifyPlaybackstateProvider.future);
 
       if (body['is_playing'] == false) {
         return;

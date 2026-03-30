@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'dart:convert';
-import 'package:spotimmich/backend/spotify/spotifyapi.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 import 'package:spotimmich/providers/theme/colorscheme.dart';
 import 'package:spotimmich/providers/theme/album_art_provider.dart';
 
@@ -23,27 +22,24 @@ class Song {
 @riverpod
 class InfoGetter extends _$InfoGetter {
   @override
-  Future<Song> build() {
-    ref.watch(refreshTimerProvider);
-    return getCurrentSong();
+  Future<Song> build() async {
+    final dynamic currentPlaybackState = await ref.watch(spotifyPlaybackstateProvider.future);
+
+    return getCurrentSong(currentPlaybackState);
   }
 
-  Future<Song> getCurrentSong() async {
-    final String currentPlaybackState = await Interactions()
-        .cachedPlaybackStateResponse(functionName: 'SongInfo');
-    final dynamic body = jsonDecode(currentPlaybackState);
-
+  Future<Song> getCurrentSong(dynamic currentPlaybackState) async {
     Song currentSong = Song();
-    currentSong.title = body['item']['name'];
-    currentSong.artist = body['item']['album']['artists'][0]['name'];
-    currentSong.uri = body['item']['uri'];
+    currentSong.title = currentPlaybackState['item']['name'];
+    currentSong.artist = currentPlaybackState['item']['album']['artists'][0]['name'];
+    currentSong.uri = currentPlaybackState['item']['uri'];
 
     final Song? oldSong = state.value;
 
     if (oldSong != null) {
       isNewSong(currentSong.uri);
-    }  
-    
+    }
+
     // If no previous song is found, it should still refresh colorscheme and images.
     if (oldSong == null) {
       ref.read(albumImageProvider.notifier).refreshImage();
@@ -74,18 +70,5 @@ class isQueueExpanded extends _$isQueueExpanded {
 
   void changeState() {
     state = !state;
-  }
-}
-
-@riverpod
-class GetPlaybackState extends _$GetPlaybackState {
-  @override
-  Future<dynamic> build() async {
-    ref.watch(refreshTimerProvider);
-    final String currentPlaybackState = await Interactions()
-        .cachedPlaybackStateResponse(functionName: 'Controls');
-
-    final dynamic playbackJson = jsonDecode(currentPlaybackState);
-    return playbackJson;
   }
 }
