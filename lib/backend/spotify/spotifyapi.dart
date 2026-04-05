@@ -50,27 +50,8 @@ class Interactions {
     await _putRequest('player/pause');
   }
 
-  Future<void> resumePlayback({String? context_uri}) async {
-    String body = '';
-
-    if (context_uri == null) {
-      await _putRequest('player/play');
-      return;
-    }
-
-    if (context_uri != '' && context_uri.contains('track')) {
-      final Map<String, List<String>> bodyMap = <String, List<String>>{
-        'uris': <String>[context_uri],
-      };
-      body = jsonEncode(bodyMap);
-    } else if (context_uri != '') {
-      final Map<String, String> bodyMap = <String, String>{
-        'context_uri': context_uri,
-      };
-      body = jsonEncode(bodyMap);
-    }
-
-    await _putRequest('player/play', body: body);
+  Future<void> resumePlayback() async {
+    await _putRequest('player/play');
   }
 
   Future<void> skipPrevious() async {

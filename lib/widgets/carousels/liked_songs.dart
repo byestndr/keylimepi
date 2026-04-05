@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
 import 'package:spotimmich/providers/spotify/likedSongs_provider.dart';
 
 class SongCarousel extends ConsumerStatefulWidget {
@@ -16,7 +17,11 @@ class _AlbumCarouselState extends ConsumerState<SongCarousel> {
 
     return CarouselView(
       onTap: (int index) async {
-        await ref.read(songProviderProvider.notifier).startSong(index);
+        final List<dynamic> tracks = await ref.read(
+          songProviderProvider.future,
+        );
+        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+        await spotifyAPI.startFromContext(<dynamic>[tracks[index]['track']['uri']]);
       },
       itemExtent: 200,
       children: List<Widget>.generate(

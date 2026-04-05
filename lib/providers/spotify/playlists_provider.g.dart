@@ -33,7 +33,7 @@ final class PlaylistsProviderProvider
   PlaylistsProvider create() => PlaylistsProvider();
 }
 
-String _$playlistsProviderHash() => r'664ae5d9a3c6f6effb54ae1a81390e9d606026c1';
+String _$playlistsProviderHash() => r'21b093c2ea37afa75f508e514d11b3dd78a16142';
 
 abstract class _$PlaylistsProvider extends $AsyncNotifier<List<dynamic>> {
   FutureOr<List<dynamic>> build();

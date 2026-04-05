@@ -1,5 +1,4 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'dart:convert';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 part 'album_art_provider.g.dart';

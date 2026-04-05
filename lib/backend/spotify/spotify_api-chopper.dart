@@ -2,7 +2,6 @@ import 'package:chopper/chopper.dart';
 import 'dart:async';
 
 import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
-import 'package:spotimmich/settings/preferences.dart';
 
 part 'spotify_api-chopper.chopper.dart';
 
@@ -23,15 +22,32 @@ abstract class SpotifyUserService extends ChopperService {
   @GET(path: '/player/queue')
   Future<Response> getQueue();
 
+  @PUT(path: '/player/pause')
+  Future<Response> pausePlayback();
+
+  @PUT(path: '/player/play')
+  Future<Response> resumePlayback();
+
+  @PUT(path: '/player/play')
+  Future<Response> _startFromContext(@Body() Map<String, dynamic> body);
+
+  Future<Response>? startFromContext(dynamic contextUri) {
+    if (contextUri.runtimeType == String) {
+      return _startFromContext(<String, dynamic>{'context_uri': contextUri});
+    } else if (contextUri.runtimeType == List<dynamic>) {
+      return _startFromContext(<String, dynamic>{'uris': contextUri});
+    }
+
+    return null;
+  }
+
   static SpotifyUserService create() {
-    final client = ChopperClient(
+    final ChopperClient client = ChopperClient(
       baseUrl: Uri.parse('https://api.spotify.com'),
-      services: [_$SpotifyUserService()],
+      services: <ChopperService>[_$SpotifyUserService()],
       converter: const JsonConverter(),
       authenticator: SpotifyChopperReauthentication(),
-      interceptors: [
-        SpotifyChopperAuthInterceptor(),
-      ],
+      interceptors: <Interceptor>[SpotifyChopperAuthInterceptor()],
     );
     return _$SpotifyUserService(client);
   }

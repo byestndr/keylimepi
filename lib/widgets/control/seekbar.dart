@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
