@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
@@ -60,7 +61,7 @@ class RepeatButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<dynamic> playbackStateResponse = ref.watch(
-      spotifyPlaybackstateProvider
+      spotifyPlaybackstateProvider,
     );
 
     return IconButton.filled(
@@ -82,9 +83,7 @@ class RepeatButton extends ConsumerWidget {
               return Icons.repeat;
             }
 
-            final IconData currentIcon = RepeatStates.getIcon(
-              iconState
-            );
+            final IconData currentIcon = RepeatStates.getIcon(iconState);
             return currentIcon;
           },
           error: (Object error, StackTrace stack) {
@@ -116,7 +115,8 @@ class NextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton.filled(
       onPressed: () {
-        Interactions().skipNext();
+        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+        spotifyAPI.skipForward();
       },
       icon: const Icon(Icons.skip_next),
       iconSize: 30,
@@ -140,7 +140,8 @@ class PreviousButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton.filled(
       onPressed: () {
-        Interactions().skipPrevious();
+        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+        spotifyAPI.skipPrevious();
       },
       icon: const Icon(Icons.skip_previous),
       iconSize: 30,
@@ -237,7 +238,8 @@ class PauseButton extends ConsumerWidget {
 
     return FloatingActionButton(
       onPressed: () {
-        Interactions().pauseToggle();
+        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+        spotifyAPI.playPause();
       },
       child: Icon(
         playbackStateResponse.when(
@@ -245,10 +247,12 @@ class PauseButton extends ConsumerWidget {
           skipLoadingOnReload: true,
           data: (dynamic data) {
             if (data.statusCode == 204) {
-              return Icons.shuffle;
+              return Icons.play_arrow;
             }
 
-            return data.body['is_playing'] == false ? Icons.play_arrow : Icons.pause;
+            return data.body['is_playing'] == false
+                ? Icons.play_arrow
+                : Icons.pause;
           },
           error: (Object error, StackTrace stack) {
             return Icons.play_arrow;

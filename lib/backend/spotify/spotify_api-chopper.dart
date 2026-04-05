@@ -22,11 +22,17 @@ abstract class SpotifyUserService extends ChopperService {
   @GET(path: '/player/queue')
   Future<Response> getQueue();
 
+  @POST(path: '/player/previous')
+  Future<Response> skipPrevious();
+
+  @POST(path: '/player/next')
+  Future<Response> skipForward();
+
   @PUT(path: '/player/pause')
-  Future<Response> pausePlayback();
+  Future<Response> _pausePlayback();
 
   @PUT(path: '/player/play')
-  Future<Response> resumePlayback();
+  Future<Response> _resumePlayback();
 
   @PUT(path: '/player/play')
   Future<Response> _startFromContext(@Body() Map<String, dynamic> body);
@@ -39,6 +45,19 @@ abstract class SpotifyUserService extends ChopperService {
     }
 
     return null;
+  }
+
+  Future<Response>? playPause() async {
+    final Response<dynamic> playbackState = await getPlayerState();
+    final bool isPlaying = playbackState.body['is_playing'];
+
+    if (isPlaying == true) {
+      await _pausePlayback();
+    } else {
+      await _resumePlayback();
+    }
+    
+    return playbackState;
   }
 
   static SpotifyUserService create() {

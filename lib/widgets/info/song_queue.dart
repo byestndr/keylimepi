@@ -94,8 +94,10 @@ class _QueueContentState extends State<QueueContent> {
   }
 
   Future<void> skipToSong(int index) async {
+    final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+
     for (int i = 0; i < index + 1; i++) {
-      unawaited(Interactions().skipNext());
+      unawaited(spotifyAPI.skipForward());
     }
     // For some reason, the first time an item is clicked, the
     // queue returned by Spotify doesn't change without delay.

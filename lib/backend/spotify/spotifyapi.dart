@@ -34,32 +34,9 @@ class Interactions {
     return response;
   }
 
-  Future<void> _postRequest(String endpoint) async {
-    final Uri uri = Uri.https(base, '$path/$endpoint');
-    final Map<String, String> headers = await _getHeaders();
-
-    await http.post(uri, headers: headers);
-  }
-
   Future<String> getPlaybackState() async {
     final http.Response response = await _getRequest('player');
     return response.body;
-  }
-
-  Future<void> pausePlayback() async {
-    await _putRequest('player/pause');
-  }
-
-  Future<void> resumePlayback() async {
-    await _putRequest('player/play');
-  }
-
-  Future<void> skipPrevious() async {
-    await _postRequest('player/previous');
-  }
-
-  Future<void> skipNext() async {
-    await _postRequest('player/next');
   }
 
   Future<void> seekSong(int position) async {
@@ -86,21 +63,6 @@ class Interactions {
     };
     await _putRequest('player/shuffle', params: parameters);
 
-    return newState;
-  }
-
-  Future<bool> pauseToggle() async {
-    final String response = await getPlaybackState();
-    final dynamic body = jsonDecode(response);
-    final bool isPlaying = body['is_playing'];
-    bool newState = false;
-    if (isPlaying == true) {
-      newState = false;
-      await pausePlayback();
-    } else {
-      newState = true;
-      await resumePlayback();
-    }
     return newState;
   }
 

@@ -54,14 +54,28 @@ final class _$SpotifyUserService extends SpotifyUserService {
   }
 
   @override
-  Future<Response<dynamic>> pausePlayback() {
+  Future<Response<dynamic>> skipPrevious() {
+    final Uri $url = Uri.parse('/v1/me/player/previous');
+    final Request $request = Request('POST', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> skipForward() {
+    final Uri $url = Uri.parse('/v1/me/player/next');
+    final Request $request = Request('POST', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> _pausePlayback() {
     final Uri $url = Uri.parse('/v1/me/player/pause');
     final Request $request = Request('PUT', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
 
   @override
-  Future<Response<dynamic>> resumePlayback() {
+  Future<Response<dynamic>> _resumePlayback() {
     final Uri $url = Uri.parse('/v1/me/player/play');
     final Request $request = Request('PUT', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
