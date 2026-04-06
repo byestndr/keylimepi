@@ -39,13 +39,6 @@ class Interactions {
     return response.body;
   }
 
-  Future<void> seekSong(int position) async {
-    final Map<String, String> parameters = <String, String>{
-      'position_ms': '$position',
-    };
-    await _putRequest('player/seek', params: parameters);
-  }
-
   Future<bool> shuffleToggle() async {
     final String response = await getPlaybackState();
     final dynamic body = jsonDecode(response);

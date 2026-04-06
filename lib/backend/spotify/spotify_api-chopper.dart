@@ -28,6 +28,9 @@ abstract class SpotifyUserService extends ChopperService {
   @POST(path: '/player/next')
   Future<Response> skipForward();
 
+  @PUT(path: '/player/seek')
+  Future<Response> seekSong(@Query('position_ms') int position);
+
   @PUT(path: '/player/pause')
   Future<Response> _pausePlayback();
 

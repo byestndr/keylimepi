@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
 import 'dart:async';
-import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 class ProgressSlider extends ConsumerStatefulWidget {
@@ -97,7 +97,8 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
         },
         onChangeEnd: (double value) {
           int currentPosition = value.toInt();
-          Interactions().seekSong(currentPosition);
+          final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+          spotifyAPI.seekSong(currentPosition);
         },
       ),
     );
