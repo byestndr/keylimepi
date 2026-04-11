@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'album_provider.dart';
+part of 'playlists_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,38 +9,37 @@ part of 'album_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(AlbumProvider)
-const albumProviderProvider = AlbumProviderProvider._();
+@ProviderFor(PlaylistsProvider)
+final playlistsProviderProvider = PlaylistsProviderProvider._();
 
-final class AlbumProviderProvider
-    extends $AsyncNotifierProvider<AlbumProvider, List<dynamic>> {
-  const AlbumProviderProvider._()
+final class PlaylistsProviderProvider
+    extends $AsyncNotifierProvider<PlaylistsProvider, List<dynamic>> {
+  PlaylistsProviderProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'albumProviderProvider',
-        isAutoDispose: true,
+        name: r'playlistsProviderProvider',
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$albumProviderHash();
+  String debugGetCreateSourceHash() => _$playlistsProviderHash();
 
   @$internal
   @override
-  AlbumProvider create() => AlbumProvider();
+  PlaylistsProvider create() => PlaylistsProvider();
 }
 
-String _$albumProviderHash() => r'036255fc2bca7726848cf3fd4b83514c984b77d1';
+String _$playlistsProviderHash() => r'21b093c2ea37afa75f508e514d11b3dd78a16142';
 
-abstract class _$AlbumProvider extends $AsyncNotifier<List<dynamic>> {
+abstract class _$PlaylistsProvider extends $AsyncNotifier<List<dynamic>> {
   FutureOr<List<dynamic>> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<dynamic>>, List<dynamic>>;
     final element =
         ref.element
@@ -50,6 +49,6 @@ abstract class _$AlbumProvider extends $AsyncNotifier<List<dynamic>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

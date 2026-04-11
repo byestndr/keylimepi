@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/backend/spotify/spotify_api.dart';
 import 'dart:async';
-import 'dart:convert';
-import 'package:spotimmich/settings/spotify/spotifyapi.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
-class ProgressSlider extends StatefulWidget {
+class ProgressSlider extends ConsumerStatefulWidget {
   const ProgressSlider({super.key});
 
   @override
-  State<ProgressSlider> createState() => _ProgressSliderState();
+  ConsumerState<ProgressSlider> createState() => _ProgressSliderState();
 }
 
-class _ProgressSliderState extends State<ProgressSlider> {
+class _ProgressSliderState extends ConsumerState<ProgressSlider> {
   double sliderPos = 0;
   double maxPos = 3600000;
   Timer? timer;
   int refreshCount = 20;
+  bool _isPaused = true;
 
   @override
   void initState() {
@@ -28,7 +30,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
   }
 
   Future<void> RefreshLoop() async {
-    if (refreshCount < 30) {
+    if (refreshCount < 30 && _isPaused) {
       refreshCount++;
       setState(() {
         if (sliderPos + 200 <= maxPos) {
@@ -39,13 +41,13 @@ class _ProgressSliderState extends State<ProgressSlider> {
     }
 
     try {
-      final dynamic body = jsonDecode(
-        await Interactions().cachedPlaybackStateResponse(
-          functionName: 'ProgressSlider',
-        ),
+      final dynamic currentPlaybackState = await ref.watch(
+        spotifyPlaybackstateProvider.future,
       );
 
-      if (body['is_playing'] == false) {
+      if (currentPlaybackState.statusCode == 204) {
+        maxPos = 1;
+        sliderPos = 0;
         return;
       }
 
@@ -55,11 +57,13 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
       setState(() {
         try {
-          int pos = body['item']['duration_ms'];
+          _isPaused = false;
+          int pos = currentPlaybackState.body['item']['duration_ms'];
           maxPos = pos.toDouble();
-          int currentpos = body['progress_ms'];
+          int currentpos = currentPlaybackState.body['progress_ms'];
           sliderPos = currentpos.toDouble();
           refreshCount = 0;
+          _isPaused = currentPlaybackState.body['is_playing'];
         } on NoSuchMethodError {
           maxPos = 1;
           sliderPos = 0;
@@ -93,7 +97,8 @@ class _ProgressSliderState extends State<ProgressSlider> {
         },
         onChangeEnd: (double value) {
           int currentPosition = value.toInt();
-          Interactions().seekSong(currentPosition);
+          final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+          spotifyAPI.seekSong(currentPosition);
         },
       ),
     );

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/player_page.dart';
-import 'package:spotimmich/providers/background_getter.dart';
+import 'package:spotimmich/providers/theme/background_getter.dart';
 import 'package:spotimmich/song_select.dart';
 import 'package:spotimmich/widgets/control/playbackbar.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/backend/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/settings/settings.dart';
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:spotimmich/widgets/info/song_queue.dart';
-import 'package:spotimmich/providers/colorscheme.dart';
+import 'package:spotimmich/providers/theme/colorscheme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +47,9 @@ class App extends ConsumerWidget {
       home: const MusicPage(),
       theme: ThemeData(
         colorScheme: appColorScheme.when(
+          skipError: true,
+          skipLoadingOnRefresh: true,
+          skipLoadingOnReload: true,
           data: (ColorScheme appscheme) => appscheme,
           error: (Object error, StackTrace stacktrace) {
             ColorScheme.fromSeed(

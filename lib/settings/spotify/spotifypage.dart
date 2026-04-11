@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:spotimmich/settings/spotify/spotifyauth.dart';
+import 'package:spotimmich/backend/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/spotify/spotifytokendialog.dart';
-import 'package:spotimmich/settings/spotify/spotifyauthserver.dart';
+import 'package:spotimmich/backend/spotify/spotifyauthserver.dart';
 
 class SpotifyPage extends StatelessWidget {
   const SpotifyPage({super.key});

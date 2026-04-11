@@ -6,9 +6,9 @@ import 'package:spotimmich/widgets/carousels/album_carousel.dart';
 import 'package:spotimmich/widgets/carousels/liked_songs.dart';
 import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/widgets/carousels/playlist_carousel.dart';
-import 'package:spotimmich/providers/album_provider.dart';
-import 'package:spotimmich/providers/likedSongs_provider.dart';
-import 'package:spotimmich/providers/playlists_provider.dart';
+import 'package:spotimmich/providers/spotify/album_provider.dart';
+import 'package:spotimmich/providers/spotify/likedSongs_provider.dart';
+import 'package:spotimmich/providers/spotify/playlists_provider.dart';
 import 'package:spotimmich/widgets/info/songimage.dart';
 import 'package:spotimmich/widgets/info/songinfo.dart';
 
@@ -160,15 +160,12 @@ class _SongSelectState extends ConsumerState<SongSelect> {
             ],
           ),
           onRefresh: () async {
-            final Future<void> refreshAlbums = ref
-                .read(albumProviderProvider.notifier)
-                .refreshAlbums();
-            final Future<void> refreshSongs = ref
-                .read(songProviderProvider.notifier)
-                .refreshSongs();
-            final Future<void> refreshPlaylists = ref
-                .read(playlistsProviderProvider.notifier)
-                .refreshPlaylists();
+            final Future<List<dynamic>> refreshAlbums = ref
+                .read(albumProviderProvider.future);
+            final Future<List<dynamic>> refreshSongs = ref
+                .read(songProviderProvider.future);
+            final Future<List<dynamic>> refreshPlaylists = ref
+                .refresh(playlistsProviderProvider.future);
 
             await Future.wait(<Future<void>>[
               refreshAlbums,

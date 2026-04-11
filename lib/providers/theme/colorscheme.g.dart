@@ -10,11 +10,11 @@ part of 'colorscheme.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(appColorScheme)
-const appColorSchemeProvider = AppColorSchemeProvider._();
+final appColorSchemeProvider = AppColorSchemeProvider._();
 
 final class AppColorSchemeProvider
     extends $AsyncNotifierProvider<appColorScheme, ColorScheme> {
-  const AppColorSchemeProvider._()
+  AppColorSchemeProvider._()
     : super(
         from: null,
         argument: null,
@@ -33,14 +33,13 @@ final class AppColorSchemeProvider
   appColorScheme create() => appColorScheme();
 }
 
-String _$appColorSchemeHash() => r'4f4fdb755684ad7b9582fdaf107bf973c218acc7';
+String _$appColorSchemeHash() => r'71d3602f7fefe2c34c0408b2e7517e6f1c48dd0e';
 
 abstract class _$appColorScheme extends $AsyncNotifier<ColorScheme> {
   FutureOr<ColorScheme> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<ColorScheme>, ColorScheme>;
     final element =
         ref.element
@@ -50,6 +49,6 @@ abstract class _$appColorScheme extends $AsyncNotifier<ColorScheme> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

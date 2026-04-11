@@ -10,11 +10,11 @@ part of 'album_art_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(AlbumImage)
-const albumImageProvider = AlbumImageProvider._();
+final albumImageProvider = AlbumImageProvider._();
 
 final class AlbumImageProvider
     extends $AsyncNotifierProvider<AlbumImage, String> {
-  const AlbumImageProvider._()
+  AlbumImageProvider._()
     : super(
         from: null,
         argument: null,
@@ -33,14 +33,13 @@ final class AlbumImageProvider
   AlbumImage create() => AlbumImage();
 }
 
-String _$albumImageHash() => r'95409676020ab737e560cf749770313e51ced36b';
+String _$albumImageHash() => r'e20e6f383003903ca93ecdc97884fa98ca87b295';
 
 abstract class _$AlbumImage extends $AsyncNotifier<String> {
   FutureOr<String> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<String>, String>;
     final element =
         ref.element
@@ -50,6 +49,6 @@ abstract class _$AlbumImage extends $AsyncNotifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

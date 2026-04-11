@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/player_page.dart';
-import 'package:spotimmich/providers/album_art_provider.dart';
+import 'package:spotimmich/providers/theme/album_art_provider.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/widgets/control/seekbar.dart';
 
@@ -91,6 +91,9 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: backgroundImage.when(
+                  skipError: true,
+                  skipLoadingOnRefresh: true,
+                  skipLoadingOnReload: true,
                   data: (String data) {
                     return NetworkImage(data);
                   },
