@@ -38,20 +38,28 @@ class _SongImageState extends ConsumerState<SongImage> {
       data: (String data) {
         return Image.network(
           data,
-          cacheHeight:
-              (MediaQuery.of(context).devicePixelRatio * imageMultiplier)
-                  .toInt(),
+          height:
+              (MediaQuery.of(context).size.height *
+                  MediaQuery.of(context).devicePixelRatio) /
+              5,
         );
       },
       error: (Object error, StackTrace trace) {
         return Image.asset(
           'assets/imagePlaceholder.png',
-          cacheHeight:
-              (MediaQuery.of(context).devicePixelRatio * imageMultiplier)
-                  .toInt(),
+          height:
+              (MediaQuery.of(context).size.height *
+                  MediaQuery.of(context).devicePixelRatio) /
+              5,
         );
       },
-      loading: () => const CircularProgressIndicator(),
+      loading: () => Image.asset(
+        'assets/imagePlaceholder.png',
+        height:
+            (MediaQuery.of(context).size.height *
+                MediaQuery.of(context).devicePixelRatio) /
+            5,
+      ),
     );
   }
 }
