@@ -58,33 +58,4 @@ class Interactions {
 
     return newState;
   }
-
-  Future<String> repeatState() async {
-    final String response = await getPlaybackState();
-    final dynamic body = jsonDecode(response);
-    final String currentState = body['repeat_state'];
-    String newState = 'off';
-
-    switch (currentState) {
-      case 'off':
-        newState = 'context';
-        break;
-      case 'context':
-        newState = 'track';
-        break;
-      case 'track':
-        newState = 'off';
-        break;
-      default:
-        newState = 'off';
-        break;
-    }
-
-    final Map<String, String> parameters = <String, String>{
-      'state': '$newState',
-    };
-    await _putRequest('player/repeat', params: parameters);
-
-    return newState;
-  }
 }

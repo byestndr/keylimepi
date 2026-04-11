@@ -31,6 +31,9 @@ abstract class SpotifyUserService extends ChopperService {
   @PUT(path: '/player/seek')
   Future<Response> seekSong(@Query('position_ms') int position);
 
+  @PUT(path: '/player/repeat')
+  Future<Response> cycleRepeat(@Query('state') String repeatState);
+
   @PUT(path: '/player/pause')
   Future<Response> _pausePlayback();
 

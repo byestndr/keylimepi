@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
@@ -55,45 +57,89 @@ class PlaybackControls extends StatelessWidget {
   }
 }
 
-class RepeatButton extends ConsumerWidget {
+class RepeatButton extends ConsumerStatefulWidget {
   const RepeatButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<dynamic> playbackStateResponse = ref.watch(
+  ConsumerState<ConsumerStatefulWidget> createState() => _RepeatButtonState();
+}
+
+class _RepeatButtonState extends ConsumerState<RepeatButton> {
+  late Timer _timer;
+  String _currentState = 'off';
+  IconData _currentIcon = Icons.repeat_rounded;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 2), (_) {
+      _getCurrentState();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
+
+  void _getCurrentState() {
+    final AsyncValue<dynamic> playbackStateResponse = ref.read(
       spotifyPlaybackstateProvider,
     );
 
+    playbackStateResponse.when(
+      data: (dynamic data) {
+        setState(() {
+          _currentState = data.body['repeat_state'];
+          switch (_currentState) {
+            case 'off':
+              _currentIcon = Icons.repeat_rounded;
+            case 'context':
+              _currentIcon = Icons.repeat_on_rounded;
+            case 'track':
+              _currentIcon = Icons.repeat_one_on_rounded;
+            default:
+              _currentIcon = Icons.repeat_rounded;
+          }
+        });
+      },
+      error: (Object error, StackTrace stackTrace) => setState(() {
+        _currentIcon = Icons.repeat_rounded;
+      }),
+      loading: () => setState(() {
+        _currentIcon = Icons.repeat_rounded;
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return IconButton.filled(
       onPressed: () {
-        Interactions().repeatState();
+        setState(() {
+          switch (_currentState) {
+            case 'off':
+              _currentState = 'context';
+              _currentIcon = Icons.repeat_on_rounded;
+              break;
+            case 'context':
+              _currentState = 'track';
+              _currentIcon = Icons.repeat_one_rounded;
+              break;
+            case 'track':
+              _currentState = 'off';
+              _currentIcon = Icons.repeat_rounded;
+              break;
+            default:
+              _currentState = 'off';
+              break;
+          }
+        });
+        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+        spotifyAPI.cycleRepeat(_currentState);
       },
-      icon: Icon(
-        playbackStateResponse.when(
-          skipLoadingOnRefresh: true,
-          skipLoadingOnReload: true,
-          data: (dynamic data) {
-            if (data.statusCode == 204) {
-              return Icons.repeat;
-            }
-
-            final String? iconState = data.body['repeat_state'];
-
-            if (iconState == null) {
-              return Icons.repeat;
-            }
-
-            final IconData currentIcon = RepeatStates.getIcon(iconState);
-            return currentIcon;
-          },
-          error: (Object error, StackTrace stack) {
-            return Icons.repeat;
-          },
-          loading: () {
-            return Icons.repeat;
-          },
-        ),
-      ),
+      icon: Icon(_currentIcon),
       iconSize: 30,
       visualDensity: const VisualDensity(
         horizontal: iconButtonDensityHorizontal,
