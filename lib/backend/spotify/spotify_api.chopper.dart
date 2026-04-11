@@ -1,7 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format width=80
 
-part of 'spotify_api-chopper.dart';
+part of 'spotify_api.dart';
 
 // **************************************************************************
 // ChopperGenerator

@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
 
-part 'spotify_api-chopper.chopper.dart';
+part 'spotify_api.chopper.dart';
 
 @ChopperApi(baseUrl: '/v1/me')
 abstract class SpotifyUserService extends ChopperService {

@@ -1,7 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
+import 'package:spotimmich/backend/spotify/spotify_api.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 import 'dart:async';
 import 'package:spotimmich/backend/spotify/spotifyauth.dart';

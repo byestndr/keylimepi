@@ -1,6 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
+import 'package:spotimmich/backend/spotify/spotify_api.dart';
 
 part 'album_provider.g.dart';
 
