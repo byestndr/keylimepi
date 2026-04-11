@@ -289,41 +289,81 @@ class _ShuffleButtonState extends ConsumerState<ShuffleButton> {
   }
 }
 
-class PauseButton extends ConsumerWidget {
+class PauseButton extends ConsumerStatefulWidget {
   const PauseButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<dynamic> playbackStateResponse = ref.watch(
+  ConsumerState<ConsumerStatefulWidget> createState() => _PauseButtonState();
+}
+
+class _PauseButtonState extends ConsumerState<PauseButton>
+    with SingleTickerProviderStateMixin {
+  late Timer _timer;
+  bool _currentState = false;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
+      _getCurrentState();
+    });
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+    _controller.dispose();
+  }
+
+  void _getCurrentState() {
+    final AsyncValue<dynamic> playbackStateResponse = ref.read(
       spotifyPlaybackstateProvider,
     );
+    playbackStateResponse.when(
+      skipError: true,
+      skipLoadingOnRefresh: true,
+      skipLoadingOnReload: true,
+      data: (dynamic data) {
+        setState(() {
+          _currentState = data.body['is_playing'];
+        });
+        if (_currentState) {
+          _controller.forward();
+        } else {
+          _controller.reverse();
+        }
+      },
+      error: (Object error, StackTrace stackTrace) => setState(() {
+        _currentState = false;
+      }),
+      loading: () => setState(() {
+        _currentState = false;
+      }),
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
+        _currentState = !_currentState;
+        if (_currentState) {
+          _controller.forward();
+        } else {
+          _controller.reverse();
+        }
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         spotifyAPI.playPause();
       },
-      child: Icon(
-        playbackStateResponse.when(
-          skipLoadingOnRefresh: true,
-          skipLoadingOnReload: true,
-          data: (dynamic data) {
-            if (data.statusCode == 204) {
-              return Icons.play_arrow;
-            }
-
-            return data.body['is_playing'] == false
-                ? Icons.play_arrow
-                : Icons.pause;
-          },
-          error: (Object error, StackTrace stack) {
-            return Icons.play_arrow;
-          },
-          loading: () {
-            return Icons.play_arrow;
-          },
-        ),
-      ),
+      child: AnimatedIcon(icon: AnimatedIcons.play_pause, progress: _animation),
     );
   }
 }
