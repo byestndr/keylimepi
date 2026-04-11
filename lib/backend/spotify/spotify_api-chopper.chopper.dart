@@ -98,6 +98,19 @@ final class _$SpotifyUserService extends SpotifyUserService {
   }
 
   @override
+  Future<Response<dynamic>> shuffleToggle(bool isShuffled) {
+    final Uri $url = Uri.parse('/v1/me/player/shuffle');
+    final Map<String, dynamic> $params = <String, dynamic>{'state': isShuffled};
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> _pausePlayback() {
     final Uri $url = Uri.parse('/v1/me/player/pause');
     final Request $request = Request('PUT', $url, client.baseUrl);

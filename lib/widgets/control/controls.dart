@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/spotify/spotify_api-chopper.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
-import 'package:spotimmich/backend/spotify/spotifyapi.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 const double iconButtonDensityHorizontal = 1;
@@ -81,7 +80,7 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 2), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
       _getCurrentState();
     });
   }
@@ -98,6 +97,9 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
     );
 
     playbackStateResponse.when(
+      skipError: true,
+      skipLoadingOnRefresh: true,
+      skipLoadingOnReload: true,
       data: (dynamic data) {
         setState(() {
           _currentState = data.body['repeat_state'];
@@ -213,39 +215,65 @@ class QueueButton extends ConsumerWidget {
   }
 }
 
-class ShuffleButton extends ConsumerWidget {
+class ShuffleButton extends ConsumerStatefulWidget {
   const ShuffleButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<dynamic> playbackStateResponse = ref.watch(
+  ConsumerState<ConsumerStatefulWidget> createState() => _ShuffleButtonState();
+}
+
+class _ShuffleButtonState extends ConsumerState<ShuffleButton> {
+  late Timer _timer;
+  bool _currentState = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
+      _getCurrentState();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
+
+  void _getCurrentState() {
+    final AsyncValue<dynamic> playbackStateResponse = ref.read(
       spotifyPlaybackstateProvider,
     );
+    playbackStateResponse.when(
+      skipError: true,
+      skipLoadingOnRefresh: true,
+      skipLoadingOnReload: true,
+      data: (dynamic data) {
+        setState(() {
+          _currentState = data.body['shuffle_state'];
+        });
+      },
+      error: (Object error, StackTrace stackTrace) => setState(() {
+        _currentState = false;
+      }),
+      loading: () => setState(() {
+        _currentState = false;
+      }),
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return IconButton.filled(
       onPressed: () {
-        Interactions().shuffleToggle();
+        setState(() {
+          _currentState = !_currentState;
+        });
+        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+        spotifyAPI.shuffleToggle(_currentState);
       },
       icon: Icon(
-        playbackStateResponse.when(
-          skipLoadingOnRefresh: true,
-          skipLoadingOnReload: true,
-          data: (dynamic data) {
-            if (data.statusCode == 204) {
-              return Icons.shuffle;
-            }
-
-            return data.body['shuffle_state'] == false
-                ? Icons.shuffle
-                : Icons.shuffle_on_rounded;
-          },
-          error: (Object error, StackTrace stack) {
-            return Icons.shuffle;
-          },
-          loading: () {
-            return Icons.shuffle;
-          },
-        ),
+        _currentState ? Icons.shuffle_on_rounded : Icons.shuffle_rounded,
       ),
       iconSize: 30,
       visualDensity: const VisualDensity(
