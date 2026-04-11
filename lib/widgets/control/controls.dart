@@ -101,10 +101,15 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
       skipLoadingOnRefresh: true,
       skipLoadingOnReload: true,
       data: (dynamic data) {
-        setState(() {
-          _currentState = data.body['repeat_state'];
-          _currentIcon = RepeatStates.getIcon(_currentState);
-        });
+        try {
+          setState(() {
+            _currentState = data.body['repeat_state'];
+            _currentIcon = RepeatStates.getIcon(_currentState);
+          });
+        } on Error {
+          _currentState = 'off';
+          _currentIcon = Icons.repeat_rounded;
+        }
       },
       error: (Object error, StackTrace stackTrace) => setState(() {
         _currentIcon = Icons.repeat_rounded;
@@ -252,9 +257,13 @@ class _ShuffleButtonState extends ConsumerState<ShuffleButton> {
       skipLoadingOnRefresh: true,
       skipLoadingOnReload: true,
       data: (dynamic data) {
-        setState(() {
-          _currentState = data.body['shuffle_state'];
-        });
+        try {
+          setState(() {
+            _currentState = data.body['shuffle_state'];
+          });
+        } on Error {
+          _currentState = false;
+        }
       },
       error: (Object error, StackTrace stackTrace) => setState(() {
         _currentState = false;
@@ -336,9 +345,14 @@ class _PauseButtonState extends ConsumerState<PauseButton>
       skipLoadingOnRefresh: true,
       skipLoadingOnReload: true,
       data: (dynamic data) {
-        setState(() {
-          _currentState = data.body['is_playing'];
-        });
+        try {
+          setState(() {
+            _currentState = data.body['is_playing'];
+          });
+        } on Error {
+          _currentState = false;
+        }
+
         if (_currentState) {
           _controller.forward();
         } else {
