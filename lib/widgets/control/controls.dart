@@ -118,7 +118,7 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton.filled(
-      onPressed: () {
+      onPressed: () async {
         final RepeatStates _repeatState = RepeatStates.getStateFromString(
           _currentState,
         );
@@ -127,7 +127,8 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
           _currentIcon = _repeatState.nextIcon;
         });
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-        spotifyAPI.cycleRepeat(_currentState);
+        await spotifyAPI.cycleRepeat(_currentState);
+        ref.invalidate(spotifyPlaybackstateProvider);
       },
       icon: Icon(_currentIcon),
       iconSize: 30,
@@ -144,15 +145,16 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
   }
 }
 
-class NextButton extends StatelessWidget {
+class NextButton extends ConsumerWidget {
   const NextButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return IconButton.filled(
-      onPressed: () {
+      onPressed: () async {
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-        spotifyAPI.skipForward();
+        await spotifyAPI.skipForward();
+        ref.invalidate(spotifyPlaybackstateProvider);
       },
       icon: const Icon(Icons.skip_next),
       iconSize: 30,
@@ -169,15 +171,16 @@ class NextButton extends StatelessWidget {
   }
 }
 
-class PreviousButton extends StatelessWidget {
+class PreviousButton extends ConsumerWidget {
   const PreviousButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return IconButton.filled(
-      onPressed: () {
+      onPressed: () async {
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-        spotifyAPI.skipPrevious();
+        await spotifyAPI.skipPrevious();
+        ref.invalidate(spotifyPlaybackstateProvider);
       },
       icon: const Icon(Icons.skip_previous),
       iconSize: 30,
@@ -265,12 +268,13 @@ class _ShuffleButtonState extends ConsumerState<ShuffleButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton.filled(
-      onPressed: () {
+      onPressed: () async {
         setState(() {
           _currentState = !_currentState;
         });
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-        spotifyAPI.shuffleToggle(_currentState);
+        await spotifyAPI.shuffleToggle(_currentState);
+        ref.invalidate(spotifyPlaybackstateProvider);
       },
       icon: Icon(
         _currentState ? Icons.shuffle_on_rounded : Icons.shuffle_rounded,
@@ -353,7 +357,7 @@ class _PauseButtonState extends ConsumerState<PauseButton>
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {
+      onPressed: () async {
         _currentState = !_currentState;
         if (_currentState) {
           _controller.forward();
@@ -361,7 +365,8 @@ class _PauseButtonState extends ConsumerState<PauseButton>
           _controller.reverse();
         }
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-        spotifyAPI.playPause();
+        await spotifyAPI.playPause();
+        ref.invalidate(spotifyPlaybackstateProvider);
       },
       child: AnimatedIcon(icon: AnimatedIcons.play_pause, progress: _animation),
     );
