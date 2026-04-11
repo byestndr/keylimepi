@@ -35,6 +35,15 @@ enum RepeatStates {
     }
     return Icons.repeat;
   }
+
+  static RepeatStates getStateFromString(String currentState) {
+    for (final RepeatStates states in values) {
+      if (states.current == currentState) {
+        return states;
+      }
+    }
+    return RepeatStates.off;
+  }
 }
 
 class PlaybackControls extends StatelessWidget {
@@ -92,16 +101,7 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
       data: (dynamic data) {
         setState(() {
           _currentState = data.body['repeat_state'];
-          switch (_currentState) {
-            case 'off':
-              _currentIcon = Icons.repeat_rounded;
-            case 'context':
-              _currentIcon = Icons.repeat_on_rounded;
-            case 'track':
-              _currentIcon = Icons.repeat_one_on_rounded;
-            default:
-              _currentIcon = Icons.repeat_rounded;
-          }
+          _currentIcon = RepeatStates.getIcon(_currentState);
         });
       },
       error: (Object error, StackTrace stackTrace) => setState(() {
@@ -117,24 +117,12 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
   Widget build(BuildContext context) {
     return IconButton.filled(
       onPressed: () {
+        final RepeatStates _repeatState = RepeatStates.getStateFromString(
+          _currentState,
+        );
         setState(() {
-          switch (_currentState) {
-            case 'off':
-              _currentState = 'context';
-              _currentIcon = Icons.repeat_on_rounded;
-              break;
-            case 'context':
-              _currentState = 'track';
-              _currentIcon = Icons.repeat_one_rounded;
-              break;
-            case 'track':
-              _currentState = 'off';
-              _currentIcon = Icons.repeat_rounded;
-              break;
-            default:
-              _currentState = 'off';
-              break;
-          }
+          _currentState = _repeatState.next;
+          _currentIcon = _repeatState.nextIcon;
         });
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         spotifyAPI.cycleRepeat(_currentState);
