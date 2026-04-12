@@ -42,7 +42,7 @@ class CenteredInfo extends StatelessWidget {
                         borderRadius: BorderRadiusGeometry.circular(
                           _imageRadius,
                         ),
-                        child: const SongImage(imageMultiplier: 400),
+                        child: const SongImage(),
                       ),
                     ),
                   )
@@ -87,7 +87,7 @@ class BottomLeftInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         MediaQuery.of(context).size.width >= _imageBreakpoint
@@ -110,7 +110,7 @@ class BottomLeftInfo extends StatelessWidget {
 
                   child: ClipRRect(
                     borderRadius: BorderRadiusGeometry.circular(_imageRadius),
-                    child: const SongImage(imageMultiplier: 125),
+                    child: const SongImage(),
                   ),
                 ),
               )

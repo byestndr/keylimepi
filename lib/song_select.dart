@@ -35,8 +35,8 @@ class _SongSelectState extends ConsumerState<SongSelect> {
         child: RefreshIndicator(
           child: ListView(
             children: <Widget>[
-              SizedBox(
-                height: 400,
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 200),
                 child: CarouselView.weighted(
                   flexWeights: <int>[2],
                   children: <Widget>[
@@ -59,7 +59,7 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                                 sigmaX: 10,
                                 sigmaY: 10,
                               ),
-                              child: const SongImage(imageMultiplier: 200),
+                              child: const SongImage(),
                             ),
                           ),
                         ),
@@ -90,9 +90,7 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                                             BorderRadiusGeometry.circular(
                                               imageRadius,
                                             ),
-                                        child: const SongImage(
-                                          imageMultiplier: 200,
-                                        ),
+                                        child: const SongImage(),
                                       ),
                                     ),
                                   )
@@ -103,7 +101,9 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                                   ),
                             const Expanded(
                               child: Padding(
-                                padding: EdgeInsetsGeometry.directional(bottom: 10),
+                                padding: EdgeInsetsGeometry.directional(
+                                  bottom: 10,
+                                ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -160,12 +160,15 @@ class _SongSelectState extends ConsumerState<SongSelect> {
             ],
           ),
           onRefresh: () async {
-            final Future<List<dynamic>> refreshAlbums = ref
-                .read(albumProviderProvider.future);
-            final Future<List<dynamic>> refreshSongs = ref
-                .read(songProviderProvider.future);
-            final Future<List<dynamic>> refreshPlaylists = ref
-                .refresh(playlistsProviderProvider.future);
+            final Future<List<dynamic>> refreshAlbums = ref.read(
+              albumProviderProvider.future,
+            );
+            final Future<List<dynamic>> refreshSongs = ref.read(
+              songProviderProvider.future,
+            );
+            final Future<List<dynamic>> refreshPlaylists = ref.refresh(
+              playlistsProviderProvider.future,
+            );
 
             await Future.wait(<Future<void>>[
               refreshAlbums,

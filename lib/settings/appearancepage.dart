@@ -26,13 +26,15 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   bool backgroundState = false;
   int? _currentAlignment = 1;
   double sliderValue = 0;
-  bool navibarState = false;
+  bool isNavbarTransparent = false;
+  bool navbarShown = false;
 
   @override
   void initState() {
     super.initState();
     getBackgroundToggle();
-    getBarToggle();
+    getBarTransparency();
+    isBarOn();
     getAlignment();
     getSliderPos();
   }
@@ -54,17 +56,32 @@ class _SettingsListState extends ConsumerState<SettingsList> {
     return;
   }
 
-  Future<void> getBarToggle() async {
+  Future<void> isBarOn() async {
+    final bool? naviState = await AsyncPreferences().getBoolValue('navibar_on');
+    if (naviState == null) {
+      setState(() {
+        navbarShown = false;
+      });
+    } else {
+      setState(() {
+        navbarShown = naviState;
+      });
+    }
+
+    return;
+  }
+
+  Future<void> getBarTransparency() async {
     final bool? naviState = await AsyncPreferences().getBoolValue(
       'transparent_navibar',
     );
     if (naviState == null) {
       setState(() {
-        navibarState = false;
+        navbarShown = false;
       });
     } else {
       setState(() {
-        navibarState = naviState;
+        navbarShown = naviState;
       });
     }
 
@@ -159,19 +176,41 @@ class _SettingsListState extends ConsumerState<SettingsList> {
           ),
         ),
         ListTile(
-          title: const Text('Transparent navigation bar'),
+          title: const Text('Show navigation bar'),
           leading: const Icon(Icons.visibility_rounded),
+          subtitle: const Text(
+            'Hide the navigation bar at the top of the screen. Pages are still navigable by swiping.',
+          ),
+          trailing: Switch(
+            value: navbarShown,
+            onChanged: (bool value) {
+              AsyncPreferences().setBoolValue('navibar_on', value);
+              setState(() {
+                navbarShown = value;
+              });
+            },
+          ),
+        ),
+        ListTile(
+          title: const Text('Transparent navigation bar'),
+          leading: const Icon(Icons.opacity_rounded),
+          enabled: navbarShown,
           subtitle: const Text(
             'When on, the navigation bar turns transparent and overlays over the content.',
           ),
           trailing: Switch(
-            value: navibarState,
-            onChanged: (bool value) {
-              AsyncPreferences().setBoolValue('transparent_navibar', value);
-              setState(() {
-                navibarState = value;
-              });
-            },
+            value: isNavbarTransparent,
+            onChanged: navbarShown
+                ? (bool value) {
+                    AsyncPreferences().setBoolValue(
+                      'transparent_navibar',
+                      value,
+                    );
+                    setState(() {
+                      isNavbarTransparent = value;
+                    });
+                  }
+                : null,
           ),
         ),
         ListTile(
