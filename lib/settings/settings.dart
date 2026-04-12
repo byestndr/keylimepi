@@ -26,6 +26,7 @@ class SettingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      reverse: true,
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.palette_rounded),

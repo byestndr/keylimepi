@@ -179,7 +179,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
           title: const Text('Show navigation bar'),
           leading: const Icon(Icons.visibility_rounded),
           subtitle: const Text(
-            'Hide the navigation bar at the top of the screen. Pages are still navigable via swiping left and right.',
+            'Hide the navigation bar at the top of the screen. Pages are still navigable by swiping.',
           ),
           trailing: Switch(
             value: navbarShown,
@@ -194,13 +194,13 @@ class _SettingsListState extends ConsumerState<SettingsList> {
         ListTile(
           title: const Text('Transparent navigation bar'),
           leading: const Icon(Icons.opacity_rounded),
-          enabled: !navbarShown,
+          enabled: navbarShown,
           subtitle: const Text(
             'When on, the navigation bar turns transparent and overlays over the content.',
           ),
           trailing: Switch(
             value: isNavbarTransparent,
-            onChanged: !navbarShown
+            onChanged: navbarShown
                 ? (bool value) {
                     AsyncPreferences().setBoolValue(
                       'transparent_navibar',

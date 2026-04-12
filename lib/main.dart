@@ -76,14 +76,14 @@ class MusicPage extends ConsumerStatefulWidget {
 }
 
 class _MusicPageState extends ConsumerState<MusicPage> {
-  int _currentPageIndex = 0;
+  int _currentPageIndex = 1;
   bool _queueExpanded = false;
   bool navbarOn = true;
   late PageController _pageController;
   static const List<Widget> _navigationPages = <Widget>[
+    SettingsPage(),
     FullPlayerPage(),
     SongSelect(),
-    SettingsPage(),
   ];
 
   void queueExpandedButton(bool data) {
@@ -99,7 +99,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _pageController = PageController(initialPage: 1);
     getNaviBarColor();
   }
 
@@ -160,16 +160,16 @@ class _MusicPageState extends ConsumerState<MusicPage> {
                     : Colors.transparent,
                 destinations: <NavigationDestination>[
                   const NavigationDestination(
+                    icon: Icon(Icons.settings),
+                    label: 'Settings',
+                  ),
+                  const NavigationDestination(
                     icon: Icon(Icons.music_note),
                     label: 'Player',
                   ),
                   const NavigationDestination(
                     icon: Icon(Icons.home),
                     label: 'Home',
-                  ),
-                  const NavigationDestination(
-                    icon: Icon(Icons.settings),
-                    label: 'Settings',
                   ),
                 ],
                 selectedIndex: _currentPageIndex,
@@ -181,6 +181,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
         children: [
           Expanded(
             child: PageView(
+              scrollDirection: .vertical,
               onPageChanged: (int value) => setState(() {
                 _currentPageIndex = value;
               }),
