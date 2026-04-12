@@ -182,6 +182,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
           Expanded(
             child: PageView(
               scrollDirection: .vertical,
+              physics: const BouncingScrollPhysics(),
               onPageChanged: (int value) => setState(() {
                 _currentPageIndex = value;
               }),
