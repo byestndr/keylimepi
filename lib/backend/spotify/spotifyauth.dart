@@ -87,39 +87,39 @@ Future<int> GetAccessToken(String url) async {
   return response.statusCode;
 }
 
-Future<void> isLoggedIn() async {
-  final String? token = await Preferences.getStringValue('token');
-  final Uri uri = Uri.https('api.spotify.com', 'v1/me');
-  const int statusCodeError = 400;
+// Future<void> isLoggedIn() async {
+//   final String? token = await Preferences.getStringValue('token');
+//   final Uri uri = Uri.https('api.spotify.com', 'v1/me');
+//   const int statusCodeError = 400;
 
-  final http.Response response = await http.get(
-    uri,
-    headers: <String, String>{'Authorization': 'Bearer $token'},
-  );
+//   final http.Response response = await http.get(
+//     uri,
+//     headers: <String, String>{'Authorization': 'Bearer $token'},
+//   );
 
-  final String? rtoken = await Preferences.getStringValue('refresh_token');
-  if (rtoken == null) {
-    return;
-  }
+//   final String? rtoken = await Preferences.getStringValue('refresh_token');
+//   if (rtoken == null) {
+//     return;
+//   }
 
-  if (response.statusCode >= statusCodeError) {
-    final Uri refreshUri = Uri.https('accounts.spotify.com', 'api/token');
-    final http.Response refreshResponse = await http.post(
-      refreshUri,
-      headers: <String, String>{'Content-Type': 'application/x-www-form-urlencoded'},
-      body: <String, String>{
-        'grant_type': 'refresh_token',
-        'refresh_token': rtoken,
-        'client_id': 'c92fab18b6924cf7872ed2965644cb25',
-      },
-    );
+//   if (response.statusCode >= statusCodeError) {
+//     final Uri refreshUri = Uri.https('accounts.spotify.com', 'api/token');
+//     final http.Response refreshResponse = await http.post(
+//       refreshUri,
+//       headers: <String, String>{'Content-Type': 'application/x-www-form-urlencoded'},
+//       body: <String, String>{
+//         'grant_type': 'refresh_token',
+//         'refresh_token': rtoken,
+//         'client_id': 'c92fab18b6924cf7872ed2965644cb25',
+//       },
+//     );
 
-    final dynamic refreshBody = jsonDecode(refreshResponse.body);
+//     final dynamic refreshBody = jsonDecode(refreshResponse.body);
 
-    final String accessToken = refreshBody['access_token'];
-    final String newRtoken = refreshBody['refresh_token'];
+//     final String accessToken = refreshBody['access_token'];
+//     final String newRtoken = refreshBody['refresh_token'];
 
-    await Preferences.setStringValue('token', accessToken);
-    await Preferences.setStringValue('refresh_token', newRtoken);
-  }
-}
+//     await Preferences.setStringValue('token', accessToken);
+//     await Preferences.setStringValue('refresh_token', newRtoken);
+//   }
+// }

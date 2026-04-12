@@ -67,7 +67,6 @@ class _QueueContentState extends State<QueueContent> {
         currentQueue = body['queue'];
       });
     } on TypeError {
-      await isLoggedIn();
       setState(() {
         currentQueue = body['queue'];
       });
