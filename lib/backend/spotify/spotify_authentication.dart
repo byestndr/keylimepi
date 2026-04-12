@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:spotimmich/settings/preferences.dart';
 
 class SpotifyChopperReauthentication extends Authenticator {
+  static final SpotifySecureStorage _storage = SpotifySecureStorage();
+
   @override
   FutureOr<Request?> authenticate(
     Request request,
@@ -28,7 +30,7 @@ class SpotifyChopperReauthentication extends Authenticator {
   }
 
   static Future<String?> _getStoredRefreshToken() async {
-    return await AsyncPreferences.getStringValue('refresh_token');
+    return await _storage.getRefreshToken();
   }
 
   static Future<String> _getNewAccessToken(String refreshToken) async {
@@ -61,8 +63,8 @@ class SpotifyChopperReauthentication extends Authenticator {
     String refreshToken,
     String accessToken,
   ) async {
-    await AsyncPreferences.setStringValue('token', accessToken);
-    await AsyncPreferences.setStringValue('refresh_token', refreshToken);
+    await _storage.setAuthToken(accessToken);
+    await _storage.setRefreshToken(refreshToken);
   }
 }
 
@@ -71,7 +73,8 @@ class SpotifyChopperAuthInterceptor implements Interceptor {
   FutureOr<Response<BodyType>> intercept<BodyType>(
     Chain<BodyType> chain,
   ) async {
-    final String? token = await AsyncPreferences.getStringValue('token');
+    final SpotifySecureStorage storage = SpotifySecureStorage();
+    final String? token = await storage.getAuthToken();
 
     if (token != null) {
       final request = chain.request.copyWith(
