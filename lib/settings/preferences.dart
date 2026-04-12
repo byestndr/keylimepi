@@ -1,53 +1,53 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AsyncPreferences {
-  final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+  static final SharedPreferencesAsync _asyncPrefs = SharedPreferencesAsync();
 
-  Future<void> setStringValue(String key, String value) async {
-    await asyncPrefs.remove(key);
-    await asyncPrefs.setString(key, value);
+  static Future<void> setStringValue(String key, String value) async {
+    await _asyncPrefs.remove(key);
+    await _asyncPrefs.setString(key, value);
   }
 
-  Future<String?> getStringValue(String key) async {
-    final String? value = await asyncPrefs.getString(key);
+  static Future<String?> getStringValue(String key) async {
+    final String? value = await _asyncPrefs.getString(key);
     return value;
   }
 
-  Future<void> setIntValue(String key, int value) async {
-    await asyncPrefs.remove(key);
-    await asyncPrefs.setInt(key, value);
+  static Future<void> setIntValue(String key, int value) async {
+    await _asyncPrefs.remove(key);
+    await _asyncPrefs.setInt(key, value);
   }
 
-  Future<void> removeIntValue(String key) async {
-    await asyncPrefs.remove(key);
+  static Future<void> removeIntValue(String key) async {
+    await _asyncPrefs.remove(key);
   }
 
-  Future<int?> getIntValue(String key) async {
-    final int? value = await asyncPrefs.getInt(key);
+  static Future<int?> getIntValue(String key) async {
+    final int? value = await _asyncPrefs.getInt(key);
     return value;
   }
 
-  Future<void> setBoolValue(String key, bool value) async {
-    await asyncPrefs.remove(key);
-    await asyncPrefs.setBool(key, value);
+  static Future<void> setBoolValue(String key, bool value) async {
+    await _asyncPrefs.remove(key);
+    await _asyncPrefs.setBool(key, value);
   }
 
-  Future<double?> getDoubleValue(String key) async {
-    final double? value = await asyncPrefs.getDouble(key);
+  static Future<double?> getDoubleValue(String key) async {
+    final double? value = await _asyncPrefs.getDouble(key);
     return value;
   }
 
-  Future<void> setDoubleValue(String key, double value) async {
-    await asyncPrefs.remove(key);
-    await asyncPrefs.setDouble(key, value);
+  static Future<void> setDoubleValue(String key, double value) async {
+    await _asyncPrefs.remove(key);
+    await _asyncPrefs.setDouble(key, value);
   }
 
-  Future<bool?> getBoolValue(String key) async {
-    final bool? value = await asyncPrefs.getBool(key);
+  static Future<bool?> getBoolValue(String key) async {
+    final bool? value = await _asyncPrefs.getBool(key);
     return value;
   }
 
-  Future<void> clearPreferences() async {
-    await asyncPrefs.clear();
+  static Future<void> clearPreferences() async {
+    await _asyncPrefs.clear();
   }
 }

@@ -6,8 +6,6 @@ import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/widgets/background/immich_background_carousel.dart';
 import 'dart:async';
 
-const int imageBreakpoint = 600;
-
 class MediaWidget extends StatefulWidget {
   const MediaWidget({super.key});
 
@@ -27,7 +25,7 @@ class _MediaWidgetState extends State<MediaWidget> {
   }
 
   Future<void> getOnPageControls() async {
-    final int? isOnPageWidget = await AsyncPreferences().getIntValue(
+    final int? isOnPageWidget = await AsyncPreferences.getIntValue(
       'playback_bar_position',
     );
 
@@ -39,7 +37,7 @@ class _MediaWidgetState extends State<MediaWidget> {
   }
 
   Future<void> getPosition() async {
-    final int? positionType = await AsyncPreferences().getIntValue(
+    final int? positionType = await AsyncPreferences.getIntValue(
       'player_alignment',
     );
 
@@ -81,7 +79,7 @@ class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
   }
 
   Future<void> getBackgroundType() async {
-    final bool? backgroundState = await AsyncPreferences().getBoolValue(
+    final bool? backgroundState = await AsyncPreferences.getBoolValue(
       'immich_background',
     );
 

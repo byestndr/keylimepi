@@ -21,6 +21,7 @@ class SongSelect extends ConsumerStatefulWidget {
 
 class _SongSelectState extends ConsumerState<SongSelect> {
   static const double imageRadius = 28;
+  static const int imageBreakpoint = 600;
 
   @override
   Widget build(BuildContext context) {

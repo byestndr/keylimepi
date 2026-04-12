@@ -40,7 +40,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   }
 
   Future<void> getBackgroundToggle() async {
-    final bool? background_bool = await AsyncPreferences().getBoolValue(
+    final bool? background_bool = await AsyncPreferences.getBoolValue(
       'immich_background',
     );
     if (background_bool == null) {
@@ -57,7 +57,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   }
 
   Future<void> isBarOn() async {
-    final bool? naviState = await AsyncPreferences().getBoolValue('navibar_on');
+    final bool? naviState = await AsyncPreferences.getBoolValue('navibar_on');
     if (naviState == null) {
       setState(() {
         navbarShown = false;
@@ -72,7 +72,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   }
 
   Future<void> getBarTransparency() async {
-    final bool? naviState = await AsyncPreferences().getBoolValue(
+    final bool? naviState = await AsyncPreferences.getBoolValue(
       'transparent_navibar',
     );
     if (naviState == null) {
@@ -89,7 +89,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   }
 
   Future<void> getAlignment() async {
-    final int? alignment = await AsyncPreferences().getIntValue(
+    final int? alignment = await AsyncPreferences.getIntValue(
       'player_alignment',
     );
 
@@ -107,7 +107,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   }
 
   Future<void> getSliderPos() async {
-    final double? position = await AsyncPreferences().getDoubleValue(
+    final double? position = await AsyncPreferences.getDoubleValue(
       'background_blur_radius',
     );
 
@@ -137,7 +137,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
           trailing: Switch(
             value: backgroundState,
             onChanged: (bool value) async {
-              AsyncPreferences().setBoolValue('immich_background', value);
+              AsyncPreferences.setBoolValue('immich_background', value);
               setState(() {
                 backgroundState = value;
               });
@@ -163,7 +163,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
                     }
                   : null,
               onChangeEnd: (double value) async {
-                await AsyncPreferences().setDoubleValue(
+                await AsyncPreferences.setDoubleValue(
                   'background_blur_radius',
                   value,
                 );
@@ -184,7 +184,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
           trailing: Switch(
             value: navbarShown,
             onChanged: (bool value) {
-              AsyncPreferences().setBoolValue('navibar_on', value);
+              AsyncPreferences.setBoolValue('navibar_on', value);
               setState(() {
                 navbarShown = value;
               });
@@ -202,7 +202,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
             value: isNavbarTransparent,
             onChanged: navbarShown
                 ? (bool value) {
-                    AsyncPreferences().setBoolValue(
+                    AsyncPreferences.setBoolValue(
                       'transparent_navibar',
                       value,
                     );
@@ -230,7 +230,7 @@ class _SettingsListState extends ConsumerState<SettingsList> {
                       return RadioGroup<int>(
                         groupValue: _currentAlignment,
                         onChanged: (int? value) {
-                          AsyncPreferences().setIntValue(
+                          AsyncPreferences.setIntValue(
                             'player_alignment',
                             value!,
                           );
@@ -292,7 +292,7 @@ class _BarPositionTileState extends ConsumerState<BarPositionTile> {
   }
 
   Future<void> getPlaybackBarState() async {
-    final int? barState = await AsyncPreferences().getIntValue(
+    final int? barState = await AsyncPreferences.getIntValue(
       'playback_bar_position',
     );
 
@@ -326,7 +326,7 @@ class _BarPositionTileState extends ConsumerState<BarPositionTile> {
                   return RadioGroup<int>(
                     groupValue: _currentAppearance,
                     onChanged: (int? value) {
-                      AsyncPreferences().setIntValue(
+                      AsyncPreferences.setIntValue(
                         'playback_bar_position',
                         value!,
                       );

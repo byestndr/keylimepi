@@ -6,7 +6,6 @@ import 'package:spotimmich/settings/preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ImmichPreferences {
-  final AsyncPreferences prefs = AsyncPreferences();
   Future<int> SetAPIkey(String key) async {
     final String? serverURL = await GetURL();
 
@@ -32,7 +31,7 @@ class ImmichPreferences {
     );
 
     if (response.statusCode == 200) {
-      await prefs.setStringValue('immich_key', key);
+      await AsyncPreferences.setStringValue('immich_key', key);
       return 200;
     } else {
       return 401;
@@ -40,27 +39,27 @@ class ImmichPreferences {
   }
 
   Future<String?> GetAPIkey() async {
-    final String? key = await prefs.getStringValue('immich_key');
+    final String? key = await AsyncPreferences.getStringValue('immich_key');
     return key;
   }
 
   Future<void> SetServerURL(String url) async {
     final String noHttps = url.replaceAll('https://', '');
     String cleanURL = noHttps.replaceAll(RegExp(r'\/.*'), '');
-    await prefs.setStringValue('immich_url', cleanURL);
+    await AsyncPreferences.setStringValue('immich_url', cleanURL);
   }
 
   Future<String?> GetURL() async {
-    final String? url = await prefs.getStringValue('immich_url');
+    final String? url = await AsyncPreferences.getStringValue('immich_url');
     return url;
   }
 
   Future<void> SetAlbumID(String id) async {
-    await prefs.getStringValue('immich_album');
+    await AsyncPreferences.getStringValue('immich_album');
   }
 
   Future<String?> GetAlbumID() async {
-    final String? album = await prefs.getStringValue('immich_album');
+    final String? album = await AsyncPreferences.getStringValue('immich_album');
     return album;
   }
 }

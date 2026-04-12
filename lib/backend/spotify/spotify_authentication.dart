@@ -28,8 +28,7 @@ class SpotifyChopperReauthentication extends Authenticator {
   }
 
   static Future<String?> _getStoredRefreshToken() async {
-    final AsyncPreferences Preferences = AsyncPreferences();
-    return await Preferences.getStringValue('refresh_token');
+    return await AsyncPreferences.getStringValue('refresh_token');
   }
 
   static Future<String> _getNewAccessToken(String refreshToken) async {
@@ -62,10 +61,8 @@ class SpotifyChopperReauthentication extends Authenticator {
     String refreshToken,
     String accessToken,
   ) async {
-    final AsyncPreferences Preferences = AsyncPreferences();
-
-    await Preferences.setStringValue('token', accessToken);
-    await Preferences.setStringValue('refresh_token', refreshToken);
+    await AsyncPreferences.setStringValue('token', accessToken);
+    await AsyncPreferences.setStringValue('refresh_token', refreshToken);
   }
 }
 
@@ -74,8 +71,7 @@ class SpotifyChopperAuthInterceptor implements Interceptor {
   FutureOr<Response<BodyType>> intercept<BodyType>(
     Chain<BodyType> chain,
   ) async {
-    final AsyncPreferences Preferences = AsyncPreferences();
-    final String? token = await Preferences.getStringValue('token');
+    final String? token = await AsyncPreferences.getStringValue('token');
 
     if (token != null) {
       final request = chain.request.copyWith(

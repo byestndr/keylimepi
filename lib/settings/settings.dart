@@ -103,7 +103,7 @@ class SettingsList extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        AsyncPreferences().clearPreferences();
+                        AsyncPreferences.clearPreferences();
                         ScaffoldMessenger.of(
                           context,
                         ).showSnackBar(resetSnackBar);

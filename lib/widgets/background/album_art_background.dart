@@ -29,7 +29,7 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
   }
 
   Future<void> getPosition() async {
-    final int? positionType = await AsyncPreferences().getIntValue(
+    final int? positionType = await AsyncPreferences.getIntValue(
       'player_alignment',
     );
 
@@ -47,7 +47,7 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
   }
 
   Future<void> getOnPageControls() async {
-    final int? isOnPageWidget = await AsyncPreferences().getIntValue(
+    final int? isOnPageWidget = await AsyncPreferences.getIntValue(
       'playback_bar_position',
     );
 
@@ -59,7 +59,7 @@ class _AlbumArtBackgroundState extends ConsumerState<AlbumArtBackground> {
   }
 
   Future<void> getBlur() async {
-    final double? blur = await AsyncPreferences().getDoubleValue(
+    final double? blur = await AsyncPreferences.getDoubleValue(
       'background_blur_radius',
     );
 

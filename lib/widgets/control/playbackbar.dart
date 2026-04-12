@@ -7,8 +7,7 @@ import 'package:spotimmich/widgets/info/weatherwidget.dart';
 import 'package:spotimmich/widgets/control/seekbar.dart';
 
 class BottomPlaybar extends ConsumerStatefulWidget {
-  final Function(bool) isQueueExpanded;
-  const BottomPlaybar({super.key, required this.isQueueExpanded});
+  const BottomPlaybar({super.key});
 
   @override
   ConsumerState<BottomPlaybar> createState() => _BottomPlaybarState();
@@ -16,7 +15,7 @@ class BottomPlaybar extends ConsumerStatefulWidget {
 
 class _BottomPlaybarState extends ConsumerState<BottomPlaybar> {
   Future<void> getPlaybackBarState() async {
-    final int? barState = await AsyncPreferences().getIntValue(
+    final int? barState = await AsyncPreferences.getIntValue(
       'playback_bar_position',
     );
     if (barState == null) {
