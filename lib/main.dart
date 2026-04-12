@@ -78,6 +78,7 @@ class MusicPage extends ConsumerStatefulWidget {
 class _MusicPageState extends ConsumerState<MusicPage> {
   int _currentPageIndex = 0;
   bool _queueExpanded = false;
+  bool navbarOn = true;
   late PageController _pageController;
   static const List<Widget> _navigationPages = <Widget>[
     FullPlayerPage(),
@@ -122,45 +123,59 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     return;
   }
 
+  Future<void> isNavbarEnabled() async {
+    final bool? naviState = await AsyncPreferences().getBoolValue('navibar_on');
+    setState(() {
+      navbarOn = naviState ?? true;
+    });
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool navibarState = ref.watch(navigationBarColorProvider);
+    isNavbarEnabled();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       bottomNavigationBar: BottomPlaybar(isQueueExpanded: queueExpandedButton),
-      appBar: PreferredSize(
-        preferredSize: Size(
-          double.infinity,
-          !navibarState ? kToolbarHeight : 100,
-        ),
-        child: NavigationBar(
-          onDestinationSelected: (int newPageIndex) {
-            setState(() {
-              _currentPageIndex = newPageIndex;
-            });
-            _pageController.animateToPage(
-              _currentPageIndex,
-              duration: const Duration(milliseconds: 500),
-              curve: Easing.emphasizedDecelerate,
-            );
-          },
-          backgroundColor: !navibarState
-              ? Theme.of(context).colorScheme.surfaceContainer
-              : Colors.transparent,
-          destinations: <NavigationDestination>[
-            const NavigationDestination(
-              icon: Icon(Icons.music_note),
-              label: 'Player',
-            ),
-            const NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-            const NavigationDestination(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
-            ),
-          ],
-          selectedIndex: _currentPageIndex,
-        ),
-      ),
+      appBar: navbarOn
+          ? PreferredSize(
+              preferredSize: Size(
+                double.infinity,
+                !navibarState ? kToolbarHeight : 100,
+              ),
+              child: NavigationBar(
+                onDestinationSelected: (int newPageIndex) {
+                  setState(() {
+                    _currentPageIndex = newPageIndex;
+                  });
+                  _pageController.animateToPage(
+                    _currentPageIndex,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Easing.emphasizedDecelerate,
+                  );
+                },
+                backgroundColor: !navibarState
+                    ? Theme.of(context).colorScheme.surfaceContainer
+                    : Colors.transparent,
+                destinations: <NavigationDestination>[
+                  const NavigationDestination(
+                    icon: Icon(Icons.music_note),
+                    label: 'Player',
+                  ),
+                  const NavigationDestination(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
+                  const NavigationDestination(
+                    icon: Icon(Icons.settings),
+                    label: 'Settings',
+                  ),
+                ],
+                selectedIndex: _currentPageIndex,
+              ),
+            )
+          : PreferredSize(preferredSize: .zero, child: Container()),
 
       body: Row(
         children: [

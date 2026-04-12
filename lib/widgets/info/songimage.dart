@@ -5,21 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:spotimmich/providers/theme/album_art_provider.dart';
 
 class SongImage extends ConsumerStatefulWidget {
-  final int imageMultiplier;
-  const SongImage({super.key, required this.imageMultiplier});
+  const SongImage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SongImageState();
 }
 
 class _SongImageState extends ConsumerState<SongImage> {
-  late int imageMultiplier;
   Timer? timer;
 
   @override
   void initState() {
     super.initState();
-    imageMultiplier = widget.imageMultiplier;
   }
 
   @override
