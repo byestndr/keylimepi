@@ -66,6 +66,8 @@ void launchURL() async {
 
 
 Future<void> showQrCodeDialog(BuildContext context) async {
+  final String spotifyLoginURL = SpotifyAuthentication.AuthFlow();
+
   final result = showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -81,7 +83,7 @@ Future<void> showQrCodeDialog(BuildContext context) async {
                       width: 300,
                       height: 300,
                       child: QrImageView(
-                        data: SpotifyAuthentication.AuthFlow(),
+                        data: spotifyLoginURL,
                         backgroundColor: Colors.white,
                         version: QrVersions.auto,
                         size: 300,
