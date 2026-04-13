@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/app_body.dart';
 import 'package:flutter/gestures.dart';
+import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/theme/colorscheme.dart';
+import 'package:spotimmich/settings/preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: AppEntrypoint()));
+  final UserValues userPreferences = await UserValues().getUpdatedValues();
+  runApp(
+    ProviderScope(
+      overrides: [
+        userSettingsProvider.overrideWith(
+          () => UserSettingsOverride(userPreferences),
+        ),
+      ],
+      child: const AppEntrypoint(),
+    ),
+  );
 }
 
 class ScrollBehavior extends MaterialScrollBehavior {

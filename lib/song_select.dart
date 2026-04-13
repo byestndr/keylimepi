@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/widgets/carousels/album_carousel.dart';
 import 'package:spotimmich/widgets/carousels/liked_songs.dart';
-import 'package:spotimmich/player_page.dart';
 import 'package:spotimmich/widgets/carousels/playlist_carousel.dart';
 import 'package:spotimmich/providers/spotify/album_provider.dart';
 import 'package:spotimmich/providers/spotify/likedSongs_provider.dart';

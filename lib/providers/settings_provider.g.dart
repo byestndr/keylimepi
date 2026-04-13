@@ -41,7 +41,7 @@ final class UserSettingsProvider
   }
 }
 
-String _$userSettingsHash() => r'fead1fb868c33994a2333e8a5beb11b8f01be2ab';
+String _$userSettingsHash() => r'93325ab8ef9c7781a6679ff15374b2a81b859677';
 
 abstract class _$UserSettings extends $Notifier<UserValues> {
   UserValues build();

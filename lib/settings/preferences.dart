@@ -53,6 +53,58 @@ class AsyncPreferences {
   }
 }
 
+class UserValues {
+  bool immichBackgroundImage;
+  double backgroundBlur;
+  bool navigationBarOn;
+  bool navigationBarTransparent;
+  bool albumInfoCentered;
+  int playbackBarPosition;
+
+  UserValues({
+    this.immichBackgroundImage = false,
+    this.albumInfoCentered = false,
+    this.backgroundBlur = 12.0,
+    this.navigationBarOn = true,
+    this.navigationBarTransparent = false,
+    this.playbackBarPosition = 0,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'background_blur_radius': backgroundBlur,
+    'navibar_on': navigationBarOn,
+    'playback_bar_position': playbackBarPosition,
+    'centered_info': albumInfoCentered,
+    'transparent_navibar': navigationBarTransparent,
+    'immich_background': immichBackgroundImage,
+  };
+
+  Future<UserValues> getUpdatedValues() async {
+    final double backgroundBlur =
+        await AsyncPreferences.getDoubleValue('background_blur_radius') ?? 12.0;
+    final bool navigationBarOn =
+        await AsyncPreferences.getBoolValue('navibar_on') ?? true;
+    final int playbackBarPosition =
+        await AsyncPreferences.getIntValue('playback_bar_position') ?? 0;
+    final bool centeredInfo =
+        await AsyncPreferences.getBoolValue('centered_info') ?? false;
+    final bool navigationBarTransparent =
+        await AsyncPreferences.getBoolValue('transparent_navibar') ?? false;
+    final bool immichBackground =
+        await AsyncPreferences.getBoolValue('immich_background') ?? false;
+
+    return UserValues(
+      albumInfoCentered: centeredInfo,
+      backgroundBlur: backgroundBlur,
+      immichBackgroundImage: immichBackground,
+      navigationBarOn: navigationBarOn,
+      navigationBarTransparent: navigationBarTransparent,
+      playbackBarPosition: playbackBarPosition,
+    );
+  }
+}
+
+// Abstract class in case there are any more needs for secure storage
 abstract class SecureStorage {
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 

@@ -1,46 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/theme/background_getter.dart';
+import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/widgets/control/controls.dart';
 import 'package:spotimmich/widgets/info/weatherwidget.dart';
 import 'package:spotimmich/widgets/control/seekbar.dart';
 
-class BottomPlaybar extends ConsumerStatefulWidget {
+class BottomPlaybar extends ConsumerWidget {
   const BottomPlaybar({super.key});
 
   @override
-  ConsumerState<BottomPlaybar> createState() => _BottomPlaybarState();
-}
-
-class _BottomPlaybarState extends ConsumerState<BottomPlaybar> {
-  Future<void> getPlaybackBarState() async {
-    final int? barState = await AsyncPreferences.getIntValue(
-      'playback_bar_position',
-    );
-    if (barState == null) {
-      ref.read(barPositionProvider.notifier).changeCurrentPosition(0);
-    } else {
-      ref.read(barPositionProvider.notifier).changeCurrentPosition(barState);
-    }
-
-    return;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getPlaybackBarState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final double currentScreenSize = MediaQuery.of(context).size.width;
     const double sliderWidthBreakpoint = 600;
     const double weatherWidthBreakpoint = 530;
-    final int barPositionState = ref.watch(barPositionProvider);
+    final UserValues preferences = ref.watch(userSettingsProvider);
 
-    return switch (barPositionState) {
+    return switch (preferences.playbackBarPosition) {
       0 => BottomAppBar(
         child: Row(
           children: <Widget>[

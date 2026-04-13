@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/settings/appearancepage.dart';
 import 'package:spotimmich/settings/immich/immichpage.dart';
 import 'package:spotimmich/settings/preferences.dart';
@@ -17,14 +19,14 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-class SettingsList extends StatelessWidget {
+class SettingsList extends ConsumerWidget {
   const SettingsList({super.key});
   static const SnackBar resetSnackBar = SnackBar(
     content: Text('Reseted all settings'),
   );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: <Widget>[
         ListTile(
@@ -104,6 +106,7 @@ class SettingsList extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         AsyncPreferences.clearPreferences();
+                        ref.read(userSettingsProvider.notifier).getNewState();
                         ScaffoldMessenger.of(
                           context,
                         ).showSnackBar(resetSnackBar);

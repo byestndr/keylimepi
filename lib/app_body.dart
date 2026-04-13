@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/player_page.dart';
-import 'package:spotimmich/providers/theme/background_getter.dart';
+import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/settings/settings.dart';
 import 'package:spotimmich/song_select.dart';
@@ -17,7 +17,6 @@ class AppBody extends ConsumerStatefulWidget {
 
 class _MusicPageState extends ConsumerState<AppBody> {
   int _currentPageIndex = 1;
-  bool navbarOn = true;
   late PageController _pageController;
   static const List<Widget> _navigationPages = <Widget>[
     SettingsPage(),
@@ -29,7 +28,6 @@ class _MusicPageState extends ConsumerState<AppBody> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 1);
-    getNaviBarColor();
   }
 
   @override
@@ -38,40 +36,18 @@ class _MusicPageState extends ConsumerState<AppBody> {
     _pageController.dispose();
   }
 
-  Future<void> getNaviBarColor() async {
-    final bool? naviState = await AsyncPreferences.getBoolValue(
-      'transparent_navibar',
-    );
-
-    if (naviState == null) {
-      ref.read(navigationBarColorProvider.notifier).changeColor(false);
-    } else {
-      ref.read(navigationBarColorProvider.notifier).changeColor(naviState);
-    }
-
-    return;
-  }
-
-  Future<void> isNavbarEnabled() async {
-    final bool? naviState = await AsyncPreferences.getBoolValue('navibar_on');
-    setState(() {
-      navbarOn = naviState ?? true;
-    });
-    return;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final bool navibarState = ref.watch(navigationBarColorProvider);
-    isNavbarEnabled();
+    final UserValues preferences = ref.watch(userSettingsProvider);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       bottomNavigationBar: const BottomPlaybar(),
-      appBar: navbarOn
+      appBar: preferences.navigationBarOn
           ? PreferredSize(
               preferredSize: Size(
                 double.infinity,
-                !navibarState ? kToolbarHeight : 100,
+                preferences.navigationBarTransparent ? 100 : kToolbarHeight,
               ),
               child: NavigationBar(
                 onDestinationSelected: (int newPageIndex) {
@@ -84,9 +60,9 @@ class _MusicPageState extends ConsumerState<AppBody> {
                     curve: Easing.emphasizedDecelerate,
                   );
                 },
-                backgroundColor: !navibarState
-                    ? Theme.of(context).colorScheme.surfaceContainer
-                    : Colors.transparent,
+                backgroundColor: preferences.navigationBarTransparent
+                    ? Colors.transparent
+                    : Theme.of(context).colorScheme.surfaceContainer,
                 destinations: <NavigationDestination>[
                   const NavigationDestination(
                     icon: Icon(Icons.settings),
@@ -121,7 +97,7 @@ class _MusicPageState extends ConsumerState<AppBody> {
           const QueueSideSheet(),
         ],
       ),
-      extendBodyBehindAppBar: navibarState,
+      extendBodyBehindAppBar: preferences.navigationBarTransparent,
     );
   }
 }
