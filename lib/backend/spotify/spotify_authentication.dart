@@ -28,7 +28,7 @@ abstract class SpotifyAuthenticationService extends ChopperService {
       codeVerifier = null;
     }
 
-    final Map<String, dynamic> body = {
+    final Map<String, dynamic> body = <String, dynamic>{
       'grant_type': 'authorization_code',
       'code': authcode,
       'redirect_uri': 'http://127.0.0.1:8080',
@@ -54,7 +54,7 @@ abstract class SpotifyAuthenticationService extends ChopperService {
   static SpotifyAuthenticationService create() {
     final ChopperClient client = ChopperClient(
       baseUrl: Uri.parse('https://accounts.spotify.com'),
-      services: [_$SpotifyAuthenticationService()],
+      services: <ChopperService>[_$SpotifyAuthenticationService()],
       converter: const JsonConverter()
     );
     return _$SpotifyAuthenticationService(client);
@@ -70,7 +70,7 @@ class SpotifyURL {
     final String codeChallenge = _getCodeChallenge(codeVerifier);
     final String stateCode = _getSetStateCode();
 
-    final Map<String, dynamic> queryParameters = {
+    final Map<String, dynamic> queryParameters = <String, dynamic>{
       'client_id': _clientID,
       'response_type': 'code',
       'redirect_uri': 'http://127.0.0.1:8080',
@@ -145,7 +145,7 @@ class SpotifyChopperReauthentication extends Authenticator {
 
       final String accessToken = await _getNewAccessToken(refreshToken);
       return request.copyWith(
-        headers: {...request.headers, 'Authorization': 'Bearer $accessToken'},
+        headers: <String, String>{...request.headers, 'Authorization': 'Bearer $accessToken'},
       );
     }
     return null;
@@ -159,13 +159,13 @@ class SpotifyChopperReauthentication extends Authenticator {
     final SpotifyAuthenticationService spotifyAuthentication =
         SpotifyAuthenticationService.create();
 
-    final Map<String, String> body = {
+    final Map<String, String> body = <String, String>{
       'grant_type': 'refresh_token',
       'refresh_token': refreshToken,
       'client_id': 'c92fab18b6924cf7872ed2965644cb25',
     };
 
-    final Response apiResponse = await spotifyAuthentication._getAuthToken(
+    final Response<dynamic> apiResponse = await spotifyAuthentication._getAuthToken(
       body,
     );
 
@@ -199,8 +199,8 @@ class SpotifyChopperAuthInterceptor implements Interceptor {
     final String? token = await storage.getAuthToken();
 
     if (token != null) {
-      final request = chain.request.copyWith(
-        headers: {...chain.request.headers, 'Authorization': 'Bearer $token'},
+      final Request request = chain.request.copyWith(
+        headers: <String, String>{...chain.request.headers, 'Authorization': 'Bearer $token'},
       );
       return chain.proceed(request);
     }
