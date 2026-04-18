@@ -56,7 +56,7 @@ class SettingsList extends StatelessWidget {
 }
 
 void launchURL() async {
-  final String url = SpotifyAuthentication.AuthFlow();
+  final String url = SpotifyAuthentication.getAuthenticationURL();
   final Uri parsedUrl = Uri.parse(url);
   if (!await launchUrl(parsedUrl)) {
     throw 'Unable to open authorization page';
@@ -66,7 +66,7 @@ void launchURL() async {
 
 
 Future<void> showQrCodeDialog(BuildContext context) async {
-  final String spotifyLoginURL = SpotifyAuthentication.AuthFlow();
+  final String spotifyLoginURL = SpotifyAuthentication.getAuthenticationURL();
 
   final result = showDialog(
     context: context,
