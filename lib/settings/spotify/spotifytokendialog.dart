@@ -1,5 +1,6 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-import 'package:spotimmich/backend/spotify/spotifyauth.dart';
+import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
 
 class AccessToken extends StatefulWidget {
   const AccessToken({super.key});
@@ -46,17 +47,23 @@ class _AccessTokenState extends State<AccessToken> {
                           child: const Text('Cancel'),
                         ),
                         TextButton(
-                          onPressed: () {
-                            SpotifyAuthentication.GetAccessToken(URLtextField.text).then((int value) {
-                              if (value == 200) {
-                                Navigator.of(context).pop();
-                              } else {
-                                setState(() {
-                                  errorTextField =
-                                      'Please retry authentication and paste its redirect link again.';
-                                });
-                              }
-                            });
+                          onPressed: () async {
+                            final SpotifyAuthenticationService
+                            authenticationService =
+                                SpotifyAuthenticationService.create();
+                            final Response authenticatorResponse =
+                                await authenticationService.getNewAccessToken(
+                                  URLtextField.text,
+                                );
+
+                            if (authenticatorResponse.isSuccessful) {
+                              Navigator.of(context).pop();
+                            } else {
+                              setState(() {
+                                errorTextField =
+                                    'Please retry authentication and paste its redirect link again.';
+                              });
+                            }
                           },
                           child: const Text('Next'),
                         ),
@@ -65,7 +72,6 @@ class _AccessTokenState extends State<AccessToken> {
                         borderRadius: BorderRadiusGeometry.circular(20),
                       ),
                       content: SizedBox.square(
-
                         child: Column(
                           children: <Widget>[
                             const Padding(

@@ -1,7 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format width=80
 
-part of 'spotifyauth.dart';
+part of 'spotify_authentication.dart';
 
 // **************************************************************************
 // ChopperGenerator
@@ -20,16 +20,21 @@ final class _$SpotifyAuthenticationService
   final Type definitionType = SpotifyAuthenticationService;
 
   @override
-  Future<Response<dynamic>> getNewToken() {
-    final Uri $url = Uri.parse('/authorize/api/token');
-    final Request $request = Request('POST', $url, client.baseUrl);
-    return client.send<dynamic, dynamic>($request);
-  }
-
-  @override
-  Future<Response<dynamic>> tokenFromRefreshToken() {
-    final Uri $url = Uri.parse('/authorize/api/token');
-    final Request $request = Request('POST', $url, client.baseUrl);
+  Future<Response<dynamic>> _getAuthToken(Map<String, dynamic> body) {
+    final Uri $url = Uri.parse('/api/token');
+    final Map<String, String> $headers = {
+      'content-type': 'application/x-www-form-urlencoded',
+    };
+    final $body = body.map<String, String>((key, value) {
+      return MapEntry(key.toString(), value.toString());
+    });
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+      headers: $headers,
+    );
     return client.send<dynamic, dynamic>($request);
   }
 }

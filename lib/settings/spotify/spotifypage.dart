@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:spotimmich/backend/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/spotify/spotifytokendialog.dart';
 import 'package:spotimmich/backend/spotify/spotifyauthserver.dart';
 
@@ -56,7 +56,7 @@ class SettingsList extends StatelessWidget {
 }
 
 void launchURL() async {
-  final String url = SpotifyAuthentication.getAuthenticationURL();
+  final String url = SpotifyURL.getAuthenticationURL();
   final Uri parsedUrl = Uri.parse(url);
   if (!await launchUrl(parsedUrl)) {
     throw 'Unable to open authorization page';
@@ -66,7 +66,7 @@ void launchURL() async {
 
 
 Future<void> showQrCodeDialog(BuildContext context) async {
-  final String spotifyLoginURL = SpotifyAuthentication.getAuthenticationURL();
+  final String spotifyLoginURL = SpotifyURL.getAuthenticationURL();
 
   final result = showDialog(
     context: context,

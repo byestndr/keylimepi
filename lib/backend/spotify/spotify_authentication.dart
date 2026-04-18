@@ -2,8 +2,130 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:chopper/chopper.dart';
-import 'package:http/http.dart' as http;
+import 'dart:math';
+import 'package:crypto/crypto.dart';
 import 'package:spotimmich/settings/preferences.dart';
+
+part 'spotify_authentication.chopper.dart';
+
+@ChopperApi(baseUrl: '/api/token')
+abstract class SpotifyAuthenticationService extends ChopperService {
+  @POST()
+  @formUrlEncoded
+  Future<Response> _getAuthToken(@Body() Map<String, dynamic> body);
+
+  Future<Response> getNewAccessToken(String url) async {
+    final SpotifySecureStorage storage = SpotifySecureStorage();
+
+    final Uri parsedURI = Uri.parse(url);
+    final Map<String, String> queryParameters = parsedURI.queryParameters;
+    final String? stateCode = await storage.getStateCode();
+    final String? authcode = queryParameters['code'];
+    String? codeVerifier = await storage.getCodeVerifier();
+
+    if (!queryParameters.containsKey('state') ||
+        queryParameters['state'] != stateCode) {
+      codeVerifier = null;
+    }
+
+    final Map<String, dynamic> body = {
+      'grant_type': 'authorization_code',
+      'code': authcode,
+      'redirect_uri': 'http://127.0.0.1:8080',
+      'client_id': 'c92fab18b6924cf7872ed2965644cb25',
+      'code_verifier': codeVerifier,
+    };
+
+    final Response<dynamic> response = await _getAuthToken(body);
+
+    if (!response.isSuccessful) {
+      return response;
+    }
+
+    final String authToken = response.body['access_token'];
+    final String refreshToken = response.body['refresh_token'];
+
+    await storage.setAuthToken(authToken);
+    await storage.setRefreshToken(refreshToken);
+
+    return response;
+  }
+
+  static SpotifyAuthenticationService create() {
+    final ChopperClient client = ChopperClient(
+      baseUrl: Uri.parse('https://accounts.spotify.com'),
+      services: [_$SpotifyAuthenticationService()],
+      converter: const JsonConverter()
+    );
+    return _$SpotifyAuthenticationService(client);
+  }
+}
+
+class SpotifyURL {
+  static final SpotifySecureStorage _storage = SpotifySecureStorage();
+  static const String _clientID = 'c92fab18b6924cf7872ed2965644cb25';
+
+  static String getAuthenticationURL() {
+    final String codeVerifier = _getSetCodeVerifier();
+    final String codeChallenge = _getCodeChallenge(codeVerifier);
+    final String stateCode = _getSetStateCode();
+
+    final Map<String, dynamic> queryParameters = {
+      'client_id': _clientID,
+      'response_type': 'code',
+      'redirect_uri': 'http://127.0.0.1:8080',
+      'code_challenge_method': 'S256',
+      'code_challenge': codeChallenge,
+      'scope':
+          'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private user-library-read',
+      'state': stateCode,
+    };
+
+    final Uri spotifyURL = Uri.https(
+      'accounts.spotify.com',
+      'authorize',
+      queryParameters,
+    );
+    return spotifyURL.toString();
+  }
+
+  static String _getSetStateCode() {
+    final String stateCode = _generateRandomString(Random().nextInt(30) + 20);
+    _storage.setStateCode(stateCode);
+    return stateCode;
+  }
+
+  static String _getCodeChallenge(String codeVerifier) {
+    final Digest codeChallengeDigest = sha256.convert(
+      utf8.encode(codeVerifier),
+    );
+    final String codeChallenge = base64UrlEncode(
+      codeChallengeDigest.bytes,
+    ).replaceAll('=', '');
+
+    return codeChallenge;
+  }
+
+  static String _getSetCodeVerifier() {
+    int length = Random().nextInt(85) + 43;
+    final String codeVerifier = _generateRandomString(length);
+    _storage.setCodeVerifier(codeVerifier);
+
+    return codeVerifier;
+  }
+
+  static String _generateRandomString(int length) {
+    const String chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    final Random random = Random();
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => chars.codeUnitAt(random.nextInt(chars.length)),
+      ),
+    );
+  }
+}
 
 class SpotifyChopperReauthentication extends Authenticator {
   static final SpotifySecureStorage _storage = SpotifySecureStorage();
@@ -34,25 +156,25 @@ class SpotifyChopperReauthentication extends Authenticator {
   }
 
   static Future<String> _getNewAccessToken(String refreshToken) async {
-    final Uri spotifyRefreshURI = Uri.https(
-      'accounts.spotify.com',
-      'api/token',
-    );
-    final http.Response authorizationResponse = await http.post(
-      spotifyRefreshURI,
-      headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: <String, String>{
-        'grant_type': 'refresh_token',
-        'refresh_token': refreshToken,
-        'client_id': 'c92fab18b6924cf7872ed2965644cb25',
-      },
+    final SpotifyAuthenticationService spotifyAuthentication =
+        SpotifyAuthenticationService.create();
+
+    final Map<String, String> body = {
+      'grant_type': 'refresh_token',
+      'refresh_token': refreshToken,
+      'client_id': 'c92fab18b6924cf7872ed2965644cb25',
+    };
+
+    final Response apiResponse = await spotifyAuthentication._getAuthToken(
+      body,
     );
 
-    final dynamic apiResponse = jsonDecode(authorizationResponse.body);
-    final String newAccessToken = apiResponse['access_token'];
-    final String newRefreshToken = apiResponse['refresh_token'];
+    if (!apiResponse.isSuccessful) {
+      throw Exception('Unable to refresh token');
+    }
+
+    final String newAccessToken = apiResponse.body['access_token'];
+    final String newRefreshToken = apiResponse.body['refresh_token'];
 
     await _storeNewToken(newRefreshToken, newAccessToken);
 
