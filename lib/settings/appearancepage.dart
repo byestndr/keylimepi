@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/theme/background_getter.dart';
+import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/settings/preferences.dart';
 
 class AppearancePage extends StatelessWidget {
@@ -35,91 +35,60 @@ class _SettingsListState extends ConsumerState<SettingsList> {
     getBackgroundToggle();
     getBarTransparency();
     isBarOn();
-    getAlignment();
-    getSliderPos();
+    getInfoAlignment();
+    getBackgroundBlur();
   }
 
-  Future<void> getBackgroundToggle() async {
-    final bool? background_bool = await AsyncPreferences().getBoolValue(
-      'immich_background',
-    );
-    if (background_bool == null) {
-      setState(() {
-        backgroundState = false;
-      });
-    } else {
-      setState(() {
-        backgroundState = background_bool;
-      });
-    }
+  void getBackgroundToggle() {
+    final bool background_bool = ref
+        .read(userSettingsProvider)
+        .immichBackgroundImage;
+
+    setState(() {
+      backgroundState = background_bool;
+    });
 
     return;
   }
 
-  Future<void> isBarOn() async {
-    final bool? naviState = await AsyncPreferences().getBoolValue('navibar_on');
-    if (naviState == null) {
-      setState(() {
-        navbarShown = false;
-      });
-    } else {
-      setState(() {
-        navbarShown = naviState;
-      });
-    }
+  void isBarOn() {
+    final bool naviState = ref.read(userSettingsProvider).navigationBarOn;
+
+    setState(() {
+      navbarShown = naviState;
+    });
 
     return;
   }
 
-  Future<void> getBarTransparency() async {
-    final bool? naviState = await AsyncPreferences().getBoolValue(
-      'transparent_navibar',
-    );
-    if (naviState == null) {
-      setState(() {
-        navbarShown = false;
-      });
-    } else {
-      setState(() {
-        navbarShown = naviState;
-      });
-    }
+  void getBarTransparency() {
+    final bool naviState = ref
+        .read(userSettingsProvider)
+        .navigationBarTransparent;
+
+    setState(() {
+      navbarShown = naviState;
+    });
 
     return;
   }
 
-  Future<void> getAlignment() async {
-    final int? alignment = await AsyncPreferences().getIntValue(
-      'player_alignment',
-    );
+  void getInfoAlignment() {
+    final bool alignment = ref.read(userSettingsProvider).albumInfoCentered;
 
-    if (alignment == null) {
-      setState(() {
-        _currentAlignment = 0;
-      });
-    } else {
-      setState(() {
-        _currentAlignment = alignment;
-      });
-    }
+    setState(() {
+      _currentAlignment = alignment ? 1 : 0;
+    });
 
     return;
   }
 
-  Future<void> getSliderPos() async {
-    final double? position = await AsyncPreferences().getDoubleValue(
-      'background_blur_radius',
-    );
+  void getBackgroundBlur() {
+    final double position = ref.read(userSettingsProvider).backgroundBlur;
 
-    if (position == null) {
-      setState(() {
-        sliderValue = 0;
-      });
-    } else {
-      setState(() {
-        sliderValue = position;
-      });
-    }
+    setState(() {
+      sliderValue = position;
+    });
 
     return;
   }
@@ -137,7 +106,8 @@ class _SettingsListState extends ConsumerState<SettingsList> {
           trailing: Switch(
             value: backgroundState,
             onChanged: (bool value) async {
-              AsyncPreferences().setBoolValue('immich_background', value);
+              AsyncPreferences.setBoolValue('immich_background', value);
+              await ref.read(userSettingsProvider.notifier).getNewState();
               setState(() {
                 backgroundState = value;
               });
@@ -163,10 +133,11 @@ class _SettingsListState extends ConsumerState<SettingsList> {
                     }
                   : null,
               onChangeEnd: (double value) async {
-                await AsyncPreferences().setDoubleValue(
+                await AsyncPreferences.setDoubleValue(
                   'background_blur_radius',
                   value,
                 );
+                await ref.read(userSettingsProvider.notifier).getNewState();
               },
               divisions: 32,
               year2023: false,
@@ -183,8 +154,9 @@ class _SettingsListState extends ConsumerState<SettingsList> {
           ),
           trailing: Switch(
             value: navbarShown,
-            onChanged: (bool value) {
-              AsyncPreferences().setBoolValue('navibar_on', value);
+            onChanged: (bool value) async {
+              await AsyncPreferences.setBoolValue('navibar_on', value);
+              await ref.read(userSettingsProvider.notifier).getNewState();
               setState(() {
                 navbarShown = value;
               });
@@ -201,11 +173,9 @@ class _SettingsListState extends ConsumerState<SettingsList> {
           trailing: Switch(
             value: isNavbarTransparent,
             onChanged: navbarShown
-                ? (bool value) {
-                    AsyncPreferences().setBoolValue(
-                      'transparent_navibar',
-                      value,
-                    );
+                ? (bool value) async {
+                    await AsyncPreferences.setBoolValue('transparent_navibar', value);
+                    await ref.read(userSettingsProvider.notifier).getNewState();
                     setState(() {
                       isNavbarTransparent = value;
                     });
@@ -229,11 +199,12 @@ class _SettingsListState extends ConsumerState<SettingsList> {
                     builder: (BuildContext context, StateSetter setState) {
                       return RadioGroup<int>(
                         groupValue: _currentAlignment,
-                        onChanged: (int? value) {
-                          AsyncPreferences().setIntValue(
+                        onChanged: (int? value) async {
+                          await AsyncPreferences.setIntValue(
                             'player_alignment',
                             value!,
                           );
+                          await ref.read(userSettingsProvider.notifier).getNewState();
                           setState(() {
                             _currentAlignment = value;
                           });
@@ -291,20 +262,12 @@ class _BarPositionTileState extends ConsumerState<BarPositionTile> {
     getPlaybackBarState();
   }
 
-  Future<void> getPlaybackBarState() async {
-    final int? barState = await AsyncPreferences().getIntValue(
-      'playback_bar_position',
-    );
+  void getPlaybackBarState() {
+    final int barState = ref.read(userSettingsProvider).playbackBarPosition;
 
-    if (barState == null) {
-      setState(() {
-        _currentAppearance = 0;
-      });
-    } else {
-      setState(() {
-        _currentAppearance = barState;
-      });
-    }
+    setState(() {
+      _currentAppearance = barState;
+    });
 
     return;
   }
@@ -325,18 +288,15 @@ class _BarPositionTileState extends ConsumerState<BarPositionTile> {
                 builder: (BuildContext context, StateSetter setState) {
                   return RadioGroup<int>(
                     groupValue: _currentAppearance,
-                    onChanged: (int? value) {
-                      AsyncPreferences().setIntValue(
+                    onChanged: (int? value) async {
+                      await AsyncPreferences.setIntValue(
                         'playback_bar_position',
                         value!,
                       );
+                      await ref.read(userSettingsProvider.notifier).getNewState();
                       setState(() {
                         _currentAppearance = value;
                       });
-
-                      ref
-                          .read(barPositionProvider.notifier)
-                          .changeCurrentPosition(value);
                     },
                     child: const Column(
                       mainAxisSize: MainAxisSize.min,

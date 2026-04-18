@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/providers/settings_provider.dart';
+import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/widgets/control/controls.dart';
 import 'package:spotimmich/widgets/info/songimage.dart';
 import 'package:spotimmich/widgets/info/songinfo.dart';
@@ -6,12 +9,13 @@ import 'package:spotimmich/widgets/info/songinfo.dart';
 const int _imageBreakpoint = 360;
 const double _imageRadius = 15;
 
-class CenteredInfo extends StatelessWidget {
-  final bool onPageControls;
-  const CenteredInfo({super.key, required this.onPageControls});
+class CenteredInfo extends ConsumerWidget {
+  const CenteredInfo({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final UserValues preferences = ref.watch(userSettingsProvider);
+
     return Align(
       alignment: Alignment.center,
       child: FittedBox(
@@ -52,7 +56,7 @@ class CenteredInfo extends StatelessWidget {
 
             const SongTitleInfo(),
             const SongArtistInfo(),
-            onPageControls
+            preferences.playbackBarPosition == 1
                 ? const Padding(
                     padding: EdgeInsetsDirectional.only(
                       top: 10,
@@ -80,12 +84,13 @@ class CenteredInfo extends StatelessWidget {
   }
 }
 
-class BottomLeftInfo extends StatelessWidget {
-  final bool onPageControls;
-  const BottomLeftInfo({super.key, required this.onPageControls});
+class BottomLeftInfo extends ConsumerWidget {
+  const BottomLeftInfo({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final UserValues preferences = ref.watch(userSettingsProvider);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -124,7 +129,7 @@ class BottomLeftInfo extends StatelessWidget {
               children: [
                 const SongTitleInfo(),
                 const SongArtistInfo(),
-                onPageControls
+                preferences.playbackBarPosition == 1
                     ? const Padding(
                         padding: EdgeInsetsDirectional.only(
                           top: 10,

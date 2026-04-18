@@ -42,29 +42,3 @@ class Background3 extends _$Background1 {
     ref.invalidateSelf();
   }
 }
-
-@riverpod
-class BarPosition extends _$BarPosition {
-  @override
-  int build() {
-    return 0;
-  }
-
-  void changeCurrentPosition(int position) {
-    state = position;
-    return;
-  }
-}
-
-@riverpod
-class NavigationBarColor extends _$NavigationBarColor {
-  @override
-  bool build() {
-    return false;
-  }
-
-  void changeColor(bool colorState) {
-    state = colorState;
-    return;
-  }
-}

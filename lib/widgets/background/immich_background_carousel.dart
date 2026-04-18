@@ -15,6 +15,7 @@ class ImmichCarousel extends ConsumerStatefulWidget {
 class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
   Timer? timer;
   static const int carouselLength = 3;
+  static const int imageBreakpoint = 600;
 
   CarouselController carouselController = CarouselController(initialItem: 0);
   int currentCarouselItem = 0;

@@ -13,7 +13,7 @@ class Server {
   Future<Response> handler(Request request) async {
     final Uri returnedURL = request.requestedUri;
 
-    final int authorizationStatus = await GetAccessToken(
+    final int authorizationStatus = await SpotifyAuthentication.GetAccessToken(
       returnedURL.toString(),
     );
 
