@@ -331,9 +331,9 @@ class _PauseButtonState extends ConsumerState<PauseButton>
 
   @override
   void dispose() {
-    super.dispose();
     _timer.cancel();
     _controller.dispose();
+    super.dispose();
   }
 
   void _getCurrentState() {

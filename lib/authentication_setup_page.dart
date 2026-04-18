@@ -41,17 +41,7 @@ class AuthenticationSetupPage extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: isAuthenticated
-                    ? FilledButton.tonal(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const SpotifyPage(),
-                          ),
-                        ),
-                        child: const Text('Log in to Spotify'),
-                      )
-                    : FilledButton(
+                    ? FilledButton(
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
@@ -61,6 +51,16 @@ class AuthenticationSetupPage extends ConsumerWidget {
                           );
                         },
                         child: const Text('Continue'),
+                      )
+                    : FilledButton.tonal(
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const SpotifyPage(),
+                          ),
+                        ),
+                        child: const Text('Log in to Spotify'),
                       ),
               ),
             ],
