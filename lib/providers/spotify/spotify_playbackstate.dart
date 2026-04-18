@@ -21,3 +21,16 @@ class SpotifyPlaybackstate extends _$SpotifyPlaybackstate {
     return spotifyResponse;
   }
 }
+
+@Riverpod(keepAlive: true)
+class SpotifyAuthenticated extends _$SpotifyAuthenticated {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void setTrue() {
+    state = true;
+    return;
+  }
+}

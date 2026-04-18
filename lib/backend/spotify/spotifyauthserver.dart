@@ -30,7 +30,7 @@ class Server {
 
     Future.delayed(const Duration(seconds: 1), () {
       server!.close(force: true);
-      Navigator.of(newcontext).pop();
+      Navigator.of(newcontext).pop(true);
     });
     return Response.ok('Authorized! You may now close this page.');
   }

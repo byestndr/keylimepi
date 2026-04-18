@@ -170,7 +170,7 @@ class SpotifyChopperReauthentication extends Authenticator {
     );
 
     if (!apiResponse.isSuccessful) {
-      throw Exception('Unable to refresh token');
+      throw NotAuthenticatedException('Unable to refresh token');
     }
 
     final String newAccessToken = apiResponse.body['access_token'];
@@ -205,6 +205,14 @@ class SpotifyChopperAuthInterceptor implements Interceptor {
       return chain.proceed(request);
     }
 
-    throw Exception('Not authenticated, please log in.');
+    throw NotAuthenticatedException('User not authenticated');
   }
+}
+
+class NotAuthenticatedException implements Exception {
+  String message;
+  NotAuthenticatedException(this.message);
+
+  @override
+  String toString() => 'NotAuthenticatedException: $message';
 }

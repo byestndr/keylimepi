@@ -55,3 +55,56 @@ abstract class _$SpotifyPlaybackstate
     element.handleCreate(ref, build);
   }
 }
+
+@ProviderFor(SpotifyAuthenticated)
+final spotifyAuthenticatedProvider = SpotifyAuthenticatedProvider._();
+
+final class SpotifyAuthenticatedProvider
+    extends $NotifierProvider<SpotifyAuthenticated, bool> {
+  SpotifyAuthenticatedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'spotifyAuthenticatedProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$spotifyAuthenticatedHash();
+
+  @$internal
+  @override
+  SpotifyAuthenticated create() => SpotifyAuthenticated();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$spotifyAuthenticatedHash() =>
+    r'2923baa6f8c196d3af523c4e4f2dcd708239f70e';
+
+abstract class _$SpotifyAuthenticated extends $Notifier<bool> {
+  bool build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<bool, bool>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
