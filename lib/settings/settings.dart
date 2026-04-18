@@ -104,9 +104,10 @@ class SettingsList extends ConsumerWidget {
                       child: const Text('Cancel'),
                     ),
                     TextButton(
-                      onPressed: () {
-                        AsyncPreferences.clearPreferences();
-                        ref.read(userSettingsProvider.notifier).getNewState();
+                      onPressed: () async {
+                        await AsyncPreferences.clearPreferences();
+                        await SpotifySecureStorage().deleteData();
+                        await ref.read(userSettingsProvider.notifier).getNewState();
                         ScaffoldMessenger.of(
                           context,
                         ).showSnackBar(resetSnackBar);
