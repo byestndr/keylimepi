@@ -117,9 +117,12 @@ abstract class SecureStorage {
     return await _storage.read(key: key);
   }
 
-  Future<void> deleteData() async {
-    await _storage.deleteAll();
+  Future<void> _deleteKey(String key) async {
+    await _storage.delete(key: key);
+    return;
   }
+
+  Future<void> deleteData();
 }
 
 class SpotifySecureStorage extends SecureStorage {
@@ -152,7 +155,7 @@ class SpotifySecureStorage extends SecureStorage {
     await _setValue(key: 'spotify-state_code', value: stateCode);
     return;
   }
-  
+
   Future<void> setAuthToken(String authToken) async {
     await _setValue(key: 'spotify-auth_token', value: authToken);
     return;
@@ -160,6 +163,22 @@ class SpotifySecureStorage extends SecureStorage {
 
   Future<void> setRefreshToken(String refrehToken) async {
     await _setValue(key: 'spotify-refresh_token', value: refrehToken);
+    return;
+  }
+
+  @override
+  Future<void> deleteData() async {
+    final Set<String> keys = {
+      'spotify-code_verifier',
+      'spotify-state_code',
+      'spotify-auth_token',
+      'spotify-refresh_token',
+    };
+
+    for (final String key in keys) {
+      await _deleteKey(key);
+    }
+
     return;
   }
 }

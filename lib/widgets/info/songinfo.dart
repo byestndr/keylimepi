@@ -24,7 +24,7 @@ class SongTitleInfo extends ConsumerWidget {
               },
               error: (Object error, StackTrace trace) {
                 if (error.runtimeType == NoSuchMethodError) {
-                  return 'You are not logged in...';
+                  return 'Media type not supported';
                 }
 
                 if (error.runtimeType == FormatException) {
@@ -83,7 +83,7 @@ class SongArtistInfo extends ConsumerWidget {
         },
         error: (Object error, StackTrace trace) {
           if (error.runtimeType == NoSuchMethodError) {
-            return 'Log into Spotify via settings';
+            return 'Play something else to view info';
           }
 
           if (error.runtimeType == FormatException) {

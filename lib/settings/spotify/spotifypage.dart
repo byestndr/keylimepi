@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:spotimmich/backend/spotify/spotifyauth.dart';
 import 'package:spotimmich/settings/spotify/spotifytokendialog.dart';
 import 'package:spotimmich/backend/spotify/spotifyauthserver.dart';
 
@@ -41,13 +43,17 @@ class SettingsList extends StatelessWidget {
           },
         ),
         const AccessToken(),
-        ListTile(
-          title: const Text('Login via QR code'),
-          leading: const Icon(Icons.qr_code_rounded),
-          subtitle: const Text('Use another device to log into Spotify'),
-          onTap: () async {
-            await server.startServer(context);
-            unawaited(showQrCodeDialog(context));
+        Consumer(
+          builder: (context, ref, child) {
+            return ListTile(
+              title: const Text('Login via QR code'),
+              leading: const Icon(Icons.qr_code_rounded),
+              subtitle: const Text('Use another device to log into Spotify'),
+              onTap: () async {
+                await server.startServer(context);
+                unawaited(showQrCodeDialog(context, ref));
+              },
+            );
           },
         ),
       ],
@@ -56,19 +62,17 @@ class SettingsList extends StatelessWidget {
 }
 
 void launchURL() async {
-  final String url = SpotifyAuthentication.AuthFlow();
+  final String url = SpotifyURL.getAuthenticationURL();
   final Uri parsedUrl = Uri.parse(url);
   if (!await launchUrl(parsedUrl)) {
     throw 'Unable to open authorization page';
   }
 }
 
+Future<void> showQrCodeDialog(BuildContext context, WidgetRef ref) async {
+  final String spotifyLoginURL = SpotifyURL.getAuthenticationURL();
 
-
-Future<void> showQrCodeDialog(BuildContext context) async {
-  final String spotifyLoginURL = SpotifyAuthentication.AuthFlow();
-
-  final result = showDialog(
+  final Future<dynamic> result = showDialog(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
@@ -99,8 +103,8 @@ Future<void> showQrCodeDialog(BuildContext context) async {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(true);
-                          showQrCodeDirections(context);
+                          Navigator.of(context).pop(false);
+                          showQrCodeDirections(context, ref);
                         },
                         child: const Text('Next'),
                       ),
@@ -112,14 +116,15 @@ Future<void> showQrCodeDialog(BuildContext context) async {
       );
     },
   );
-  final bool? isNext = await result;
-
-  if (isNext == null) {
+  final bool? isNotNext = await result;
+  if (isNotNext == null) {
     server.stopServer();
+  } else if (isNotNext) {
+    ref.read(spotifyAuthenticatedProvider.notifier).setTrue();
   }
 }
 
-void showQrCodeDirections(BuildContext context) async {
+void showQrCodeDirections(BuildContext context, WidgetRef ref) async {
   final String? localIP = await NetworkInfo().getWifiIP();
   final result = showDialog(
     context: context,
@@ -191,6 +196,9 @@ void showQrCodeDirections(BuildContext context) async {
     },
   );
 
-  await result;
+  final bool? isSuccessful = await result;
+  if (isSuccessful == true) {
+    ref.read(spotifyAuthenticatedProvider.notifier).setTrue();
+  }
   server.stopServer();
 }

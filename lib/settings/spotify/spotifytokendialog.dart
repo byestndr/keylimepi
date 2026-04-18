@@ -1,5 +1,8 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-import 'package:spotimmich/backend/spotify/spotifyauth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 class AccessToken extends StatefulWidget {
   const AccessToken({super.key});
@@ -45,27 +48,43 @@ class _AccessTokenState extends State<AccessToken> {
                           },
                           child: const Text('Cancel'),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            SpotifyAuthentication.GetAccessToken(URLtextField.text).then((int value) {
-                              if (value == 200) {
-                                Navigator.of(context).pop();
-                              } else {
-                                setState(() {
-                                  errorTextField =
-                                      'Please retry authentication and paste its redirect link again.';
-                                });
-                              }
-                            });
-                          },
-                          child: const Text('Next'),
+                        Consumer(
+                          builder:
+                              (
+                                BuildContext context,
+                                WidgetRef ref,
+                                Widget? child,
+                              ) {
+                                return TextButton(
+                                  onPressed: () async {
+                                    final SpotifyAuthenticationService
+                                    authenticationService =
+                                        SpotifyAuthenticationService.create();
+                                    final Response authenticatorResponse =
+                                        await authenticationService
+                                            .getNewAccessToken(
+                                              URLtextField.text,
+                                            );
+
+                                    if (authenticatorResponse.isSuccessful) {
+                                      ref.read(spotifyAuthenticatedProvider.notifier).setTrue();
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      setState(() {
+                                        errorTextField =
+                                            'Please retry authentication and paste its redirect link again.';
+                                      });
+                                    }
+                                  },
+                                  child: const Text('Next'),
+                                );
+                              },
                         ),
                       ],
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadiusGeometry.circular(20),
                       ),
                       content: SizedBox.square(
-
                         child: Column(
                           children: <Widget>[
                             const Padding(

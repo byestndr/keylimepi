@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/authentication_setup_page.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
+import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 import 'package:spotimmich/settings/appearancepage.dart';
 import 'package:spotimmich/settings/immich/immichpage.dart';
 import 'package:spotimmich/settings/preferences.dart';
@@ -104,13 +106,25 @@ class SettingsList extends ConsumerWidget {
                       child: const Text('Cancel'),
                     ),
                     TextButton(
-                      onPressed: () {
-                        AsyncPreferences.clearPreferences();
-                        ref.read(userSettingsProvider.notifier).getNewState();
+                      onPressed: () async {
+                        await AsyncPreferences.clearPreferences();
+                        await SpotifySecureStorage().deleteData();
+                        await ref
+                            .read(userSettingsProvider.notifier)
+                            .getNewState();
+                        Navigator.of(context).pop();
                         ScaffoldMessenger.of(
                           context,
                         ).showSnackBar(resetSnackBar);
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const AuthenticationSetupPage(),
+                          ),
+                        );
+                        ref
+                            .read(spotifyAuthenticatedProvider.notifier)
+                            .setFalse();
                       },
                       child: const Text('Confirm'),
                     ),
