@@ -89,8 +89,20 @@ void showQueueSheet(BuildContext context, WidgetRef ref) {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2),
                               child: ListTile(
-                                title: Text(data[index].title),
-                                subtitle: Text(data[index].artist),
+                                title: Text(
+                                  data[index].title,
+                                  style: const TextStyle(
+                                    fontFamilyFallback: ['NotoSansJP'],
+                                    fontWeight: .w600
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  data[index].artist,
+                                  style: const TextStyle(
+                                    fontFamilyFallback: ['NotoSansJP'],
+                                    fontWeight: .w500
+                                  ),
+                                ),
                                 leading: ClipRRect(
                                   borderRadius: BorderRadiusGeometry.circular(
                                     5,
