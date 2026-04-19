@@ -9,7 +9,7 @@ class appColorScheme extends _$appColorScheme {
   @override
   Future<ColorScheme> build() async {
     final dynamic currentPlaybackState = await ref.watch(
-      spotifyPlaybackstateProvider.future,
+      spotifyPlaybackStateProvider.future,
     );
 
     if (currentPlaybackState.statusCode == 204) {

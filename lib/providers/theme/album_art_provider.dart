@@ -7,7 +7,7 @@ part 'album_art_provider.g.dart';
 class AlbumImage extends _$AlbumImage {
   @override
   Future<String> build() async {
-    final dynamic currentPlaybackState = await ref.watch(spotifyPlaybackstateProvider.future);
+    final dynamic currentPlaybackState = await ref.watch(spotifyPlaybackStateProvider.future);
 
     return getAlbumArt(currentPlaybackState.body);
   }

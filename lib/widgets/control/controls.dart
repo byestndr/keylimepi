@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
+import 'package:spotimmich/providers/spotify/queue_provider.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
+import 'package:spotimmich/widgets/info/queue_sheet.dart';
 
 const double iconButtonDensityHorizontal = 1;
 const double iconButtonDensityVertical = 1;
@@ -93,7 +95,7 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
 
   void _getCurrentState() {
     final AsyncValue<dynamic> playbackStateResponse = ref.read(
-      spotifyPlaybackstateProvider,
+      spotifyPlaybackStateProvider,
     );
 
     playbackStateResponse.when(
@@ -133,7 +135,7 @@ class _RepeatButtonState extends ConsumerState<RepeatButton> {
         });
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         await spotifyAPI.cycleRepeat(_currentState);
-        ref.invalidate(spotifyPlaybackstateProvider);
+        ref.invalidate(spotifyPlaybackStateProvider);
       },
       icon: Icon(_currentIcon),
       iconSize: 30,
@@ -159,7 +161,7 @@ class NextButton extends ConsumerWidget {
       onPressed: () async {
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         await spotifyAPI.skipForward();
-        ref.invalidate(spotifyPlaybackstateProvider);
+        ref.invalidate(spotifyPlaybackStateProvider);
       },
       icon: const Icon(Icons.skip_next),
       iconSize: 30,
@@ -185,7 +187,7 @@ class PreviousButton extends ConsumerWidget {
       onPressed: () async {
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         await spotifyAPI.skipPrevious();
-        ref.invalidate(spotifyPlaybackstateProvider);
+        ref.invalidate(spotifyPlaybackStateProvider);
       },
       icon: const Icon(Icons.skip_previous),
       iconSize: 30,
@@ -209,7 +211,7 @@ class QueueButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton.filled(
       onPressed: () {
-        ref.read(isQueueExpandedProvider.notifier).changeState();
+        showQueueSheet(context, ref);
       },
       icon: const Icon(Icons.queue_music_rounded),
       iconSize: 30,
@@ -250,7 +252,7 @@ class _ShuffleButtonState extends ConsumerState<ShuffleButton> {
 
   void _getCurrentState() {
     final AsyncValue<dynamic> playbackStateResponse = ref.read(
-      spotifyPlaybackstateProvider,
+      spotifyPlaybackStateProvider,
     );
     playbackStateResponse.when(
       skipError: true,
@@ -283,7 +285,7 @@ class _ShuffleButtonState extends ConsumerState<ShuffleButton> {
         });
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         await spotifyAPI.shuffleToggle(_currentState);
-        ref.invalidate(spotifyPlaybackstateProvider);
+        ref.invalidate(spotifyPlaybackStateProvider);
       },
       icon: Icon(
         _currentState ? Icons.shuffle_on_rounded : Icons.shuffle_rounded,
@@ -338,7 +340,7 @@ class _PauseButtonState extends ConsumerState<PauseButton>
 
   void _getCurrentState() {
     final AsyncValue<dynamic> playbackStateResponse = ref.read(
-      spotifyPlaybackstateProvider,
+      spotifyPlaybackStateProvider,
     );
     playbackStateResponse.when(
       skipError: true,
@@ -380,7 +382,7 @@ class _PauseButtonState extends ConsumerState<PauseButton>
         }
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         await spotifyAPI.playPause();
-        ref.invalidate(spotifyPlaybackstateProvider);
+        ref.invalidate(spotifyPlaybackStateProvider);
       },
       child: AnimatedIcon(icon: AnimatedIcons.play_pause, progress: _animation),
     );

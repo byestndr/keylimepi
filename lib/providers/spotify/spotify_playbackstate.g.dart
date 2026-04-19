@@ -9,34 +9,34 @@ part of 'spotify_playbackstate.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(SpotifyPlaybackstate)
-final spotifyPlaybackstateProvider = SpotifyPlaybackstateProvider._();
+@ProviderFor(SpotifyPlaybackState)
+final spotifyPlaybackStateProvider = SpotifyPlaybackStateProvider._();
 
-final class SpotifyPlaybackstateProvider
-    extends $AsyncNotifierProvider<SpotifyPlaybackstate, Response<dynamic>> {
-  SpotifyPlaybackstateProvider._()
+final class SpotifyPlaybackStateProvider
+    extends $AsyncNotifierProvider<SpotifyPlaybackState, Response<dynamic>> {
+  SpotifyPlaybackStateProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'spotifyPlaybackstateProvider',
+        name: r'spotifyPlaybackStateProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$spotifyPlaybackstateHash();
+  String debugGetCreateSourceHash() => _$spotifyPlaybackStateHash();
 
   @$internal
   @override
-  SpotifyPlaybackstate create() => SpotifyPlaybackstate();
+  SpotifyPlaybackState create() => SpotifyPlaybackState();
 }
 
-String _$spotifyPlaybackstateHash() =>
-    r'57793abbbb4240dd3ec31e339b9ffb6fd0385297';
+String _$spotifyPlaybackStateHash() =>
+    r'76b38d43456a02e3d061e0a53ee10452d61f278b';
 
-abstract class _$SpotifyPlaybackstate
+abstract class _$SpotifyPlaybackState
     extends $AsyncNotifier<Response<dynamic>> {
   FutureOr<Response<dynamic>> build();
   @$mustCallSuper
