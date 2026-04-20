@@ -19,7 +19,7 @@ class QueueHeader extends SliverPersistentHeaderDelegate {
       color: Theme.of(context).colorScheme.surfaceContainerLow,
       child: const Column(
         crossAxisAlignment: .start,
-        children: [
+        children: <Widget>[
           Padding(
             padding: EdgeInsets.only(left: 10.0, bottom: 18.0),
             child: Text(
@@ -45,7 +45,6 @@ class QueueHeader extends SliverPersistentHeaderDelegate {
   }
 }
 
-// TODO: Clean up this widget
 class BottomSheetQueue extends ConsumerStatefulWidget {
   const BottomSheetQueue({super.key});
 
@@ -66,7 +65,8 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
     final Set<Song> removedSongs = currentQueueAsSet.difference(newQueueAsSet);
     final Set<Song> newSongs = newQueueAsSet.difference(currentQueueAsSet);
 
-    final animatedListState = _animatedListKey.currentState;
+    final SliverAnimatedListState? animatedListState =
+        _animatedListKey.currentState;
 
     if (!mounted) return;
 
@@ -79,7 +79,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
           BuildContext context,
           Animation<double> animation,
         ) {
-          final slideAnimation =
+          final Animation<Offset> slideAnimation =
               Tween<Offset>(
                 begin: const Offset(1, 0),
                 end: Offset.zero,
@@ -121,7 +121,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
       builder: (BuildContext context, ScrollController scrollController) {
         return CustomScrollView(
           controller: scrollController,
-          slivers: [
+          slivers: <Widget>[
             SliverPersistentHeader(
               delegate: QueueHeader(),
               pinned: true,
@@ -138,6 +138,36 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
                   _diffSongQueue(data);
                 }
 
+                if (_currentSongQueue!.isEmpty) {
+                  return SliverList(
+                    delegate: SliverChildListDelegate.fixed(<Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: .center,
+                          mainAxisAlignment: .center,
+                          children: <Widget>[
+                            Text(
+                              '(⁠｡⁠ŏ⁠﹏⁠ŏ⁠)',
+                              style: TextStyle(
+                                fontSize: 48,
+                                color: Colors.white.withAlpha(175),
+                              ),
+                            ),
+                            Text(
+                              'There\'s nothing currently in the queue...',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white.withAlpha(175),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
+                  );
+                }
+
                 return SliverAnimatedList(
                   key: _animatedListKey,
                   initialItemCount: data.length,
@@ -147,7 +177,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
                         int index,
                         Animation<double> animation,
                       ) {
-                        final slideAnimation =
+                        final Animation<Offset> slideAnimation =
                             Tween<Offset>(
                               begin: const Offset(1, 0),
                               end: Offset.zero,
@@ -168,21 +198,27 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
                 );
               },
               error: (Object error, StackTrace stackTrace) {
-                return const SliverList(
-                  delegate: SliverChildListDelegate.fixed([
+                return SliverList(
+                  delegate: SliverChildListDelegate.fixed(<Widget>[
                     Padding(
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: Column(
                         crossAxisAlignment: .center,
                         mainAxisAlignment: .center,
-                        children: [
+                        children: <Widget>[
                           Text(
                             '(⁠┛⁠◉⁠Д⁠◉⁠)⁠┛⁠彡⁠┻⁠━⁠┻',
-                            style: TextStyle(fontSize: 48),
+                            style: TextStyle(
+                              fontSize: 48,
+                              color: Colors.white.withAlpha(175),
+                            ),
                           ),
                           Text(
                             'There was an error loading the queue.',
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white.withAlpha(175),
+                            ),
                           ),
                         ],
                       ),
@@ -192,7 +228,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
               },
               loading: () {
                 return const SliverList(
-                  delegate: SliverChildListDelegate.fixed([
+                  delegate: SliverChildListDelegate.fixed(<Widget>[
                     LinearProgressIndicator(minHeight: 2),
                   ]),
                 );
@@ -203,15 +239,6 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
       },
     );
   }
-}
-
-void showQueueSheet(BuildContext context, WidgetRef ref) {
-  showModalBottomSheet(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
-    builder: (BuildContext context) => const BottomSheetQueue(),
-  );
 }
 
 class QueueItem extends ConsumerWidget {
@@ -239,14 +266,14 @@ class QueueItem extends ConsumerWidget {
             title: Text(
               song.title,
               style: const TextStyle(
-                fontFamilyFallback: ['NotoSansJP'],
+                fontFamilyFallback: <String>['NotoSansJP'],
                 fontWeight: .w600,
               ),
             ),
             subtitle: Text(
               song.artist,
               style: const TextStyle(
-                fontFamilyFallback: ['NotoSansJP'],
+                fontFamilyFallback: <String>['NotoSansJP'],
                 fontWeight: .w500,
               ),
             ),
@@ -268,4 +295,13 @@ class QueueItem extends ConsumerWidget {
       ),
     );
   }
+}
+
+void showQueueSheet(BuildContext context, WidgetRef ref) {
+  showModalBottomSheet(
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    builder: (BuildContext context) => const BottomSheetQueue(),
+  );
 }
