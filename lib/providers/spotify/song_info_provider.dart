@@ -39,6 +39,16 @@ class Song {
       queuePosition: index
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Song && other.uri == uri;
+  }
+
+  @override
+  int get hashCode => uri.hashCode;
 }
 
 @riverpod
