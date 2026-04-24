@@ -81,15 +81,13 @@ class _MusicPageState extends ConsumerState<AppBody> {
             )
           : PreferredSize(preferredSize: .zero, child: Container()),
 
-      body: Expanded(
-        child: PageView(
-          physics: const BouncingScrollPhysics(),
-          onPageChanged: (int value) => setState(() {
-            _currentPageIndex = value;
-          }),
-          controller: _pageController,
-          children: _navigationPages,
-        ),
+      body: PageView(
+        physics: const BouncingScrollPhysics(),
+        onPageChanged: (int value) => setState(() {
+          _currentPageIndex = value;
+        }),
+        controller: _pageController,
+        children: _navigationPages,
       ),
       extendBodyBehindAppBar: preferences.navigationBarTransparent,
     );
