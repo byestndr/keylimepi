@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
-import 'package:spotimmich/providers/spotify/queue_provider.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
-import 'package:spotimmich/widgets/info/queue_sheet.dart';
+import 'package:spotimmich/widgets/info/queue/queue_sheet.dart';
 
 const double iconButtonDensityHorizontal = 1;
 const double iconButtonDensityVertical = 1;

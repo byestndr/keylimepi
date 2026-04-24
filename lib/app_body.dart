@@ -6,7 +6,6 @@ import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/settings/settings.dart';
 import 'package:spotimmich/song_select.dart';
 import 'package:spotimmich/widgets/control/playbackbar.dart';
-import 'package:spotimmich/widgets/info/song_queue.dart';
 
 class AppBody extends ConsumerStatefulWidget {
   const AppBody({super.key});
@@ -82,20 +81,15 @@ class _MusicPageState extends ConsumerState<AppBody> {
             )
           : PreferredSize(preferredSize: .zero, child: Container()),
 
-      body: Row(
-        children: [
-          Expanded(
-            child: PageView(
-              physics: const BouncingScrollPhysics(),
-              onPageChanged: (int value) => setState(() {
-                _currentPageIndex = value;
-              }),
-              controller: _pageController,
-              children: _navigationPages,
-            ),
-          ),
-          const QueueSideSheet(),
-        ],
+      body: Expanded(
+        child: PageView(
+          physics: const BouncingScrollPhysics(),
+          onPageChanged: (int value) => setState(() {
+            _currentPageIndex = value;
+          }),
+          controller: _pageController,
+          children: _navigationPages,
+        ),
       ),
       extendBodyBehindAppBar: preferences.navigationBarTransparent,
     );

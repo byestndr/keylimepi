@@ -7,7 +7,6 @@ import 'package:spotimmich/authentication_setup_page.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
 import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 import 'package:spotimmich/providers/theme/colorscheme.dart';
 import 'package:spotimmich/settings/preferences.dart';
 
