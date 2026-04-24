@@ -36,7 +36,7 @@ class Song {
       artist: song['artists'][0]['name'],
       uri: song['uri'],
       image: images.last['url'],
-      queuePosition: index
+      queuePosition: index,
     );
   }
 
@@ -71,6 +71,7 @@ class InfoGetter extends _$InfoGetter {
       title: currentPlaybackState['item']['name'],
       artist: currentPlaybackState['item']['album']['artists'][0]['name'],
       uri: currentPlaybackState['item']['uri'],
+      image: currentPlaybackState['item']['album']['images'][0]['url'],
     );
 
     final Song? oldSong = state.value;

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +20,7 @@ class QueueHeader extends SliverPersistentHeaderDelegate {
         crossAxisAlignment: .start,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 10.0, bottom: 18.0),
+            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
             child: Text(
               'Queue',
               style: TextStyle(fontSize: 22, fontWeight: .w500),
@@ -34,10 +33,43 @@ class QueueHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 50;
+  double get maxExtent => 42;
 
   @override
-  double get minExtent => 50;
+  double get minExtent => 42;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
+}
+
+class CurrentQueueSong extends SliverPersistentHeaderDelegate {
+  final Song data;
+  const CurrentQueueSong({required this.data});
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      color: Theme.of(context).colorScheme.primaryContainer,
+      child: Column(
+        children: [
+          QueueItem(song: data, index: 0, isTappable: false),
+          const Divider(thickness: 0, height: 1),
+        ],
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 58;
+
+  @override
+  double get minExtent => 58;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
@@ -89,7 +121,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
                   curve: const Cubic(0.3, 0.0, 0.8, 0.15),
                 ),
               );
-          return QueueItem(
+          return QueueItemAnimated(
             slideAnimation: slideAnimation,
             sizeAnimation: animation,
             song: songToRemove,
@@ -127,6 +159,31 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
               pinned: true,
               floating: true,
             ),
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                final AsyncValue<Song> currentSong = ref.watch(
+                  infoGetterProvider,
+                );
+
+                return currentSong.when(
+                  skipLoadingOnRefresh: true,
+                  skipLoadingOnReload: true,
+                  skipError: true,
+                  data: (Song data) {
+                    if (data.image == null) {
+                      return SliverToBoxAdapter(child: Container());
+                    }
+
+                    return SliverPersistentHeader(
+                      delegate: CurrentQueueSong(data: data),
+                      pinned: true,
+                    );
+                  },
+                  loading: () => Container(),
+                  error: (Object error, StackTrace stackTrace) => Container(),
+                );
+              },
+            ),
             queue.when(
               skipLoadingOnRefresh: true,
               skipLoadingOnReload: true,
@@ -139,33 +196,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
                 }
 
                 if (_currentSongQueue!.isEmpty) {
-                  return SliverList(
-                    delegate: SliverChildListDelegate.fixed(<Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: .center,
-                          mainAxisAlignment: .center,
-                          children: <Widget>[
-                            Text(
-                              '(⁠｡⁠ŏ⁠﹏⁠ŏ⁠)',
-                              style: TextStyle(
-                                fontSize: 48,
-                                color: Colors.white.withAlpha(175),
-                              ),
-                            ),
-                            Text(
-                              'There\'s nothing currently in the queue...',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white.withAlpha(175),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]),
-                  );
+                  return const QueueEmpty();
                 }
 
                 return SliverAnimatedList(
@@ -188,7 +219,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
                               ),
                             );
 
-                        return QueueItem(
+                        return QueueItemAnimated(
                           slideAnimation: slideAnimation,
                           sizeAnimation: animation,
                           song: _currentSongQueue![index],
@@ -198,33 +229,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
                 );
               },
               error: (Object error, StackTrace stackTrace) {
-                return SliverList(
-                  delegate: SliverChildListDelegate.fixed(<Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: .center,
-                        mainAxisAlignment: .center,
-                        children: <Widget>[
-                          Text(
-                            '(⁠┛⁠◉⁠Д⁠◉⁠)⁠┛⁠彡⁠┻⁠━⁠┻',
-                            style: TextStyle(
-                              fontSize: 48,
-                              color: Colors.white.withAlpha(175),
-                            ),
-                          ),
-                          Text(
-                            'There was an error loading the queue.',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white.withAlpha(175),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ]),
-                );
+                return const QueueEmpty();
               },
               loading: () {
                 return const SliverList(
@@ -241,57 +246,142 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
   }
 }
 
+class QueueError extends StatelessWidget {
+  const QueueError({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverList(
+      delegate: SliverChildListDelegate.fixed(<Widget>[
+        Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: .center,
+            mainAxisAlignment: .center,
+            children: <Widget>[
+              Text(
+                '(⁠┛⁠◉⁠Д⁠◉⁠)⁠┛⁠彡⁠┻⁠━⁠┻',
+                style: TextStyle(fontSize: 48, color: Colors.grey),
+              ),
+              Text(
+                'There was an error loading the queue.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      ]),
+    );
+    ;
+  }
+}
+
+class QueueEmpty extends StatelessWidget {
+  const QueueEmpty({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverList(
+      delegate: SliverChildListDelegate.fixed(<Widget>[
+        Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: .center,
+            mainAxisAlignment: .center,
+            children: <Widget>[
+              Text(
+                '(⁠｡⁠ŏ⁠﹏⁠ŏ⁠)',
+                style: TextStyle(
+                  fontSize: 48,
+                  color: Colors.grey,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: .w900,
+                ),
+              ),
+              Text(
+                'There\'s nothing currently in the queue...',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      ]),
+    );
+  }
+}
+
 class QueueItem extends ConsumerWidget {
+  final Song song;
+  final int index;
+  final bool isTappable;
+  const QueueItem({
+    super.key,
+    required this.song,
+    required this.index,
+    this.isTappable = true,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: ListTile(
+        title: Text(
+          song.title,
+          style: const TextStyle(
+            fontFamilyFallback: <String>['NotoSansJP'],
+            fontWeight: .w600,
+          ),
+        ),
+        subtitle: Text(
+          song.artist,
+          style: const TextStyle(
+            fontFamilyFallback: <String>['NotoSansJP'],
+            fontWeight: .w500,
+          ),
+        ),
+        leading: ClipRRect(
+          borderRadius: BorderRadiusGeometry.circular(5),
+          child: Image.network(song.image!),
+        ),
+        dense: true,
+        onTap: isTappable
+            ? () async {
+                final SpotifyUserService spotifyService =
+                    SpotifyUserService.create();
+                for (int i = 0; i < index + 1; i++) {
+                  unawaited(spotifyService.skipForward());
+                }
+                ref.invalidate(spotifyPlaybackStateProvider);
+              }
+            : null,
+      ),
+    );
+  }
+}
+
+class QueueItemAnimated extends StatelessWidget {
   final Animation<Offset> slideAnimation;
   final Animation<double> sizeAnimation;
   final Song song;
   final int index;
-  const QueueItem({
+  final bool isTappable;
+  const QueueItemAnimated({
     super.key,
     required this.slideAnimation,
     required this.song,
     required this.index,
     required this.sizeAnimation,
+    this.isTappable = true,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor: sizeAnimation,
       child: SlideTransition(
         position: slideAnimation,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: ListTile(
-            title: Text(
-              song.title,
-              style: const TextStyle(
-                fontFamilyFallback: <String>['NotoSansJP'],
-                fontWeight: .w600,
-              ),
-            ),
-            subtitle: Text(
-              song.artist,
-              style: const TextStyle(
-                fontFamilyFallback: <String>['NotoSansJP'],
-                fontWeight: .w500,
-              ),
-            ),
-            leading: ClipRRect(
-              borderRadius: BorderRadiusGeometry.circular(5),
-              child: Image.network(song.image!),
-            ),
-            dense: true,
-            onTap: () async {
-              final SpotifyUserService spotifyService =
-                  SpotifyUserService.create();
-              for (int i = 0; i < index + 1; i++) {
-                unawaited(spotifyService.skipForward());
-              }
-              ref.invalidate(spotifyPlaybackStateProvider);
-            },
-          ),
-        ),
+        child: QueueItem(song: song, index: index, isTappable: true),
       ),
     );
   }
