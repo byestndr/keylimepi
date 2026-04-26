@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/player_page.dart';
@@ -33,7 +34,7 @@ class AlbumArtBackground extends ConsumerWidget {
                   skipLoadingOnRefresh: true,
                   skipLoadingOnReload: true,
                   data: (String data) {
-                    return NetworkImage(data);
+                    return CachedNetworkImageProvider(data);
                   },
                   error: (Object error, StackTrace stack) {
                     return const AssetImage('assets/imagePlaceholder.png');
@@ -66,9 +67,9 @@ class AlbumArtBackground extends ConsumerWidget {
               const MediaWidget(),
               preferences.playbackBarPosition == 1
                   ? const Padding(
-                    padding: EdgeInsetsDirectional.only(bottom: 5),
-                    child: SizedBox(width: 800, child: ProgressSlider()),
-                  )
+                      padding: EdgeInsetsDirectional.only(bottom: 5),
+                      child: SizedBox(width: 800, child: ProgressSlider()),
+                    )
                   : const Padding(padding: EdgeInsetsGeometry.zero),
             ],
           ),

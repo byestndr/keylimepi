@@ -54,7 +54,6 @@ class _SongImageState extends ConsumerState<SongImage> {
                 fadeInDuration: const Duration(milliseconds: 400),
                 fadeOutCurve: const Cubic(0.3, 0.0, 0.8, 0.15),
                 fadeOutDuration: const Duration(milliseconds: 200),
-                
               );
             },
             error: (Object error, StackTrace trace) {
