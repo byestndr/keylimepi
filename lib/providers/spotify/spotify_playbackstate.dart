@@ -6,7 +6,7 @@ import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 part 'spotify_playbackstate.g.dart';
 
 @Riverpod(keepAlive: true)
-class SpotifyPlaybackstate extends _$SpotifyPlaybackstate {
+class SpotifyPlaybackState extends _$SpotifyPlaybackState {
   @override
   Future<Response> build() async {
     ref.watch(refreshTimerProvider);

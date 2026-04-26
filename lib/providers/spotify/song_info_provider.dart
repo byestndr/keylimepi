@@ -14,9 +14,41 @@ Stream<void> refreshTimer(Ref ref) {
 }
 
 class Song {
-  String title = 'Nothing currently playing...';
-  String artist = "Start playing a song to control playback";
+  String title;
+  String artist;
   String? uri;
+  String? image;
+  int? queuePosition;
+
+  Song({
+    this.title = 'Nothing currently playing...',
+    this.artist = 'Start playing a song to control playback',
+    this.uri,
+    this.image,
+    this.queuePosition,
+  });
+
+  factory Song.fromMap(Map<String, dynamic> song, int index) {
+    final List<dynamic> images = song['album']['images'];
+
+    return Song(
+      title: song['name'],
+      artist: song['artists'][0]['name'],
+      uri: song['uri'],
+      image: images.last['url'],
+      queuePosition: index,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Song && other.uri == uri;
+  }
+
+  @override
+  int get hashCode => uri.hashCode;
 }
 
 @riverpod
@@ -24,7 +56,7 @@ class InfoGetter extends _$InfoGetter {
   @override
   Future<Song> build() async {
     final dynamic currentPlaybackState = await ref.watch(
-      spotifyPlaybackstateProvider.future,
+      spotifyPlaybackStateProvider.future,
     );
 
     if (currentPlaybackState.statusCode == 204) {
@@ -35,11 +67,12 @@ class InfoGetter extends _$InfoGetter {
   }
 
   Future<Song> getCurrentSong(dynamic currentPlaybackState) async {
-    Song currentSong = Song();
-    currentSong.title = currentPlaybackState['item']['name'];
-    currentSong.artist =
-        currentPlaybackState['item']['album']['artists'][0]['name'];
-    currentSong.uri = currentPlaybackState['item']['uri'];
+    Song currentSong = Song(
+      title: currentPlaybackState['item']['name'],
+      artist: currentPlaybackState['item']['album']['artists'][0]['name'],
+      uri: currentPlaybackState['item']['uri'],
+      image: currentPlaybackState['item']['album']['images'][0]['url'],
+    );
 
     final Song? oldSong = state.value;
 

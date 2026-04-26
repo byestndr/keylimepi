@@ -72,7 +72,6 @@ class CenteredInfo extends ConsumerWidget {
                         PauseButton(),
                         NextButton(),
                         RepeatButton(),
-                        QueueButton(),
                       ],
                     ),
                   )
@@ -96,28 +95,9 @@ class BottomLeftInfo extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         MediaQuery.of(context).size.width >= _imageBreakpoint
-            ? Padding(
-                padding: const EdgeInsetsGeometry.all(16),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(_imageRadius),
-                    ),
-                    color: Colors.transparent,
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black38,
-                        blurRadius: 2,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-
-                  child: ClipRRect(
-                    borderRadius: BorderRadiusGeometry.circular(_imageRadius),
-                    child: const SongImage(),
-                  ),
-                ),
+            ? const Padding(
+                padding: EdgeInsetsGeometry.all(16),
+                child: SongImage(),
               )
             : const Padding(padding: EdgeInsetsGeometry.directional(start: 20)),
         Expanded(
@@ -145,7 +125,6 @@ class BottomLeftInfo extends ConsumerWidget {
                             PauseButton(),
                             NextButton(),
                             RepeatButton(),
-                            QueueButton(),
                           ],
                         ),
                       )
