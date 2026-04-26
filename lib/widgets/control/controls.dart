@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
-import 'package:spotimmich/widgets/info/queue/queue_sheet.dart';
 
 const double iconButtonDensityHorizontal = 1;
 const double iconButtonDensityVertical = 1;
@@ -59,7 +58,6 @@ class PlaybackControls extends StatelessWidget {
         NextButton(),
         RepeatButton(),
         ShuffleButton(),
-        QueueButton(),
       ],
     );
   }
@@ -193,27 +191,6 @@ class PreviousButton extends ConsumerWidget {
         horizontal: iconButtonDensityHorizontal,
         vertical: iconButtonDensityVertical,
       ),
-      style: IconButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(16),
-        ),
-      ),
-    );
-  }
-}
-
-class QueueButton extends ConsumerWidget {
-  const QueueButton({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return IconButton.filled(
-      onPressed: () {
-        showQueueSheet(context, ref);
-      },
-      icon: const Icon(Icons.queue_music_rounded),
-      iconSize: 30,
-      visualDensity: const VisualDensity(horizontal: 1, vertical: 1),
       style: IconButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadiusGeometry.circular(16),
