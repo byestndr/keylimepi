@@ -53,7 +53,7 @@ final class InfoGetterProvider
         argument: null,
         retry: null,
         name: r'infoGetterProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -66,7 +66,7 @@ final class InfoGetterProvider
   InfoGetter create() => InfoGetter();
 }
 
-String _$infoGetterHash() => r'54057aebaf2701acd34efca6fda5720a8ea67448';
+String _$infoGetterHash() => r'c94c308a195c8ef510046419e7f065aa1ac281bd';
 
 abstract class _$InfoGetter extends $AsyncNotifier<Song> {
   FutureOr<Song> build();
