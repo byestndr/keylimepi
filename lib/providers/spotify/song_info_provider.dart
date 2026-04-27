@@ -51,7 +51,7 @@ class Song {
   int get hashCode => uri.hashCode;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class InfoGetter extends _$InfoGetter {
   @override
   Future<Song> build() async {

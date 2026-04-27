@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
@@ -19,7 +20,9 @@ class _AlbumCarouselState extends ConsumerState<AlbumCarousel> {
 
     return CarouselView(
       onTap: (int index) async {
-        final List<dynamic> albums = await ref.read(albumProviderProvider.future);
+        final List<dynamic> albums = await ref.read(
+          albumProviderProvider.future,
+        );
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         await spotifyAPI.startFromContext(albums[index]['album']['uri']);
       },
@@ -81,8 +84,12 @@ class _AlbumCarouselState extends ConsumerState<AlbumCarousel> {
                       ).createShader(bounds);
                     },
                     blendMode: BlendMode.dstOut,
-                    child: Image.network(
-                      data[index]['album']['images'][0]['url'],
+                    child: CachedNetworkImage(
+                      imageUrl: data[index]['album']['images'][0]['url'],
+                      fadeInCurve: const Cubic(0.05, 0.7, 0.1, 1.0),
+                      fadeInDuration: const Duration(milliseconds: 400),
+                      fadeOutCurve: const Cubic(0.3, 0.0, 0.8, 0.15),
+                      fadeOutDuration: const Duration(milliseconds: 200),
                     ),
                   ),
                 ),

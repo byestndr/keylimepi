@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:spotimmich/providers/theme/album_art_provider.dart';
@@ -43,12 +44,16 @@ class _SongImageState extends ConsumerState<SongImage> {
             skipLoadingOnReload: true,
             skipError: true,
             data: (String data) {
-              return Image.network(
-                data,
+              return CachedNetworkImage(
+                imageUrl: data,
                 height:
                     (MediaQuery.of(context).size.height *
                         MediaQuery.of(context).devicePixelRatio) /
                     5,
+                fadeInCurve: const Cubic(0.05, 0.7, 0.1, 1.0),
+                fadeInDuration: const Duration(milliseconds: 400),
+                fadeOutCurve: const Cubic(0.3, 0.0, 0.8, 0.15),
+                fadeOutDuration: const Duration(milliseconds: 200),
               );
             },
             error: (Object error, StackTrace trace) {
