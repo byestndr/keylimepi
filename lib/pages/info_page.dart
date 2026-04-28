@@ -18,8 +18,8 @@ class MediaWidget extends ConsumerWidget {
   }
 }
 
-class FullPlayerPage extends ConsumerWidget {
-  const FullPlayerPage({super.key});
+class InfoPage extends ConsumerWidget {
+  const InfoPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

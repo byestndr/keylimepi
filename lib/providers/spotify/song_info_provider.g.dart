@@ -66,7 +66,7 @@ final class InfoGetterProvider
   InfoGetter create() => InfoGetter();
 }
 
-String _$infoGetterHash() => r'c94c308a195c8ef510046419e7f065aa1ac281bd';
+String _$infoGetterHash() => r'15bd26d68c2765578bc7b824df5bc7be984f1e0b';
 
 abstract class _$InfoGetter extends $AsyncNotifier<Song> {
   FutureOr<Song> build();
