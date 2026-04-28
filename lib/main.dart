@@ -1,9 +1,9 @@
 import 'package:chopper/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/app_body.dart';
+import 'package:spotimmich/pages/app_body.dart';
 import 'package:flutter/gestures.dart';
-import 'package:spotimmich/authentication_setup_page.dart';
+import 'package:spotimmich/pages/authentication_setup_page.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
 import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
 import 'package:spotimmich/providers/settings_provider.dart';

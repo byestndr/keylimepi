@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/player_page.dart';
+import 'package:spotimmich/pages/info_page.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/theme/album_art_provider.dart';
 import 'package:spotimmich/settings/preferences.dart';
@@ -45,6 +45,7 @@ class AlbumArtBackground extends ConsumerWidget {
               ),
             ),
           ),
+
           ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(28),
             clipBehavior: Clip.hardEdge,
@@ -56,6 +57,7 @@ class AlbumArtBackground extends ConsumerWidget {
               child: Container(color: Colors.transparent),
             ),
           ),
+
           Column(
             crossAxisAlignment: preferences.albumInfoCentered
                 ? CrossAxisAlignment.center
@@ -65,6 +67,8 @@ class AlbumArtBackground extends ConsumerWidget {
                 : MainAxisAlignment.end,
             children: <Widget>[
               const MediaWidget(),
+
+              // If the playback bar is set to show on page
               preferences.playbackBarPosition == 1
                   ? const Padding(
                       padding: EdgeInsetsDirectional.only(bottom: 5),

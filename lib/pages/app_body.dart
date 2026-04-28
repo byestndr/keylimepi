@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/player_page.dart';
+import 'package:spotimmich/pages/info_page.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/settings/settings.dart';
-import 'package:spotimmich/song_select.dart';
+import 'package:spotimmich/pages/song_select.dart';
 import 'package:spotimmich/widgets/control/playbackbar.dart';
 
 class AppBody extends ConsumerStatefulWidget {
