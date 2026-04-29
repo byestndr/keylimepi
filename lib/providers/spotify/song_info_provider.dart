@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:spotimmich/providers/lyrics_provider.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 import 'package:spotimmich/providers/theme/colorscheme.dart';
 import 'package:spotimmich/providers/theme/album_art_provider.dart';
@@ -99,6 +100,7 @@ class InfoGetter extends _$InfoGetter {
     if (state.value!.uri != newURI) {
       ref.read(albumImageProvider.notifier).refreshImage();
       ref.read(appColorSchemeProvider.notifier).refreshColorscheme();
+      ref.invalidate(lyricsGetterProvider);
     }
   }
 

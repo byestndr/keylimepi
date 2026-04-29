@@ -36,7 +36,6 @@ class SpotifyAuthenticated extends _$SpotifyAuthenticated {
 
   void setFalse() {
     state = false;
-    print('set to false');
     return;
   }
 }
