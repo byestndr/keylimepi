@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/backend/lyric/lyric_api.dart';
 import 'package:spotimmich/providers/lyrics_provider.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 class LyricsPage extends ConsumerWidget {
   const LyricsPage({super.key});

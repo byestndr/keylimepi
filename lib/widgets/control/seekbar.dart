@@ -55,6 +55,7 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
       if (currentPlaybackState.statusCode == 204) {
         maxPos = 1;
         sliderPos = 0;
+        ref.read(seekbarPositionProvider.notifier).setSliderPos(0);
         return;
       }
 
@@ -74,12 +75,14 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
         } on NoSuchMethodError {
           maxPos = 1;
           sliderPos = 0;
+          ref.read(seekbarPositionProvider.notifier).setSliderPos(0);
         }
       });
       ref.read(seekbarPositionProvider.notifier).setSliderPos(sliderPos);
     } on FormatException {
       maxPos = 1;
       sliderPos = 0;
+      ref.read(seekbarPositionProvider.notifier).setSliderPos(0);
       return;
     }
   }
