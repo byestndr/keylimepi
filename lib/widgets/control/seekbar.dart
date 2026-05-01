@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
+import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
 import 'dart:async';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
@@ -30,13 +31,14 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
   }
 
   Future<void> RefreshLoop() async {
-    if (refreshCount < 30 && _isPaused) {
+    if (refreshCount < 25 && _isPaused) {
       refreshCount++;
       setState(() {
         if (sliderPos + 200 <= maxPos) {
           sliderPos = sliderPos + 200;
         }
       });
+      ref.read(seekbarPositionProvider.notifier).setSliderPos(sliderPos);
       return;
     }
 
@@ -69,6 +71,7 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
           sliderPos = 0;
         }
       });
+      ref.read(seekbarPositionProvider.notifier).setSliderPos(sliderPos);
     } on FormatException {
       maxPos = 1;
       sliderPos = 0;
@@ -84,16 +87,16 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final double currentSliderPosition = ref.watch(seekbarPositionProvider);
+
     return SliderTheme(
       data: const SliderThemeData(year2023: false),
       child: Slider(
-        value: sliderPos,
+        value: currentSliderPosition,
         min: 0,
         max: maxPos,
         onChanged: (double value) {
-          setState(() {
-            sliderPos = value;
-          });
+          ref.read(seekbarPositionProvider.notifier).setSliderPos(value);
         },
         onChangeEnd: (double value) {
           int currentPosition = value.toInt();

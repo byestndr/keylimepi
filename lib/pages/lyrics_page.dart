@@ -1,4 +1,3 @@
-import 'package:chopper/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/lyric/lyric_api.dart';
