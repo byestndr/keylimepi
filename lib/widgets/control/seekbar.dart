@@ -18,6 +18,7 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
   Timer? timer;
   int refreshCount = 20;
   bool _isPaused = true;
+  bool _seeking = false;
 
   @override
   void initState() {
@@ -31,6 +32,10 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
   }
 
   Future<void> RefreshLoop() async {
+    if (_seeking) {
+      return;
+    }
+
     if (refreshCount < 25 && _isPaused) {
       refreshCount++;
       setState(() {
@@ -96,12 +101,18 @@ class _ProgressSliderState extends ConsumerState<ProgressSlider> {
         min: 0,
         max: maxPos,
         onChanged: (double value) {
+          setState(() {
+            _seeking = true;
+          });
           ref.read(seekbarPositionProvider.notifier).setSliderPos(value);
         },
         onChangeEnd: (double value) {
           int currentPosition = value.toInt();
           final SpotifyUserService spotifyAPI = SpotifyUserService.create();
           spotifyAPI.seekSong(currentPosition);
+          setState(() {
+            _seeking = false;
+          });
         },
       ),
     );
