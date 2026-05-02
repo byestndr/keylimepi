@@ -76,11 +76,18 @@ class SeekbarPosition extends _$SeekbarPosition {
   }
 
   void _incrementSliderPosition() {
-    final int newPosition = state.currentPosition.inMilliseconds + 200;
+    late int newPosition;
+    if (state.currentPosition.inMilliseconds + 200 <=
+        state.maxPosition.inMilliseconds) {
+      newPosition = state.currentPosition.inMilliseconds + 200;
+    } else {
+      newPosition = state.currentPosition.inMilliseconds;
+    }
+
     state = SeekbarTime(
       currentPosition: Duration(milliseconds: newPosition),
       maxPosition: state.maxPosition,
-      refreshCount: state.refreshCount++,
+      refreshCount: state.refreshCount + 1,
     );
     return;
   }
@@ -114,6 +121,7 @@ class SeekbarPosition extends _$SeekbarPosition {
       state = SeekbarTime(
         currentPosition: Duration(milliseconds: newCurrentPosition.toInt()),
         maxPosition: Duration(milliseconds: newMaxPosition.toInt()),
+        refreshCount: refreshCount,
       );
       return;
     } on NoSuchMethodError {
