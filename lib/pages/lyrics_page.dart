@@ -8,12 +8,11 @@ class LyricsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<Map<String, dynamic>> lyrics = ref.watch(
-      lyricsGetterProvider,
-    );
+    final AsyncValue<List<LyricLine>> lyrics = ref.watch(lyricsGetterProvider);
 
     // Must be watched in order for the lyrics to update
     final AsyncValue<Song> currentSong = ref.watch(infoGetterProvider);
+    final currentLine = ref.watch(currentLyricProvider);
 
     return Padding(
       padding: const EdgeInsets.all(6.0),
@@ -26,11 +25,13 @@ class LyricsPage extends ConsumerWidget {
             ),
           ),
           lyrics.when(
-            data: (Map<String, dynamic> data) {
-              final List<LyricLine> lyricsList = LyricLine.fromSyncedLyrics(data['syncedLyrics']);
-              return Text(lyricsList[0].line);
+            data: (List<LyricLine> data) {
+              return Text(data[0].line);
             },
-            error: (Object error, StackTrace stackTrace) => const Text('Error'),
+            error: (Object error, StackTrace stackTrace) {
+              print(error.toString());
+              return Text('Error');
+            },
             loading: () => const Text('Loading'),
           ),
         ],

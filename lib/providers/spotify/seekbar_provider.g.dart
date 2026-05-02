@@ -20,7 +20,7 @@ final class SeekbarPositionProvider
         argument: null,
         retry: null,
         name: r'seekbarPositionProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -41,7 +41,7 @@ final class SeekbarPositionProvider
   }
 }
 
-String _$seekbarPositionHash() => r'36295f9cf40290d1b9f7420ce333e3d5096a13d7';
+String _$seekbarPositionHash() => r'ad3bbdcfb32a2b79f70ad4020fdf4533e1956080';
 
 abstract class _$SeekbarPosition extends $Notifier<double> {
   double build();

@@ -4,7 +4,7 @@ import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 part 'seekbar_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class SeekbarPosition extends _$SeekbarPosition {
   @override
   double build() {
