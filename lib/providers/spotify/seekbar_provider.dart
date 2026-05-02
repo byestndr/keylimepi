@@ -66,12 +66,21 @@ class SeekbarPosition extends _$SeekbarPosition {
   FutureOr<void> updateSliderPosition() async {
     final bool isPaused = ref.read(seekbarPauseProvider);
 
-    if (state.refreshCount < 25 && isPaused) {
+    if (state.currentPosition.inMilliseconds == 0 ||
+        isPaused ||
+        state.refreshCount == 25) {
+      await _getNewSliderPosition();
+    }
+
+    if (isPaused) {
+      return;
+    }
+
+    if (state.refreshCount < 25) {
       _incrementSliderPosition();
       return;
     }
 
-    await _getNewSliderPosition();
     return;
   }
 
@@ -106,8 +115,6 @@ class SeekbarPosition extends _$SeekbarPosition {
       return;
     }
 
-    ref.read(seekbarPauseProvider.notifier).setValue(false);
-
     try {
       final double newMaxPosition =
           (currentPlaybackState.body['item']['duration_ms'] as int).toDouble();
@@ -116,7 +123,7 @@ class SeekbarPosition extends _$SeekbarPosition {
       const int refreshCount = 0;
 
       final bool isPlaying = currentPlaybackState.body['is_playing'];
-      ref.read(seekbarPauseProvider.notifier).setValue(isPlaying);
+      ref.read(seekbarPauseProvider.notifier).setValue(!isPlaying);
 
       state = SeekbarTime(
         currentPosition: Duration(milliseconds: newCurrentPosition.toInt()),
@@ -142,7 +149,7 @@ class SeekbarPosition extends _$SeekbarPosition {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class SeekbarPause extends _$SeekbarPause {
   @override
   bool build() {

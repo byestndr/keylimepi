@@ -92,7 +92,7 @@ final class SeekbarPositionProvider
   }
 }
 
-String _$seekbarPositionHash() => r'c98fdda571bac6842f938e7f50fd79cc43b20b49';
+String _$seekbarPositionHash() => r'bbd1ce978a4f8c3ee98faff4fb8c5296f7f287c8';
 
 abstract class _$SeekbarPosition extends $Notifier<SeekbarTime> {
   SeekbarTime build();
@@ -122,7 +122,7 @@ final class SeekbarPauseProvider extends $NotifierProvider<SeekbarPause, bool> {
         argument: null,
         retry: null,
         name: r'seekbarPauseProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -143,7 +143,7 @@ final class SeekbarPauseProvider extends $NotifierProvider<SeekbarPause, bool> {
   }
 }
 
-String _$seekbarPauseHash() => r'afb01dd1d0f5c99a100152701c61ff372d338c63';
+String _$seekbarPauseHash() => r'e2bc5c2dc02a04fc6bf4a2869f380bbb310cec80';
 
 abstract class _$SeekbarPause extends $Notifier<bool> {
   bool build();
