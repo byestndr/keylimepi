@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
 import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
-import 'dart:async';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 class ProgressSlider extends ConsumerWidget {
   const ProgressSlider({super.key});

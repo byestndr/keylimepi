@@ -4,7 +4,6 @@ import 'package:chopper/src/response.dart';
 import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spotimmich/backend/lyric/lyric_api.dart';
-import 'package:spotimmich/providers/spotify/likedSongs_provider.dart';
 import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 

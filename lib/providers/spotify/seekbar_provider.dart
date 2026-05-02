@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:chopper/src/response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
