@@ -94,12 +94,12 @@ class CurrentLyric extends _$CurrentLyric {
 
     if (lyricList.isEmpty) return LyricLine(line: '', timestamp: Duration());
 
-    final double currentPosition = ref.read(seekbarPositionProvider);
+    final SeekbarTime currentPosition = ref.read(seekbarPositionProvider);
     final int index = lowerBound(
       lyricList,
       LyricLine(
         line: '',
-        timestamp: Duration(milliseconds: currentPosition.toInt()),
+        timestamp: Duration(milliseconds: currentPosition.currentPosition.inMilliseconds),
       ),
       compare: (LyricLine lyric, LyricLine position) {
         

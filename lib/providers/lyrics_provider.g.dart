@@ -77,7 +77,7 @@ final class CurrentLyricProvider
   CurrentLyric create() => CurrentLyric();
 }
 
-String _$currentLyricHash() => r'89e5d836edf98f6b2c3716f9894c6474ca93a9ee';
+String _$currentLyricHash() => r'27cf87c2875b458f55a96e081d31ac3a6bb8c486';
 
 abstract class _$CurrentLyric extends $AsyncNotifier<LyricLine> {
   FutureOr<LyricLine> build();

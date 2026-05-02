@@ -1,18 +1,148 @@
+import 'dart:async';
+
 import 'package:chopper/src/response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 
 part 'seekbar_provider.g.dart';
 
-@Riverpod(keepAlive: true)
-class SeekbarPosition extends _$SeekbarPosition {
+class SeekbarTime {
+  Duration currentPosition;
+  Duration maxPosition;
+  int refreshCount;
+
+  SeekbarTime({
+    required this.currentPosition,
+    required this.maxPosition,
+    this.refreshCount = 0,
+  });
+}
+
+@riverpod
+class SeekbarTimer extends _$SeekbarTimer {
+  Timer? _timer;
+
   @override
-  double build() {
+  int build() {
+    ref.onDispose(() {
+      _timer?.cancel();
+    });
+
+    startTimer();
+
     return 0;
   }
 
+  void startTimer() async {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+      ref.read(seekbarPositionProvider.notifier).updateSliderPosition();
+    });
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
+  }
+}
+
+@Riverpod(keepAlive: true)
+class SeekbarPosition extends _$SeekbarPosition {
+  @override
+  SeekbarTime build() {
+    return SeekbarTime(
+      currentPosition: const Duration(),
+      maxPosition: const Duration(milliseconds: 360000),
+    );
+  }
+
   void setSliderPos(double position) {
-    state = position;
+    state = SeekbarTime(
+      currentPosition: Duration(milliseconds: position.toInt()),
+      maxPosition: state.maxPosition,
+    );
+    return;
+  }
+
+  FutureOr<void> updateSliderPosition() async {
+    final bool isPaused = ref.read(seekbarPauseProvider);
+
+    if (state.refreshCount < 25 && isPaused) {
+      _incrementSliderPosition();
+      return;
+    }
+
+    await _getNewSliderPosition();
+    return;
+  }
+
+  void _incrementSliderPosition() {
+    final int newPosition = state.currentPosition.inMilliseconds + 200;
+    state = SeekbarTime(
+      currentPosition: Duration(milliseconds: newPosition),
+      maxPosition: state.maxPosition,
+      refreshCount: state.refreshCount++,
+    );
+    return;
+  }
+
+  FutureOr<void> _getNewSliderPosition() async {
+    final dynamic currentPlaybackState = await ref.read(
+      spotifyPlaybackStateProvider.future,
+    );
+
+    if (currentPlaybackState.statusCode == 204) {
+      state = SeekbarTime(
+        currentPosition: const Duration(milliseconds: 0),
+        maxPosition: state.maxPosition,
+      );
+      ref.read(seekbarPositionProvider.notifier).setSliderPos(0);
+      return;
+    }
+
+    ref.read(seekbarPauseProvider.notifier).setValue(false);
+
+    try {
+      final double newMaxPosition =
+          (currentPlaybackState.body['item']['duration_ms'] as int).toDouble();
+      final double newCurrentPosition =
+          (currentPlaybackState.body['progress_ms'] as int).toDouble();
+      const int refreshCount = 0;
+
+      final bool isPlaying = currentPlaybackState.body['is_playing'];
+      ref.read(seekbarPauseProvider.notifier).setValue(isPlaying);
+
+      state = SeekbarTime(
+        currentPosition: Duration(milliseconds: newCurrentPosition.toInt()),
+        maxPosition: Duration(milliseconds: newMaxPosition.toInt()),
+      );
+      return;
+    } on NoSuchMethodError {
+      state = SeekbarTime(
+        currentPosition: const Duration(milliseconds: 0),
+        maxPosition: state.maxPosition,
+      );
+      return;
+
+      // All other exceptions
+    } on Exception {
+      state = SeekbarTime(
+        currentPosition: const Duration(milliseconds: 0),
+        maxPosition: state.maxPosition,
+      );
+      return;
+    }
+  }
+}
+
+@riverpod
+class SeekbarPause extends _$SeekbarPause {
+  @override
+  bool build() {
+    return true;
+  }
+
+  void setValue(bool value) {
+    state = value;
     return;
   }
 }
