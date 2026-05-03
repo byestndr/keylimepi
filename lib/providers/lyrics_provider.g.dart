@@ -33,7 +33,7 @@ final class LyricsGetterProvider
   LyricsGetter create() => LyricsGetter();
 }
 
-String _$lyricsGetterHash() => r'72a5116e8345648dd6ed00def44d5be28a0497fc';
+String _$lyricsGetterHash() => r'5aaa25e8267fb0f5ddb298988adcb266058868c3';
 
 abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>> {
   FutureOr<List<LyricLine>> build();
@@ -53,43 +53,43 @@ abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>> {
   }
 }
 
-@ProviderFor(CurrentLyric)
-final currentLyricProvider = CurrentLyricProvider._();
+@ProviderFor(CurrentLyricIndex)
+final currentLyricIndexProvider = CurrentLyricIndexProvider._();
 
-final class CurrentLyricProvider
-    extends $AsyncNotifierProvider<CurrentLyric, LyricLine> {
-  CurrentLyricProvider._()
+final class CurrentLyricIndexProvider
+    extends $AsyncNotifierProvider<CurrentLyricIndex, int> {
+  CurrentLyricIndexProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'currentLyricProvider',
+        name: r'currentLyricIndexProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$currentLyricHash();
+  String debugGetCreateSourceHash() => _$currentLyricIndexHash();
 
   @$internal
   @override
-  CurrentLyric create() => CurrentLyric();
+  CurrentLyricIndex create() => CurrentLyricIndex();
 }
 
-String _$currentLyricHash() => r'27cf87c2875b458f55a96e081d31ac3a6bb8c486';
+String _$currentLyricIndexHash() => r'3fa4bc3e9c0e531d245ef869635eb5d558937e85';
 
-abstract class _$CurrentLyric extends $AsyncNotifier<LyricLine> {
-  FutureOr<LyricLine> build();
+abstract class _$CurrentLyricIndex extends $AsyncNotifier<int> {
+  FutureOr<int> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<LyricLine>, LyricLine>;
+    final ref = this.ref as $Ref<AsyncValue<int>, int>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<LyricLine>, LyricLine>,
-              AsyncValue<LyricLine>,
+              AnyNotifier<AsyncValue<int>, int>,
+              AsyncValue<int>,
               Object?,
               Object?
             >;

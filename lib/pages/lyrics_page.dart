@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/providers/lyrics_provider.dart';
+import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 
 class LyricsPage extends ConsumerWidget {
@@ -12,7 +13,10 @@ class LyricsPage extends ConsumerWidget {
 
     // Must be watched in order for the lyrics to update
     final AsyncValue<Song> currentSong = ref.watch(infoGetterProvider);
-    final currentLine = ref.watch(currentLyricProvider);
+    final AsyncValue<int> currentLineIndex = ref.watch(
+      currentLyricIndexProvider,
+    );
+    ref.watch(seekbarTimerProvider);
 
     return Padding(
       padding: const EdgeInsets.all(6.0),
@@ -25,8 +29,17 @@ class LyricsPage extends ConsumerWidget {
             ),
           ),
           lyrics.when(
-            data: (List<LyricLine> data) {
-              return Text(data[0].line);
+            data: (List<LyricLine> lyricList) {
+              return Text(
+                currentLineIndex.when(
+                  skipLoadingOnRefresh: true,
+                  skipLoadingOnReload: true,
+                  skipError: true,
+                  data: (int index) => lyricList[index].line,
+                  error: (Object error, StackTrace stackTrace) => 'Error',
+                  loading: () => 'Loading',
+                ),
+              );
             },
             error: (Object error, StackTrace stackTrace) {
               print(error.toString());

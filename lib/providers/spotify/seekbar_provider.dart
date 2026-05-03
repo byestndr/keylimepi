@@ -108,9 +108,8 @@ class SeekbarPosition extends _$SeekbarPosition {
     if (currentPlaybackState.statusCode == 204) {
       state = SeekbarTime(
         currentPosition: const Duration(milliseconds: 0),
-        maxPosition: state.maxPosition,
+        maxPosition: const Duration(milliseconds: 1),
       );
-      ref.read(seekbarPositionProvider.notifier).setSliderPos(0);
       return;
     }
 

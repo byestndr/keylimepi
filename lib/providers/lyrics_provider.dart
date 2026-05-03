@@ -73,39 +73,43 @@ class LyricsGetter extends _$LyricsGetter {
       lyrics.body['syncedLyrics'].toString(),
     );
 
-    ref.invalidate(currentLyricProvider);
+    ref.invalidate(currentLyricIndexProvider);
 
     return lyricsList;
   }
 }
 
 @riverpod
-class CurrentLyric extends _$CurrentLyric {
+class CurrentLyricIndex extends _$CurrentLyricIndex {
   @override
-  Future<LyricLine> build() async {
-    return _getCurrentLine();
+  Future<int> build() async {
+    final SeekbarTime currentPosition = ref.watch(seekbarPositionProvider);
+
+    return _getCurrentLine(currentPosition);
   }
 
-  Future<LyricLine> _getCurrentLine() async {
+  Future<int> _getCurrentLine(SeekbarTime seekbarPosition) async {
     final List<LyricLine> lyricList = await ref.read(
       lyricsGetterProvider.future,
     );
 
-    if (lyricList.isEmpty) return LyricLine(line: '', timestamp: Duration());
+    if (lyricList.isEmpty) return 0;
 
-    final SeekbarTime currentPosition = ref.read(seekbarPositionProvider);
     final int index = lowerBound(
       lyricList,
       LyricLine(
         line: '',
-        timestamp: Duration(milliseconds: currentPosition.currentPosition.inMilliseconds),
+        timestamp: Duration(
+          milliseconds: seekbarPosition.currentPosition.inMilliseconds,
+        ),
       ),
       compare: (LyricLine lyric, LyricLine position) {
-        
         return lyric.timestamp.compareTo(position.timestamp);
       },
     );
 
-    return LyricLine(line: 'dsa', timestamp: Duration());
+    final int currentLyricIndex = index - 1;
+
+    return currentLyricIndex;
   }
 }

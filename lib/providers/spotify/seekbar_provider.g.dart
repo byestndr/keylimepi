@@ -92,7 +92,7 @@ final class SeekbarPositionProvider
   }
 }
 
-String _$seekbarPositionHash() => r'bbd1ce978a4f8c3ee98faff4fb8c5296f7f287c8';
+String _$seekbarPositionHash() => r'7fa28dab17d1c142262f37798b9f5feadeb4357f';
 
 abstract class _$SeekbarPosition extends $Notifier<SeekbarTime> {
   SeekbarTime build();
