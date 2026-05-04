@@ -134,3 +134,54 @@ abstract class _$CurrentLyricIndex extends $AsyncNotifier<int> {
     element.handleCreate(ref, build);
   }
 }
+
+@ProviderFor(LyricDelay)
+final lyricDelayProvider = LyricDelayProvider._();
+
+final class LyricDelayProvider extends $NotifierProvider<LyricDelay, int> {
+  LyricDelayProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'lyricDelayProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$lyricDelayHash();
+
+  @$internal
+  @override
+  LyricDelay create() => LyricDelay();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$lyricDelayHash() => r'1cc8f57e023b01ccc5a2ba19254285b0f9e48af1';
+
+abstract class _$LyricDelay extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<int, int>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

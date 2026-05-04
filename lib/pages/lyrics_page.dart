@@ -18,6 +18,7 @@ class LyricsPage extends ConsumerWidget {
     );
     ref.watch(seekbarTimerProvider);
     ref.watch(lyricSyncProvider);
+    final int delay = ref.watch(lyricDelayProvider);
 
     return Padding(
       padding: const EdgeInsets.all(6.0),
@@ -43,10 +44,34 @@ class LyricsPage extends ConsumerWidget {
               );
             },
             error: (Object error, StackTrace stackTrace) {
-              print(error.toString());
-              return Text('Error');
+              return const Text('Error');
             },
             loading: () => const Text('Loading'),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15, right: 20),
+            child: Align(
+              alignment: AlignmentGeometry.bottomRight,
+              child: Column(
+                mainAxisAlignment: .end,
+                spacing: 5,
+                crossAxisAlignment: .end,
+                children: [
+                  FloatingActionButton.small(
+                    onPressed: () {
+                      ref.read(lyricDelayProvider.notifier).increaseDelay(100);
+                    },
+                    child: const Icon(Icons.arrow_upward_rounded),
+                  ),
+                  FloatingActionButton.small(
+                    onPressed: () {
+                      ref.read(lyricDelayProvider.notifier).decreaseDelay(100);
+                    },
+                    child: const Icon(Icons.arrow_downward_rounded),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

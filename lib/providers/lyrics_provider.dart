@@ -132,3 +132,23 @@ class CurrentLyricIndex extends _$CurrentLyricIndex {
     return lyricIndex;
   }
 }
+
+@Riverpod(keepAlive: true)
+class LyricDelay extends _$LyricDelay {
+  @override
+  int build() {
+    return 0;
+  }
+
+  void increaseDelay(int delay) {
+    state = state + delay.abs();
+    return;
+  }
+
+  void decreaseDelay(int delay) {
+    if (state - delay >= 0) {
+      state = state - delay;
+    }
+    return;
+  }
+}
