@@ -115,7 +115,7 @@ final class CurrentLyricIndexProvider
   CurrentLyricIndex create() => CurrentLyricIndex();
 }
 
-String _$currentLyricIndexHash() => r'8f3e7aa8f4eef0df47e97a13ab280af5057ed803';
+String _$currentLyricIndexHash() => r'0dcb785c838444bed9692d943a9bc46f1114cf59';
 
 abstract class _$CurrentLyricIndex extends $AsyncNotifier<int> {
   FutureOr<int> build();
@@ -145,7 +145,7 @@ final class LyricDelayProvider extends $NotifierProvider<LyricDelay, int> {
         argument: null,
         retry: null,
         name: r'lyricDelayProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -166,7 +166,7 @@ final class LyricDelayProvider extends $NotifierProvider<LyricDelay, int> {
   }
 }
 
-String _$lyricDelayHash() => r'1cc8f57e023b01ccc5a2ba19254285b0f9e48af1';
+String _$lyricDelayHash() => r'e3464d204c6f5eb79289540b360a8f8bb57510db';
 
 abstract class _$LyricDelay extends $Notifier<int> {
   int build();

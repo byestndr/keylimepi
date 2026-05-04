@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:chopper/src/response.dart';
-import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spotimmich/backend/lyric/lyric_api.dart';
 import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
@@ -114,26 +113,23 @@ class CurrentLyricIndex extends _$CurrentLyricIndex {
   @override
   Future<int> build() async {
     final SeekbarTime currentPosition = ref.watch(seekbarPositionProvider);
+    final int progressDelay = ref.watch(lyricDelayProvider);
 
-    return _getCurrentLine(currentPosition);
+    return _getCurrentLine(currentPosition, progressDelay);
   }
 
-  Future<int> _getCurrentLine(SeekbarTime seekbarPosition) async {
-    final List<LyricLine> lyricList = await ref.read(
-      lyricsGetterProvider.future,
-    );
-
+  Future<int> _getCurrentLine(SeekbarTime seekbarPosition, int delay) async {
     final List<int> lyricIndexList = await ref.read(lyricSyncProvider.future);
+    final int adjustedPosition =
+        seekbarPosition.currentPosition.inMilliseconds + delay;
 
-    final int lyricIndex =
-        lyricIndexList[(seekbarPosition.currentPosition.inMilliseconds / 10)
-            .floor()];
+    final int lyricIndex = lyricIndexList[(adjustedPosition / 10).floor()];
 
     return lyricIndex;
   }
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 class LyricDelay extends _$LyricDelay {
   @override
   int build() {
@@ -141,14 +137,12 @@ class LyricDelay extends _$LyricDelay {
   }
 
   void increaseDelay(int delay) {
-    state = state + delay.abs();
+    state = state + delay;
     return;
   }
 
   void decreaseDelay(int delay) {
-    if (state - delay >= 0) {
-      state = state - delay;
-    }
+    state = state - delay;
     return;
   }
 }
