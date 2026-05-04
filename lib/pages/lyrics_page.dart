@@ -17,6 +17,7 @@ class LyricsPage extends ConsumerWidget {
       currentLyricIndexProvider,
     );
     ref.watch(seekbarTimerProvider);
+    ref.watch(lyricSyncProvider);
 
     return Padding(
       padding: const EdgeInsets.all(6.0),

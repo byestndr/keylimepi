@@ -80,6 +80,36 @@ class LyricsGetter extends _$LyricsGetter {
 }
 
 @riverpod
+Future<List<int>> LyricSync(Ref ref) async {
+  final List<LyricLine> lyricsList = await ref.watch(
+    lyricsGetterProvider.future,
+  );
+  final SeekbarTime songDuration = ref.read(seekbarPositionProvider);
+
+  final int totalTimeAsIndex =
+      (songDuration.maxPosition.inMilliseconds / 10).ceil() + 1;
+
+  // Each index represents a value of 100 ms
+  final List<int> indexList = List.filled(totalTimeAsIndex, 0);
+
+  // Start at 0 ms
+  int currentIndex = 0;
+
+  // Iterate over each 100 ms
+  for (int i = 0; i < totalTimeAsIndex; i++) {
+    // While the current 100 ms is less in length than the total song time
+    while (currentIndex + 1 < lyricsList.length &&
+        lyricsList[currentIndex + 1].timestamp.inMilliseconds <= i * 10) {
+      currentIndex++;
+    }
+
+    indexList[i] = currentIndex;
+  }
+
+  return indexList;
+}
+
+@riverpod
 class CurrentLyricIndex extends _$CurrentLyricIndex {
   @override
   Future<int> build() async {
@@ -93,23 +123,12 @@ class CurrentLyricIndex extends _$CurrentLyricIndex {
       lyricsGetterProvider.future,
     );
 
-    if (lyricList.isEmpty) return 0;
+    final List<int> lyricIndexList = await ref.read(lyricSyncProvider.future);
 
-    final int index = lowerBound(
-      lyricList,
-      LyricLine(
-        line: '',
-        timestamp: Duration(
-          milliseconds: seekbarPosition.currentPosition.inMilliseconds,
-        ),
-      ),
-      compare: (LyricLine lyric, LyricLine position) {
-        return lyric.timestamp.compareTo(position.timestamp);
-      },
-    );
+    final int lyricIndex =
+        lyricIndexList[(seekbarPosition.currentPosition.inMilliseconds / 10)
+            .floor()];
 
-    final int currentLyricIndex = index - 1;
-
-    return currentLyricIndex;
+    return lyricIndex;
   }
 }

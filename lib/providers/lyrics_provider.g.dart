@@ -53,6 +53,44 @@ abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>> {
   }
 }
 
+@ProviderFor(LyricSync)
+final lyricSyncProvider = LyricSyncProvider._();
+
+final class LyricSyncProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<int>>,
+          List<int>,
+          FutureOr<List<int>>
+        >
+    with $FutureModifier<List<int>>, $FutureProvider<List<int>> {
+  LyricSyncProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'lyricSyncProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$lyricSyncHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<int>> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<int>> create(Ref ref) {
+    return LyricSync(ref);
+  }
+}
+
+String _$lyricSyncHash() => r'22b959ca8d0ad6e823f896cd63b48d90d86e5d1b';
+
 @ProviderFor(CurrentLyricIndex)
 final currentLyricIndexProvider = CurrentLyricIndexProvider._();
 
@@ -77,7 +115,7 @@ final class CurrentLyricIndexProvider
   CurrentLyricIndex create() => CurrentLyricIndex();
 }
 
-String _$currentLyricIndexHash() => r'3fa4bc3e9c0e531d245ef869635eb5d558937e85';
+String _$currentLyricIndexHash() => r'8f3e7aa8f4eef0df47e97a13ab280af5057ed803';
 
 abstract class _$CurrentLyricIndex extends $AsyncNotifier<int> {
   FutureOr<int> build();
