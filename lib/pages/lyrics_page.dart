@@ -50,27 +50,56 @@ class LyricsPage extends ConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 15, right: 20),
-            child: Align(
-              alignment: AlignmentGeometry.bottomRight,
-              child: Column(
-                mainAxisAlignment: .end,
-                spacing: 5,
-                crossAxisAlignment: .end,
-                children: [
-                  FloatingActionButton.small(
-                    onPressed: () {
-                      ref.read(lyricDelayProvider.notifier).increaseDelay(100);
-                    },
-                    child: const Icon(Icons.arrow_upward_rounded),
+            child: Row(
+              spacing: 5,
+              crossAxisAlignment: .end,
+              mainAxisAlignment: .end,
+              children: [
+                Material(
+                  type: .card,
+                  borderRadius: BorderRadius.circular(12),
+                  clipBehavior: .antiAlias,
+                  elevation: 6,
+                  child: Container(
+                    constraints: const BoxConstraints(minWidth: 100),
+                    height: 40,
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        '200 ms',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                    ),
                   ),
-                  FloatingActionButton.small(
-                    onPressed: () {
-                      ref.read(lyricDelayProvider.notifier).decreaseDelay(100);
-                    },
-                    child: const Icon(Icons.arrow_downward_rounded),
-                  ),
-                ],
-              ),
+                ),
+                Column(
+                  mainAxisAlignment: .end,
+                  spacing: 5,
+                  crossAxisAlignment: .end,
+                  children: [
+                    FloatingActionButton.small(
+                      onPressed: () {
+                        ref
+                            .read(lyricDelayProvider.notifier)
+                            .increaseDelay(100);
+                      },
+                      child: const Icon(Icons.arrow_upward_rounded),
+                    ),
+                    FloatingActionButton.small(
+                      onPressed: () {
+                        ref
+                            .read(lyricDelayProvider.notifier)
+                            .decreaseDelay(100);
+                      },
+                      child: const Icon(Icons.arrow_downward_rounded),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

@@ -37,7 +37,7 @@ class Song {
     return Song(
       title: song['name'],
       artist: song['artists'][0]['name'],
-      album: song['item']['album']['name'],
+      album: song['album']['name'],
       uri: song['uri'],
       image: images.last['url'],
       queuePosition: index,
