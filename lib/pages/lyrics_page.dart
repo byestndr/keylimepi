@@ -37,7 +37,13 @@ class LyricsPage extends ConsumerWidget {
                   skipLoadingOnRefresh: true,
                   skipLoadingOnReload: true,
                   skipError: true,
-                  data: (int index) => lyricList[index].line,
+                  data: (int index) {
+                    if (lyricList.isNotEmpty) {
+                      return lyricList[index].line;
+                    }
+
+                    return 'No synced lyrics found';
+                  },
                   error: (Object error, StackTrace stackTrace) => 'Error',
                   loading: () => 'Loading',
                 ),
