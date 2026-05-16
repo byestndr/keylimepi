@@ -38,6 +38,12 @@ class _InfoPageState extends ConsumerState<InfoPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final UserValues preferences = ref.watch(userSettingsProvider);
 
