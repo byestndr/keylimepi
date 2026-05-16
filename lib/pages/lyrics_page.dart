@@ -60,37 +60,40 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
           padding: const EdgeInsets.only(left: 20.0, right: 70),
           child: lyrics.when(
             data: (List<LyricLine> data) {
-              return ScrollablePositionedList.builder(
-                itemScrollController: _listController,
-                itemCount: data.length,
-                padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height / 3,
-                ),
-                itemBuilder: (BuildContext context, int lineIndex) {
-                  final bool isCurrentLyric = lineIndex == currentLyricIndex;
+              return ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: ScrollablePositionedList.builder(
+                  itemScrollController: _listController,
+                  itemCount: data.length,
+                  padding: EdgeInsets.symmetric(
+                    vertical: MediaQuery.of(context).size.height / 3,
+                  ),
+                  itemBuilder: (BuildContext context, int lineIndex) {
+                    final bool isCurrentLyric = lineIndex == currentLyricIndex;
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: AnimatedDefaultTextStyle(
-                      style: TextStyle(
-                        fontSize: isCurrentLyric ? 34 : 30,
-                        fontFamilyFallback: <String>['NotoSansJP'],
-                        fontFamily: 'RobotoFlexVariable',
-                        fontVariations: [
-                          isCurrentLyric
-                              ? const FontVariation.width(130)
-                              : const FontVariation.width(120),
-                          isCurrentLyric
-                              ? const FontVariation.weight(850)
-                              : const FontVariation.weight(600),
-                        ],
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: AnimatedDefaultTextStyle(
+                        style: TextStyle(
+                          fontSize: isCurrentLyric ? 34 : 30,
+                          fontFamilyFallback: <String>['NotoSansJP'],
+                          fontFamily: 'RobotoFlexVariable',
+                          fontVariations: [
+                            isCurrentLyric
+                                ? const FontVariation.width(130)
+                                : const FontVariation.width(120),
+                            isCurrentLyric
+                                ? const FontVariation.weight(850)
+                                : const FontVariation.weight(600),
+                          ],
+                        ),
+                        duration: const Duration(milliseconds: 150),
+                        curve: Curves.easeOut,
+                        child: Text(data[lineIndex].line),
                       ),
-                      duration: const Duration(milliseconds: 150),
-                      curve: Curves.easeOut,
-                      child: Text(data[lineIndex].line),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               );
             },
             error: (Object error, StackTrace stackTrace) => const Text('Error'),
