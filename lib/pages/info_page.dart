@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotimmich/pages/lyrics_page.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
+import 'package:spotimmich/providers/theme/background_getter.dart';
 import 'package:spotimmich/widgets/background/album_art_background.dart';
 import 'package:spotimmich/widgets/control/alignedPlayers.dart';
 import 'package:spotimmich/settings/preferences.dart';
@@ -19,23 +21,48 @@ class MediaWidget extends ConsumerWidget {
   }
 }
 
-class InfoPage extends ConsumerWidget {
+class InfoPage extends ConsumerStatefulWidget {
   const InfoPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _InfoPageState();
+}
+
+class _InfoPageState extends ConsumerState<InfoPage> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final UserValues preferences = ref.watch(userSettingsProvider);
 
     return Padding(
       padding: const EdgeInsets.all(6.0),
-      child: PageView(
+      child: Stack(
         children: [
-          Stack(
-            children: [
-              preferences.immichBackgroundImage
-                  ? const ImmichCarousel()
-                  : const AlbumArtBackground(),
+          preferences.immichBackgroundImage
+              ? const ImmichCarousel()
+              : const AlbumArtBackground(),
 
+          PageView(
+            scrollDirection: .vertical,
+            controller: _pageController,
+            onPageChanged: (int value) {
+              if (value == 0) {
+                ref.read(backgroundOpacityProvider.notifier).setOpacity(100);
+                return;
+              }
+
+              ref.read(backgroundOpacityProvider.notifier).setOpacity(5);
+              return;
+            },
+            children: [
+              const LyricsPage(),
               Column(
                 crossAxisAlignment: preferences.albumInfoCentered
                     ? CrossAxisAlignment.center

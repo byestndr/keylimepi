@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/theme/album_art_provider.dart';
+import 'package:spotimmich/providers/theme/background_getter.dart';
 import 'package:spotimmich/settings/preferences.dart';
 
 class AlbumArtBackground extends ConsumerWidget {
@@ -14,6 +15,7 @@ class AlbumArtBackground extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<String> backgroundImage = ref.watch(albumImageProvider);
     final UserValues preferences = ref.watch(userSettingsProvider);
+    final int backgroundOpacity = ref.watch(backgroundOpacityProvider);
 
     return Stack(
       fit: StackFit.passthrough,
@@ -25,6 +27,7 @@ class AlbumArtBackground extends ConsumerWidget {
             borderRadius: BorderRadius.circular(28),
             image: DecorationImage(
               fit: BoxFit.cover,
+              colorFilter: .mode(Colors.black.withAlpha(backgroundOpacity), BlendMode.darken),
               image: backgroundImage.when(
                 skipError: true,
                 skipLoadingOnRefresh: true,
