@@ -59,6 +59,7 @@ class UserValues {
   bool navigationBarOn;
   bool navigationBarTransparent;
   bool albumInfoCentered;
+  bool isRomanized;
   int playbackBarPosition;
 
   UserValues({
@@ -67,6 +68,7 @@ class UserValues {
     this.backgroundBlur = 12.0,
     this.navigationBarOn = true,
     this.navigationBarTransparent = false,
+    this.isRomanized = false,
     this.playbackBarPosition = 0,
   });
 
@@ -77,6 +79,7 @@ class UserValues {
     'centered_info': albumInfoCentered,
     'transparent_navibar': navigationBarTransparent,
     'immich_background': immichBackgroundImage,
+    'romanization_on': isRomanized,
   };
 
   Future<UserValues> getUpdatedValues() async {
@@ -92,6 +95,8 @@ class UserValues {
         await AsyncPreferences.getBoolValue('transparent_navibar') ?? false;
     final bool immichBackground =
         await AsyncPreferences.getBoolValue('immich_background') ?? false;
+    final bool romanizationOn =
+        await AsyncPreferences.getBoolValue('romanization_on') ?? false;
 
     return UserValues(
       albumInfoCentered: centeredInfo,
@@ -100,6 +105,7 @@ class UserValues {
       navigationBarOn: navigationBarOn,
       navigationBarTransparent: navigationBarTransparent,
       playbackBarPosition: playbackBarPosition,
+      isRomanized: romanizationOn
     );
   }
 }
