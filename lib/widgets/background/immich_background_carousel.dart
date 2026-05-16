@@ -158,7 +158,6 @@ class _ImmichCarouselState extends ConsumerState<ImmichCarousel> {
             ),
           ),
         ),
-        const MediaWidget(),
       ],
     );
   }
