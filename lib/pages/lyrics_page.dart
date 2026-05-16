@@ -11,7 +11,8 @@ class LyricsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<LyricLine>> lyrics = ref.watch(lyricsGetterProvider);
 
-    // Must be watched in order for the lyrics to update
+    // DO NOT REMOVE: Must be watched in order for the lyrics to update
+    // ignore: unused_local_variable
     final AsyncValue<Song> currentSong = ref.watch(infoGetterProvider);
     final AsyncValue<int> currentLineIndex = ref.watch(
       currentLyricIndexProvider,

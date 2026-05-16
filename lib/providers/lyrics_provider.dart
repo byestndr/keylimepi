@@ -68,12 +68,23 @@ class LyricsGetter extends _$LyricsGetter {
       albumName: currentSong.album.toString(),
     );
 
-    final List<LyricLine> lyricsList = LyricLine.fromSyncedLyrics(
-      lyrics.body['syncedLyrics'].toString(),
-    );
+    final dynamic responseBody = lyrics.body;
+
+    late List<LyricLine> lyricsList;
+    if (responseBody == null) {
+      lyricsList = [
+        LyricLine(
+          line: 'No synced lyrics were found',
+          timestamp: const Duration(seconds: 0),
+        ),
+      ];
+    } else {
+      lyricsList = LyricLine.fromSyncedLyrics(
+        lyrics.body['syncedLyrics'].toString(),
+      );
+    }
 
     ref.invalidate(currentLyricIndexProvider);
-
     return lyricsList;
   }
 }
