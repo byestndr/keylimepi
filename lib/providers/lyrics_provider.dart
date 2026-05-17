@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:chopper/src/response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:http/http.dart' as http;
+import 'package:romanize/romanize.dart';
 import 'package:spotimmich/backend/lyric/lyric_api.dart';
+import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 
@@ -49,6 +52,39 @@ class LyricLine {
     }
     return lyricsList;
   }
+
+  Future<LyricLine> romanize() async {
+    if (line.isEmpty) {
+      return LyricLine(line: line, timestamp: timestamp);
+    }
+    final Romanizer analyzedText = TextRomanizer.detectLanguage(line);
+
+    // if (analyzedText.language != 'japanese') {
+      // final String romanizedText = analyzedText.romanize(line);
+      // return LyricLine(line: romanizedText, timestamp: timestamp);
+    // }
+
+    final Uri romajiURI = Uri(
+      scheme: 'https',
+      host: 'yomi.onrender.com',
+      path: '/analyze',
+    );
+    final http.Response response = await http.post(
+      romajiURI,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: {
+        'text': line,
+        'to': 'romaji',
+        'romaji_system': 'hepburn',
+        'mode': 'spaced',
+      },
+    );
+    // Body is a string so some reason, so we decode twice.
+    final dynamic strippedString = jsonDecode(response.body);
+    final dynamic convertedBody = jsonDecode(strippedString);
+
+    return LyricLine(line: convertedBody['converted'], timestamp: timestamp);
+  }
 }
 
 @Riverpod(keepAlive: true)
@@ -70,7 +106,7 @@ class LyricsGetter extends _$LyricsGetter {
 
     final dynamic responseBody = lyrics.body;
 
-    late List<LyricLine> lyricsList;
+    List<LyricLine> lyricsList;
     if (responseBody == null) {
       lyricsList = [
         LyricLine(
@@ -82,6 +118,18 @@ class LyricsGetter extends _$LyricsGetter {
       lyricsList = LyricLine.fromSyncedLyrics(
         lyrics.body['syncedLyrics'].toString(),
       );
+    }
+
+    final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
+    if (romanizationBool) {
+      for (final LyricLine line in lyricsList) {
+        final LyricLine romanizedLine = await line.romanize();
+        final int replacedIndex = lyricsList.indexWhere(
+          (LyricLine element) => element.timestamp == line.timestamp,
+        );
+
+        lyricsList[replacedIndex] = romanizedLine;
+      }
     }
 
     ref.invalidate(currentLyricIndexProvider);
