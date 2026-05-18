@@ -13,20 +13,21 @@ class LyricSettings extends ConsumerStatefulWidget {
 
 class _LyricsettiSgsState extends ConsumerState<LyricSettings> {
   bool romanizationOn = false;
+  double fontSize = 30.0;
 
   @override
   void initState() {
     super.initState();
-    getRomanizationToggle();
+    getValues();
   }
 
-  void getRomanizationToggle() {
-    final bool romanizationBool = ref
-        .read(userSettingsProvider)
-        .isRomanized;
+  void getValues() {
+    final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
+    final double lyricFontSize = ref.read(userSettingsProvider).lyricFontSize;
 
     setState(() {
       romanizationOn = romanizationBool;
+      fontSize = lyricFontSize;
     });
 
     return;
@@ -53,6 +54,36 @@ class _LyricsettiSgsState extends ConsumerState<LyricSettings> {
                 });
                 ref.invalidate(lyricsGetterProvider);
               },
+            ),
+          ),
+          ListTile(
+            title: const Text('Background blur'),
+            leading: const Icon(Icons.blur_on_rounded),
+            subtitle: SliderTheme(
+              data: const SliderThemeData(
+                showValueIndicator: ShowValueIndicator.onDrag,
+              ),
+              child: Slider(
+                value: fontSize,
+                max: 36.0,
+                min: 10.0,
+                onChanged: (double value) {
+                  setState(() {
+                    fontSize = value;
+                  });
+                },
+                onChangeEnd: (double value) async {
+                  await AsyncPreferences.setDoubleValue(
+                    'lyric_font_size',
+                    value,
+                  );
+                  await ref.read(userSettingsProvider.notifier).getNewState();
+                },
+                divisions: 13,
+                year2023: false,
+                padding: const EdgeInsets.all(0),
+                label: fontSize.toString(),
+              ),
             ),
           ),
         ],

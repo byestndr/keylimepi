@@ -56,6 +56,7 @@ class AsyncPreferences {
 class UserValues {
   bool immichBackgroundImage;
   double backgroundBlur;
+  double lyricFontSize;
   bool navigationBarOn;
   bool navigationBarTransparent;
   bool albumInfoCentered;
@@ -66,6 +67,7 @@ class UserValues {
     this.immichBackgroundImage = false,
     this.albumInfoCentered = false,
     this.backgroundBlur = 12.0,
+    this.lyricFontSize = 30,
     this.navigationBarOn = true,
     this.navigationBarTransparent = false,
     this.isRomanized = false,
@@ -80,6 +82,7 @@ class UserValues {
     'transparent_navibar': navigationBarTransparent,
     'immich_background': immichBackgroundImage,
     'romanization_on': isRomanized,
+    "lyric_font_size": lyricFontSize,
   };
 
   Future<UserValues> getUpdatedValues() async {
@@ -97,15 +100,18 @@ class UserValues {
         await AsyncPreferences.getBoolValue('immich_background') ?? false;
     final bool romanizationOn =
         await AsyncPreferences.getBoolValue('romanization_on') ?? false;
+    final double lyricFontSize =
+        await AsyncPreferences.getDoubleValue('lyric_font_size') ?? 30;
 
     return UserValues(
       albumInfoCentered: centeredInfo,
       backgroundBlur: backgroundBlur,
+      lyricFontSize: lyricFontSize,
       immichBackgroundImage: immichBackground,
       navigationBarOn: navigationBarOn,
       navigationBarTransparent: navigationBarTransparent,
       playbackBarPosition: playbackBarPosition,
-      isRomanized: romanizationOn
+      isRomanized: romanizationOn,
     );
   }
 }

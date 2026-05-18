@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotimmich/providers/lyrics_provider.dart';
+import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 
@@ -52,6 +53,8 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
       });
     });
 
+    final double lyricFontSize = ref.read(userSettingsProvider).lyricFontSize;
+
     return Stack(
       children: <Widget>[
         Padding(
@@ -75,7 +78,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: AnimatedDefaultTextStyle(
                         style: TextStyle(
-                          fontSize: isCurrentLyric ? 34 : 30,
+                          fontSize: isCurrentLyric ? lyricFontSize + 4 : lyricFontSize,
                           fontFamilyFallback: <String>['NotoSansJP'],
                           fontFamily: 'RobotoFlexVariable',
                           fontVariations: [
@@ -157,8 +160,8 @@ class _DelayInfoState extends ConsumerState<DelayInfo>
       vsync: this,
     );
 
-    _offsetAnimation = Tween<Offset>(begin: Offset.zero, end: const Offset(0, 1))
-        .animate(
+    _offsetAnimation =
+        Tween<Offset>(begin: Offset.zero, end: const Offset(0, 1)).animate(
           CurvedAnimation(
             parent: _controller,
             curve: const Cubic(0.2, 0.0, 0, 1.0),
