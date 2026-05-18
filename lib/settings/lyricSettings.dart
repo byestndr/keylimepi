@@ -57,33 +57,42 @@ class _LyricsettiSgsState extends ConsumerState<LyricSettings> {
             ),
           ),
           ListTile(
-            title: const Text('Background blur'),
-            leading: const Icon(Icons.blur_on_rounded),
-            subtitle: SliderTheme(
-              data: const SliderThemeData(
-                showValueIndicator: ShowValueIndicator.onDrag,
-              ),
-              child: Slider(
-                value: fontSize,
-                max: 36.0,
-                min: 10.0,
-                onChanged: (double value) {
-                  setState(() {
-                    fontSize = value;
-                  });
-                },
-                onChangeEnd: (double value) async {
-                  await AsyncPreferences.setDoubleValue(
-                    'lyric_font_size',
-                    value,
-                  );
-                  await ref.read(userSettingsProvider.notifier).getNewState();
-                },
-                divisions: 13,
-                year2023: false,
-                padding: const EdgeInsets.all(0),
-                label: fontSize.toString(),
-              ),
+            title: const Text('Font Size'),
+            leading: const Icon(Icons.font_download_rounded),
+            subtitle: Column(
+              children: [
+                const Text(
+                  'Adjust the font size of inactive lines, while active lines are 4dp above this value. Defaults to 30.0',
+                ),
+                SliderTheme(
+                  data: const SliderThemeData(
+                    showValueIndicator: ShowValueIndicator.onDrag,
+                  ),
+                  child: Slider(
+                    value: fontSize,
+                    max: 36.0,
+                    min: 10.0,
+                    onChanged: (double value) {
+                      setState(() {
+                        fontSize = value;
+                      });
+                    },
+                    onChangeEnd: (double value) async {
+                      await AsyncPreferences.setDoubleValue(
+                        'lyric_font_size',
+                        value,
+                      );
+                      await ref
+                          .read(userSettingsProvider.notifier)
+                          .getNewState();
+                    },
+                    divisions: 13,
+                    year2023: false,
+                    padding: const EdgeInsets.all(0),
+                    label: fontSize.toString(),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
