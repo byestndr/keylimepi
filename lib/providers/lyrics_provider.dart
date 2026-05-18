@@ -57,13 +57,19 @@ class LyricLine {
     if (line.isEmpty) {
       return LyricLine(line: line, timestamp: timestamp);
     }
-    final Romanizer analyzedText = TextRomanizer.detectLanguage(line);
 
+    final Romanizer analyzedText = TextRomanizer.detectLanguage(line);
     if (analyzedText.language != 'japanese') {
       final String romanizedText = analyzedText.romanize(line);
       return LyricLine(line: romanizedText, timestamp: timestamp);
     }
 
+    final Map<String, dynamic> romanizedLyrics = await _getRomanizedLyrics();
+
+    return LyricLine(line: romanizedLyrics['converted'], timestamp: timestamp);
+  }
+
+  Future<Map<String, dynamic>> _getRomanizedLyrics() async {
     final Uri romajiURI = Uri(
       scheme: 'https',
       host: 'yomi.onrender.com',
@@ -79,11 +85,12 @@ class LyricLine {
         'mode': 'spaced',
       },
     );
+
     // Body is a string so some reason, so we decode twice.
     final dynamic strippedString = jsonDecode(response.body);
-    final dynamic convertedBody = jsonDecode(strippedString);
+    final Map<String, dynamic> convertedBody = jsonDecode(strippedString);
 
-    return LyricLine(line: convertedBody['converted'], timestamp: timestamp);
+    return convertedBody;
   }
 }
 
@@ -91,10 +98,10 @@ class LyricLine {
 class LyricsGetter extends _$LyricsGetter {
   @override
   Future<List<LyricLine>> build() async {
-    return getNewLyrics();
+    return _getNewLyrics();
   }
 
-  Future<List<LyricLine>> getNewLyrics() async {
+  Future<List<LyricLine>> _getNewLyrics() async {
     final Song currentSong = await ref.read(infoGetterProvider.future);
 
     final LyricService lyricService = LyricService.create();
@@ -104,6 +111,7 @@ class LyricsGetter extends _$LyricsGetter {
       albumName: currentSong.album.toString(),
     );
 
+    // Checks to see if there are any synced lyrics
     final dynamic responseBody = lyrics.body;
     List<LyricLine> lyricsList;
     if (responseBody == null || responseBody['syncedLyrics'] == null) {
@@ -113,40 +121,51 @@ class LyricsGetter extends _$LyricsGetter {
           timestamp: const Duration(seconds: 0),
         ),
       ];
-    } else {
-      lyricsList = LyricLine.fromSyncedLyrics(
-        lyrics.body['syncedLyrics'].toString(),
-      );
+
+      return lyricsList;
     }
 
+    // Creates a list of lyric lines from the synced lyrics response
+    lyricsList = LyricLine.fromSyncedLyrics(lyrics.body['syncedLyrics']);
+
+    // Checks if romanization is turned on and if it isn't, returns.
     final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
-    if (romanizationBool) {
-      List<Future<LyricLine>> romanizedFutures = [];
-
-      for (final LyricLine line in lyricsList) {
-        romanizedFutures.add(line.romanize());
-      }
-
-      final List<LyricLine> convertedLyrics = await Future.wait(
-        romanizedFutures,
-      );
-
-      for (final LyricLine romanizedLine in convertedLyrics) {
-        final int replacedIndex = lyricsList.indexWhere(
-          (LyricLine element) => element.timestamp == romanizedLine.timestamp,
-        );
-
-        lyricsList[replacedIndex] = romanizedLine;
-      }
+    if (!romanizationBool) {
+      return lyricsList;
     }
 
-    ref.invalidate(currentLyricIndexProvider);
+    lyricsList = await _romanizeLines(lyricsList);
     return lyricsList;
+  }
+
+  Future<List<LyricLine>> _romanizeLines(
+    final List<LyricLine> lyricsList,
+  ) async {
+    // List of future romanization tasks to run concurrently
+    // The loop adds each line as a romanization task
+    List<Future<LyricLine>> romanizedFutures = [];
+    for (final LyricLine line in lyricsList) {
+      romanizedFutures.add(line.romanize());
+    }
+
+    final List<LyricLine> convertedLyrics = await Future.wait(romanizedFutures);
+
+    List<LyricLine> replacedLyricList = lyricsList;
+    // Replace each line with the future result
+    for (final LyricLine line in convertedLyrics) {
+      final int replacedIndex = lyricsList.indexWhere(
+        (LyricLine element) => element.timestamp == line.timestamp,
+      );
+
+      replacedLyricList[replacedIndex] = line;
+    }
+
+    return replacedLyricList;
   }
 }
 
 @riverpod
-Future<List<int>> LyricSync(Ref ref) async {
+Future<List<int>> lyricSync(Ref ref) async {
   final List<LyricLine> lyricsList = await ref.watch(
     lyricsGetterProvider.future,
   );
@@ -155,15 +174,15 @@ Future<List<int>> LyricSync(Ref ref) async {
   final int totalTimeAsIndex =
       (songDuration.maxPosition.inMilliseconds / 10).ceil() + 1;
 
-  // Each index represents a value of 100 ms
+  // Each index represents a value of 10 ms
   final List<int> indexList = List.filled(totalTimeAsIndex, 0);
 
   // Start at 0 ms
   int currentIndex = 0;
 
-  // Iterate over each 100 ms
+  // Iterate over each 10 ms
   for (int i = 0; i < totalTimeAsIndex; i++) {
-    // While the current 100 ms is less in length than the total song time
+    // While the current 10 ms is less in length than the total song time
     while (currentIndex + 1 < lyricsList.length &&
         lyricsList[currentIndex + 1].timestamp.inMilliseconds <= i * 10) {
       currentIndex++;

@@ -33,7 +33,7 @@ final class LyricsGetterProvider
   LyricsGetter create() => LyricsGetter();
 }
 
-String _$lyricsGetterHash() => r'8d82603413c9e889a5808e1a83caed19ed031a11';
+String _$lyricsGetterHash() => r'6b12e2091af7f1ec0aa7e5ca9c9c59d586387273';
 
 abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>> {
   FutureOr<List<LyricLine>> build();
@@ -53,7 +53,7 @@ abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>> {
   }
 }
 
-@ProviderFor(LyricSync)
+@ProviderFor(lyricSync)
 final lyricSyncProvider = LyricSyncProvider._();
 
 final class LyricSyncProvider
@@ -85,11 +85,11 @@ final class LyricSyncProvider
 
   @override
   FutureOr<List<int>> create(Ref ref) {
-    return LyricSync(ref);
+    return lyricSync(ref);
   }
 }
 
-String _$lyricSyncHash() => r'22b959ca8d0ad6e823f896cd63b48d90d86e5d1b';
+String _$lyricSyncHash() => r'53df989d0aed9a51fce7a4e701d089c1083d7298';
 
 @ProviderFor(CurrentLyricIndex)
 final currentLyricIndexProvider = CurrentLyricIndexProvider._();
