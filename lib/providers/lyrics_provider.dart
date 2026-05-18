@@ -105,9 +105,8 @@ class LyricsGetter extends _$LyricsGetter {
     );
 
     final dynamic responseBody = lyrics.body;
-
     List<LyricLine> lyricsList;
-    if (responseBody == null) {
+    if (responseBody == null || responseBody['syncedLyrics'] == null) {
       lyricsList = [
         LyricLine(
           line: 'No synced lyrics were found',

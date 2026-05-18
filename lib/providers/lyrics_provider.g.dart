@@ -33,7 +33,7 @@ final class LyricsGetterProvider
   LyricsGetter create() => LyricsGetter();
 }
 
-String _$lyricsGetterHash() => r'9b79468331e7a696bdf7ce9146a58b2b65fe6515';
+String _$lyricsGetterHash() => r'8d82603413c9e889a5808e1a83caed19ed031a11';
 
 abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>> {
   FutureOr<List<LyricLine>> build();
