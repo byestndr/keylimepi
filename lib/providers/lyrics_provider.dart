@@ -59,10 +59,10 @@ class LyricLine {
     }
     final Romanizer analyzedText = TextRomanizer.detectLanguage(line);
 
-    // if (analyzedText.language != 'japanese') {
-      // final String romanizedText = analyzedText.romanize(line);
-      // return LyricLine(line: romanizedText, timestamp: timestamp);
-    // }
+    if (analyzedText.language != 'japanese') {
+      final String romanizedText = analyzedText.romanize(line);
+      return LyricLine(line: romanizedText, timestamp: timestamp);
+    }
 
     final Uri romajiURI = Uri(
       scheme: 'https',
@@ -122,10 +122,19 @@ class LyricsGetter extends _$LyricsGetter {
 
     final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
     if (romanizationBool) {
+      List<Future<LyricLine>> romanizedFutures = [];
+
       for (final LyricLine line in lyricsList) {
-        final LyricLine romanizedLine = await line.romanize();
+        romanizedFutures.add(line.romanize());
+      }
+
+      final List<LyricLine> convertedLyrics = await Future.wait(
+        romanizedFutures,
+      );
+
+      for (final LyricLine romanizedLine in convertedLyrics) {
         final int replacedIndex = lyricsList.indexWhere(
-          (LyricLine element) => element.timestamp == line.timestamp,
+          (LyricLine element) => element.timestamp == romanizedLine.timestamp,
         );
 
         lyricsList[replacedIndex] = romanizedLine;
