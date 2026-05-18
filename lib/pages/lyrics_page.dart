@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:spotimmich/backend/spotify/spotify_api.dart';
 import 'package:spotimmich/providers/lyrics_provider.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
@@ -53,8 +54,6 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
       });
     });
 
-    final double lyricFontSize = ref.read(userSettingsProvider).lyricFontSize;
-
     return Stack(
       children: <Widget>[
         Padding(
@@ -74,26 +73,9 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                   itemBuilder: (BuildContext context, int lineIndex) {
                     final bool isCurrentLyric = lineIndex == currentLyricIndex;
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: AnimatedDefaultTextStyle(
-                        style: TextStyle(
-                          fontSize: isCurrentLyric ? lyricFontSize + 4 : lyricFontSize,
-                          fontFamilyFallback: <String>['NotoSansJP'],
-                          fontFamily: 'RobotoFlexVariable',
-                          fontVariations: [
-                            isCurrentLyric
-                                ? const FontVariation.width(130)
-                                : const FontVariation.width(120),
-                            isCurrentLyric
-                                ? const FontVariation.weight(850)
-                                : const FontVariation.weight(600),
-                          ],
-                        ),
-                        duration: const Duration(milliseconds: 150),
-                        curve: Curves.easeOut,
-                        child: Text(data[lineIndex].line),
-                      ),
+                    return LyricLineWidget(
+                      isCurrentLyric: isCurrentLyric,
+                      lyric: data[lineIndex],
                     );
                   },
                 ),
@@ -112,7 +94,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
             crossAxisAlignment: .end,
             mainAxisAlignment: .end,
             children: <Widget>[
-              DelayInfo(),
+              const DelayInfo(),
               Column(
                 mainAxisAlignment: .end,
                 spacing: 5,
@@ -136,6 +118,55 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class LyricLineWidget extends ConsumerStatefulWidget {
+  final bool isCurrentLyric;
+  final LyricLine lyric;
+  const LyricLineWidget({
+    super.key,
+    required this.isCurrentLyric,
+    required this.lyric,
+  });
+
+  @override
+  ConsumerState<LyricLineWidget> createState() => _LyricLineWidgetState();
+}
+
+class _LyricLineWidgetState extends ConsumerState<LyricLineWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final double lyricFontSize = ref.read(userSettingsProvider).lyricFontSize;
+
+    return InkWell(
+      onTap: () {
+        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+
+        spotifyAPI.seekSong(widget.lyric.timestamp.inMilliseconds);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: AnimatedDefaultTextStyle(
+          style: TextStyle(
+            fontSize: widget.isCurrentLyric ? lyricFontSize + 4 : lyricFontSize,
+            fontFamilyFallback: <String>['NotoSansJP'],
+            fontFamily: 'RobotoFlexVariable',
+            fontVariations: [
+              widget.isCurrentLyric
+                  ? const FontVariation.width(130)
+                  : const FontVariation.width(120),
+              widget.isCurrentLyric
+                  ? const FontVariation.weight(850)
+                  : const FontVariation.weight(600),
+            ],
+          ),
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeOut,
+          child: Text(widget.lyric.line),
+        ),
+      ),
     );
   }
 }
