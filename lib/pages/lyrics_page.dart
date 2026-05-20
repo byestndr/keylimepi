@@ -150,7 +150,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => const LyricSearch(),
+                    builder: (BuildContext context) => const LyricSearchPage(),
                   ),
                 );
               },
