@@ -20,14 +20,18 @@ abstract class LyricService extends ChopperService {
   });
 
   @GET(path: '/search')
-  Future<Response> searchLyrics();
+  Future<Response> searchLyrics({
+    @Query('track_name') required String trackName,
+    @Query('artist_name') required String artistName,
+    @Query('album_name') required String albumName,
+  });
 
   static LyricService create() {
     final ChopperClient client = ChopperClient(
       baseUrl: Uri.parse('https://lrclib.net'),
       services: <ChopperService>[_$LyricService()],
       converter: const JsonConverter(),
-      authenticator: LyricResponseNull()
+      authenticator: LyricResponseNull(),
     );
     return _$LyricService(client);
   }
@@ -35,8 +39,12 @@ abstract class LyricService extends ChopperService {
 
 class LyricResponseNull extends Authenticator {
   @override
-  FutureOr<Request?> authenticate(Request request, Response<dynamic> response, [Request? originalRequest]) {
-     if (!response.isSuccessful) {
+  FutureOr<Request?> authenticate(
+    Request request,
+    Response<dynamic> response, [
+    Request? originalRequest,
+  ]) {
+    if (!response.isSuccessful) {
       return request.copyWith(uri: Uri(path: '/api/get'));
     }
   }
