@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotimmich/backend/spotify/spotify_api.dart';
+import 'package:spotimmich/pages/lyrics_search.dart';
 import 'package:spotimmich/providers/lyrics_provider.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
@@ -55,7 +56,6 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
     });
 
     return Stack(
-      fit: .passthrough,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 70),
@@ -123,12 +123,14 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                 crossAxisAlignment: .end,
                 children: <Widget>[
                   FloatingActionButton.small(
+                    heroTag: null,
                     onPressed: () {
                       ref.read(lyricDelayProvider.notifier).increaseDelay(100);
                     },
                     child: const Icon(Icons.arrow_upward_rounded),
                   ),
                   FloatingActionButton.small(
+                    heroTag: null,
                     onPressed: () {
                       ref.read(lyricDelayProvider.notifier).decreaseDelay(100);
                     },
@@ -137,6 +139,23 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                 ],
               ),
             ],
+          ),
+        ),
+
+        Align(
+          alignment: .topRight,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 15, right: 20),
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const LyricSearch(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.search),
+            ),
           ),
         ),
       ],
