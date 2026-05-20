@@ -55,10 +55,13 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
     });
 
     return Stack(
+      fit: .passthrough,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 70),
           child: lyrics.when(
+            skipLoadingOnRefresh: false,
+            skipLoadingOnReload: false,
             data: (List<LyricLine> data) {
               return ScrollConfiguration(
                 behavior: ScrollConfiguration.of(
@@ -81,9 +84,28 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                 ),
               );
             },
-            error: (Object error, StackTrace stackTrace) => const Text('Error'),
+            error: (Object error, StackTrace stackTrace) => ListView(
+              padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height / 3,
+              ),
+              children: [
+                LyricLineWidget(
+                  isCurrentLyric: true,
+                  lyric: LyricLine(
+                    line: 'There was an error retrieving lyrics',
+                    timestamp: const Duration(milliseconds: 0),
+                  ),
+                ),
+              ],
+            ),
             loading: () {
-              return const Text('Loading');
+              return Center(
+                child: CircularProgressIndicator(
+                  padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 10,
+                  ),
+                ),
+              );
             },
           ),
         ),
