@@ -218,16 +218,18 @@ class CurrentLyricIndex extends _$CurrentLyricIndex {
 @riverpod
 class LyricSearch extends _$LyricSearch {
   @override
-  Future<List<dynamic>> build(String song, String album, String artist) {
-    return _searchLyrics(song, album, artist);
+  Future<List<dynamic>> build() {
+    return _searchLyrics();
   }
 
-  Future<List<dynamic>> _searchLyrics(String song, String album, String artist) async {
+  Future<List<dynamic>> _searchLyrics() async {
+    final Song currentSong = await ref.read(infoGetterProvider.future);
+
     final LyricService lyricService = LyricService.create();
     final Response<dynamic> response = await lyricService.searchLyrics(
-      trackName: song,
-      artistName: artist,
-      albumName: album,
+      trackName: currentSong.title,
+      artistName: currentSong.artist,
+      albumName: currentSong.album!,
     );
 
     final List<dynamic> responseBody = response.body;
@@ -239,7 +241,7 @@ class LyricSearch extends _$LyricSearch {
       (dynamic element) => element['syncedLyrics'] != null,
     );
 
-    return syncedLyrics.toList();
+    return Future.value(syncedLyrics.toList());
   }
 }
 

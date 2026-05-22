@@ -136,80 +136,33 @@ abstract class _$CurrentLyricIndex extends $AsyncNotifier<int> {
 }
 
 @ProviderFor(LyricSearch)
-final lyricSearchProvider = LyricSearchFamily._();
+final lyricSearchProvider = LyricSearchProvider._();
 
 final class LyricSearchProvider
     extends $AsyncNotifierProvider<LyricSearch, List<dynamic>> {
-  LyricSearchProvider._({
-    required LyricSearchFamily super.from,
-    required (String, String, String) super.argument,
-  }) : super(
-         retry: null,
-         name: r'lyricSearchProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
+  LyricSearchProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'lyricSearchProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$lyricSearchHash();
 
-  @override
-  String toString() {
-    return r'lyricSearchProvider'
-        ''
-        '$argument';
-  }
-
   @$internal
   @override
   LyricSearch create() => LyricSearch();
-
-  @override
-  bool operator ==(Object other) {
-    return other is LyricSearchProvider && other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
 }
 
-String _$lyricSearchHash() => r'e7baebba17f5c8b0e41d2cfa7b7900e3bf169bf3';
-
-final class LyricSearchFamily extends $Family
-    with
-        $ClassFamilyOverride<
-          LyricSearch,
-          AsyncValue<List<dynamic>>,
-          List<dynamic>,
-          FutureOr<List<dynamic>>,
-          (String, String, String)
-        > {
-  LyricSearchFamily._()
-    : super(
-        retry: null,
-        name: r'lyricSearchProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: true,
-      );
-
-  LyricSearchProvider call(String song, String album, String artist) =>
-      LyricSearchProvider._(argument: (song, album, artist), from: this);
-
-  @override
-  String toString() => r'lyricSearchProvider';
-}
+String _$lyricSearchHash() => r'50b7d620dd229c311088c0c11fb0c9e8dd0b9c9f';
 
 abstract class _$LyricSearch extends $AsyncNotifier<List<dynamic>> {
-  late final _$args = ref.$arg as (String, String, String);
-  String get song => _$args.$1;
-  String get album => _$args.$2;
-  String get artist => _$args.$3;
-
-  FutureOr<List<dynamic>> build(String song, String album, String artist);
+  FutureOr<List<dynamic>> build();
   @$mustCallSuper
   @override
   void runBuild() {
@@ -222,7 +175,7 @@ abstract class _$LyricSearch extends $AsyncNotifier<List<dynamic>> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, () => build(_$args.$1, _$args.$2, _$args.$3));
+    element.handleCreate(ref, build);
   }
 }
 
