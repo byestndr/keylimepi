@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/backend/lyric/lyric_api.dart';
 import 'package:spotimmich/providers/lyrics_provider.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 
 class LyricSearchPage extends ConsumerStatefulWidget {
   const LyricSearchPage({super.key});
@@ -18,14 +16,25 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
       lyricSearchProvider,
     );
 
+    // Watch this to keep the current filter state on dialog exit
+    // and clear it when the page is exited
+    ref.watch(lyricSearchFilterProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search lyrics'),
+
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      const LyricSearchFilterDialog(),
+                );
+              },
               icon: const Icon(Icons.filter_alt_sharp),
             ),
           ),
@@ -51,48 +60,11 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
               final RegExpMatch? firstTimestamp = firstTimestampRegex
                   .firstMatch(data[index]['syncedLyrics'].toString());
 
-              return ListTile(
-                title: Text(data[index]['name']),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => SimpleDialog(
-                      title: Column(
-                        crossAxisAlignment: .start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 5.0),
-                            child: Row(
-                              mainAxisAlignment: .spaceBetween,
-                              children: [
-                                const Text('Lyrics'),
-                                IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(Icons.close))
-                              ],
-                            ),
-                          ),
-                          const Divider(),
-                        ],
-                      ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Text(
-                            data[index]['syncedLyrics'],
-                            softWrap: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                subtitle: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    Text(data[index]['artistName']),
-                    Text("Duration: $minutes:$seconds"),
-                  ],
-                ),
-                trailing: Text('First lyric at: ${firstTimestamp!.group(0)}'),
+              return LyricTile(
+                minutes: minutes,
+                seconds: seconds,
+                firstTimestamp: firstTimestamp,
+                lyric: data[index],
               );
             },
           );
@@ -100,6 +72,145 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
         error: (Object error, StackTrace stackTrace) => const Text('Error'),
         loading: () => const CircularProgressIndicator(),
       ),
+    );
+  }
+}
+
+class LyricTile extends StatelessWidget {
+  final dynamic lyric;
+  final int minutes;
+  final int seconds;
+  final RegExpMatch? firstTimestamp;
+  const LyricTile({
+    super.key,
+    required this.minutes,
+    required this.seconds,
+    required this.firstTimestamp,
+    required this.lyric,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(lyric['name']),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              ShowLyricDialog(lyrics: lyric['syncedLyrics']),
+        );
+      },
+      subtitle: Column(
+        crossAxisAlignment: .start,
+        children: [
+          Text(lyric['artistName']),
+          Text("Duration: $minutes:$seconds"),
+        ],
+      ),
+      trailing: Text('First lyric at: ${firstTimestamp!.group(0)}'),
+    );
+  }
+}
+
+class ShowLyricDialog extends StatelessWidget {
+  final String lyrics;
+  const ShowLyricDialog({super.key, required this.lyrics});
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      title: Column(
+        crossAxisAlignment: .start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                const Text('Lyrics'),
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+        ],
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Text(lyrics, softWrap: true),
+        ),
+      ],
+    );
+  }
+}
+
+class LyricSearchFilterDialog extends ConsumerWidget {
+  const LyricSearchFilterDialog({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final SearchFilter toggleStates = ref.watch(lyricSearchFilterProvider);
+
+    return SimpleDialog(
+      title: Column(
+        crossAxisAlignment: .start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                const Text('Filter by...'),
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+        ],
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Column(
+            children: [
+              ListTile(
+                title: const Text('Track'),
+                trailing: Switch(
+                  value: toggleStates.track,
+                  onChanged: (bool value) => ref
+                      .read(lyricSearchFilterProvider.notifier)
+                      .changeFilterSettings(track: value),
+                ),
+              ),
+              ListTile(
+                title: const Text('Album'),
+                trailing: Switch(
+                  value: toggleStates.album,
+                  onChanged: (bool value) => ref
+                      .read(lyricSearchFilterProvider.notifier)
+                      .changeFilterSettings(album: value),
+                ),
+              ),
+              ListTile(
+                title: const Text('Artist'),
+                trailing: Switch(
+                  value: toggleStates.artist,
+                  onChanged: (bool value) => ref
+                      .read(lyricSearchFilterProvider.notifier)
+                      .changeFilterSettings(artist: value),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -179,6 +179,58 @@ abstract class _$LyricSearch extends $AsyncNotifier<List<dynamic>> {
   }
 }
 
+@ProviderFor(LyricSearchFilter)
+final lyricSearchFilterProvider = LyricSearchFilterProvider._();
+
+final class LyricSearchFilterProvider
+    extends $NotifierProvider<LyricSearchFilter, SearchFilter> {
+  LyricSearchFilterProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'lyricSearchFilterProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$lyricSearchFilterHash();
+
+  @$internal
+  @override
+  LyricSearchFilter create() => LyricSearchFilter();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SearchFilter value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SearchFilter>(value),
+    );
+  }
+}
+
+String _$lyricSearchFilterHash() => r'5b8224c27a6a3526cf3bd55760eb346ed5b3bec9';
+
+abstract class _$LyricSearchFilter extends $Notifier<SearchFilter> {
+  SearchFilter build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<SearchFilter, SearchFilter>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<SearchFilter, SearchFilter>,
+              SearchFilter,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(LyricDelay)
 final lyricDelayProvider = LyricDelayProvider._();
 

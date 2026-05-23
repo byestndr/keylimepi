@@ -94,6 +94,17 @@ class LyricLine {
   }
 }
 
+class SearchFilter {
+  bool track;
+  bool artist;
+  bool album;
+  SearchFilter({
+    required this.track,
+    required this.album,
+    required this.artist,
+  });
+}
+
 @Riverpod(keepAlive: true)
 class LyricsGetter extends _$LyricsGetter {
   @override
@@ -242,6 +253,23 @@ class LyricSearch extends _$LyricSearch {
     );
 
     return Future.value(syncedLyrics.toList());
+  }
+}
+
+@riverpod
+class LyricSearchFilter extends _$LyricSearchFilter {
+  @override
+  SearchFilter build() {
+    return SearchFilter(track: true, album: true, artist: true);
+  }
+
+  void changeFilterSettings({bool? track, bool? album, bool? artist}) {
+    state = SearchFilter(
+      track: track ?? state.track,
+      album: album ?? state.album,
+      artist: artist ?? state.artist,
+    );
+    return;
   }
 }
 
