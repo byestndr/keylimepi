@@ -46,6 +46,34 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
         skipError: true,
         skipLoadingOnReload: false,
         data: (List<dynamic> data) {
+          if (data.isEmpty) {
+            return const Center(
+              child: Column(
+                crossAxisAlignment: .center,
+                mainAxisAlignment: .center,
+                children: [
+                  Text(
+                    '(⁠｡⁠ŏ⁠﹏⁠ŏ⁠)',
+                    style: TextStyle(
+                      fontSize: 48,
+                      color: Colors.grey,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: .w900,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Text(
+                      'Sorry, but we couldn\'t find any matching lyrics. Have you tried using filters?',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      textAlign: .center,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
           return ListView.builder(
             itemCount: data.length,
             itemBuilder: (BuildContext context, int index) {
@@ -73,7 +101,22 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
             },
           );
         },
-        error: (Object error, StackTrace stackTrace) => const Text('Error'),
+        error: (Object error, StackTrace stackTrace) => const Center(
+          child: Column(
+            crossAxisAlignment: .center,
+            mainAxisAlignment: .center,
+            children: [
+              Text(
+                '(⁠┛⁠◉⁠Д⁠◉⁠)⁠┛⁠彡⁠┻⁠━⁠┻',
+                style: TextStyle(fontSize: 48, color: Colors.grey),
+              ),
+              Text(
+                'There was an error loading lyrics.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
