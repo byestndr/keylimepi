@@ -80,7 +80,7 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
   }
 }
 
-class LyricTile extends StatelessWidget {
+class LyricTile extends ConsumerWidget {
   final dynamic lyric;
   final int minutes;
   final int seconds;
@@ -94,9 +94,9 @@ class LyricTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      title: Text(lyric['name']),
+      title: Text('${lyric['name']} - ${lyric['artistName']}'),
       onTap: () {
         showDialog(
           context: context,
@@ -107,11 +107,19 @@ class LyricTile extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: .start,
         children: [
-          Text(lyric['artistName']),
           Text("Duration: $minutes:$seconds"),
+          Text('First lyric at: ${firstTimestamp!.group(0)}'),
         ],
       ),
-      trailing: Text('First lyric at: ${firstTimestamp!.group(0)}'),
+      trailing: IconButton(
+        onPressed: () {
+          ref
+              .read(lyricsGetterProvider.notifier)
+              .overrideLyrics(lyric['syncedLyrics']);
+          Navigator.of(context).pop();
+        },
+        icon: const Icon(Icons.arrow_right),
+      ),
     );
   }
 }

@@ -83,20 +83,23 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                 ),
               );
             },
-            error: (Object error, StackTrace stackTrace) => ListView(
-              padding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height / 3,
-              ),
-              children: [
-                LyricLineWidget(
-                  isCurrentLyric: true,
-                  lyric: LyricLine(
-                    line: 'There was an error retrieving lyrics',
-                    timestamp: const Duration(milliseconds: 0),
-                  ),
+            error: (Object error, StackTrace stackTrace) {
+              print(error.toString());
+              return ListView(
+                padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height / 3,
                 ),
-              ],
-            ),
+                children: [
+                  LyricLineWidget(
+                    isCurrentLyric: true,
+                    lyric: LyricLine(
+                      line: 'There was an error retrieving lyrics',
+                      timestamp: const Duration(milliseconds: 0),
+                    ),
+                  ),
+                ],
+              );
+            },
             loading: () {
               return Center(
                 child: CircularProgressIndicator(

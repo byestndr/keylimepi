@@ -97,10 +97,7 @@ class LyricLine {
 class SearchFilter {
   bool artist;
   bool album;
-  SearchFilter({
-    required this.album,
-    required this.artist,
-  });
+  SearchFilter({required this.album, required this.artist});
 }
 
 @Riverpod(keepAlive: true)
@@ -170,6 +167,18 @@ class LyricsGetter extends _$LyricsGetter {
     }
 
     return replacedLyricList;
+  }
+
+  Future<void> overrideLyrics(String lyrics) async {
+    List<LyricLine> lyricsList = LyricLine.fromSyncedLyrics(lyrics);
+
+    final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
+    if (romanizationBool) {
+      lyricsList = await _romanizeLines(lyricsList);
+    }
+
+    state = AsyncValue.data(lyricsList);
+    return;
   }
 }
 
