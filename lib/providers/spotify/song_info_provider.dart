@@ -95,10 +95,16 @@ class InfoGetter extends _$InfoGetter {
   }
 
   void isNewSong(String? newURI) {
-    if (state.value!.uri != newURI) {
-      ref.read(albumImageProvider.notifier).refreshImage();
-      ref.read(appColorSchemeProvider.notifier).refreshColorscheme();
-      ref.invalidate(lyricsGetterProvider);
+    if (state.value!.uri == newURI) {
+      return;
+    }
+
+    ref.read(albumImageProvider.notifier).refreshImage();
+    ref.read(appColorSchemeProvider.notifier).refreshColorscheme();
+    ref.invalidate(lyricsGetterProvider);
+
+    if (ref.exists(lyricSearchProvider)) {
+      ref.invalidate(lyricSearchProvider);
     }
   }
 

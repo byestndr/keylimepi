@@ -15,6 +15,7 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
     final AsyncValue<List<dynamic>> searchedResponse = ref.watch(
       lyricSearchProvider,
     );
+    final SearchFilter filterSettings = ref.watch(lyricSearchFilterProvider);
 
     // Watch this to keep the current filter state on dialog exit
     // and clear it when the page is exited
@@ -41,6 +42,9 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
         ],
       ),
       body: searchedResponse.when(
+        skipLoadingOnRefresh: false,
+        skipError: true,
+        skipLoadingOnReload: false,
         data: (List<dynamic> data) {
           return ListView.builder(
             itemCount: data.length,
@@ -70,7 +74,7 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
           );
         },
         error: (Object error, StackTrace stackTrace) => const Text('Error'),
-        loading: () => const CircularProgressIndicator(),
+        loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -180,15 +184,6 @@ class LyricSearchFilterDialog extends ConsumerWidget {
           padding: const EdgeInsets.only(left: 10),
           child: Column(
             children: [
-              ListTile(
-                title: const Text('Track'),
-                trailing: Switch(
-                  value: toggleStates.track,
-                  onChanged: (bool value) => ref
-                      .read(lyricSearchFilterProvider.notifier)
-                      .changeFilterSettings(track: value),
-                ),
-              ),
               ListTile(
                 title: const Text('Album'),
                 trailing: Switch(

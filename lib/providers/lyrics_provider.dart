@@ -95,11 +95,9 @@ class LyricLine {
 }
 
 class SearchFilter {
-  bool track;
   bool artist;
   bool album;
   SearchFilter({
-    required this.track,
     required this.album,
     required this.artist,
   });
@@ -235,12 +233,13 @@ class LyricSearch extends _$LyricSearch {
 
   Future<List<dynamic>> _searchLyrics() async {
     final Song currentSong = await ref.read(infoGetterProvider.future);
+    final SearchFilter searchFilters = ref.watch(lyricSearchFilterProvider);
 
     final LyricService lyricService = LyricService.create();
     final Response<dynamic> response = await lyricService.searchLyrics(
       trackName: currentSong.title,
-      artistName: currentSong.artist,
-      albumName: currentSong.album!,
+      artistName: searchFilters.artist == true ? currentSong.artist : null,
+      albumName: searchFilters.album == true ? currentSong.album : null,
     );
 
     final List<dynamic> responseBody = response.body;
@@ -260,12 +259,11 @@ class LyricSearch extends _$LyricSearch {
 class LyricSearchFilter extends _$LyricSearchFilter {
   @override
   SearchFilter build() {
-    return SearchFilter(track: true, album: true, artist: true);
+    return SearchFilter(album: true, artist: true);
   }
 
-  void changeFilterSettings({bool? track, bool? album, bool? artist}) {
+  void changeFilterSettings({bool? album, bool? artist}) {
     state = SearchFilter(
-      track: track ?? state.track,
       album: album ?? state.album,
       artist: artist ?? state.artist,
     );

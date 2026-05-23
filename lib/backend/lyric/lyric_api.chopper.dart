@@ -62,9 +62,9 @@ final class _$LyricService extends LyricService {
 
   @override
   Future<Response<dynamic>> searchLyrics({
-    required String trackName,
-    required String artistName,
-    required String albumName,
+    String? trackName,
+    String? artistName,
+    String? albumName,
   }) {
     final Uri $url = Uri.parse('/api/search');
     final Map<String, dynamic> $params = <String, dynamic>{

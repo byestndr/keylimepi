@@ -159,7 +159,7 @@ final class LyricSearchProvider
   LyricSearch create() => LyricSearch();
 }
 
-String _$lyricSearchHash() => r'50b7d620dd229c311088c0c11fb0c9e8dd0b9c9f';
+String _$lyricSearchHash() => r'9c9e79da889e99d25a120877fb1421f84f1689fa';
 
 abstract class _$LyricSearch extends $AsyncNotifier<List<dynamic>> {
   FutureOr<List<dynamic>> build();
@@ -211,7 +211,7 @@ final class LyricSearchFilterProvider
   }
 }
 
-String _$lyricSearchFilterHash() => r'5b8224c27a6a3526cf3bd55760eb346ed5b3bec9';
+String _$lyricSearchFilterHash() => r'7fcd38f828acf9630d8fad329015f6746adba805';
 
 abstract class _$LyricSearchFilter extends $Notifier<SearchFilter> {
   SearchFilter build();

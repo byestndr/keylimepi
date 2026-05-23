@@ -21,9 +21,9 @@ abstract class LyricService extends ChopperService {
 
   @GET(path: '/search')
   Future<Response> searchLyrics({
-    @Query('track_name') required String trackName,
-    @Query('artist_name') required String artistName,
-    @Query('album_name') required String albumName,
+    @Query('track_name') String? trackName,
+    @Query('artist_name') String? artistName,
+    @Query('album_name') String? albumName,
   });
 
   static LyricService create() {

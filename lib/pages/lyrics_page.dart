@@ -30,8 +30,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
     final AsyncValue<List<LyricLine>> lyrics = ref.watch(lyricsGetterProvider);
 
     // DO NOT REMOVE: Must be watched in order for the lyrics to update
-    // ignore: unused_local_variable
-    final AsyncValue<Song> currentSong = ref.watch(infoGetterProvider);
+    ref.watch(infoGetterProvider);
     ref.watch(seekbarTimerProvider);
     ref.watch(lyricSyncProvider);
 
