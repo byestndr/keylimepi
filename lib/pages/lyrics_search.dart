@@ -138,6 +138,13 @@ class LyricTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    late String newSeconds;
+    if (seconds.toString().length == 1) {
+      newSeconds = '0$seconds';
+    } else {
+      newSeconds = seconds.toString();
+    }
+
     return ListTile(
       title: Text('${lyric['name']} - ${lyric['artistName']}'),
       onTap: () {
@@ -150,7 +157,7 @@ class LyricTile extends ConsumerWidget {
       subtitle: Column(
         crossAxisAlignment: .start,
         children: [
-          Text("Duration: $minutes:$seconds"),
+          Text("Duration: $minutes:$newSeconds"),
           Text('First lyric at: ${firstTimestamp!.group(0)}'),
         ],
       ),
