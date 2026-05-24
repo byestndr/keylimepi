@@ -37,6 +37,7 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
                 );
               },
               icon: const Icon(Icons.filter_alt_sharp),
+              tooltip: 'Filter',
             ),
           ),
         ],
@@ -169,6 +170,7 @@ class LyricTile extends ConsumerWidget {
           Navigator.of(context).pop();
         },
         icon: const Icon(Icons.arrow_right),
+        tooltip: 'Use as current lyric',
       ),
     );
   }

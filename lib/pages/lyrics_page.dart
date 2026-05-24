@@ -129,6 +129,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                     onPressed: () {
                       ref.read(lyricDelayProvider.notifier).increaseDelay(100);
                     },
+                    tooltip: 'Increase delay',
                     child: const Icon(Icons.arrow_upward_rounded),
                   ),
                   FloatingActionButton.small(
@@ -136,6 +137,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                     onPressed: () {
                       ref.read(lyricDelayProvider.notifier).decreaseDelay(100);
                     },
+                    tooltip: 'Decrease delay',
                     child: const Icon(Icons.arrow_downward_rounded),
                   ),
                 ],
@@ -157,6 +159,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                 );
               },
               icon: const Icon(Icons.search),
+              tooltip: 'Search',
             ),
           ),
         ),
