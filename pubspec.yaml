@@ -11,6 +11,7 @@ environment:
 dependencies:
   cached_network_image: ^3.4.1
   chopper: ^8.5.1
+  collection: ^1.19.1
   crypto: ^3.0.6
   flutter:
     sdk: flutter
@@ -21,6 +22,8 @@ dependencies:
   network_info_plus: ^7.0.0
   qr_flutter: ^4.1.0
   riverpod_annotation: ^4.0.0
+  romanize: ^0.0.3
+  scrollable_positioned_list: ^0.3.8
   shared_preferences: ^2.5.3
   shelf: ^1.4.2
   url_launcher: ^6.3.1

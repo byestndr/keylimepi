@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/authentication_setup_page.dart';
+import 'package:spotimmich/pages/authentication_setup_page.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 import 'package:spotimmich/settings/appearancepage.dart';
 import 'package:spotimmich/settings/immich/immichpage.dart';
+import 'package:spotimmich/settings/lyricSettings.dart';
 import 'package:spotimmich/settings/preferences.dart';
 import 'package:spotimmich/settings/spotify/spotifypage.dart';
 import 'package:spotimmich/settings/weatherdialog.dart';
@@ -51,6 +52,19 @@ class SettingsList extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) => const SpotifyPage(),
+              ),
+            );
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.lyrics),
+          title: const Text('Lyric Settings'),
+          subtitle: const Text('Customize lyric page settings.'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const LyricSettings(),
               ),
             );
           },

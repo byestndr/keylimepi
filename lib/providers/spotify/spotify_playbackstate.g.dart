@@ -89,7 +89,7 @@ final class SpotifyAuthenticatedProvider
 }
 
 String _$spotifyAuthenticatedHash() =>
-    r'0b062cc9a15e5778d3c48d5244344dd843ac7571';
+    r'f946b80c871b484c787fb273cb5155db9c460d02';
 
 abstract class _$SpotifyAuthenticated extends $Notifier<bool> {
   bool build();

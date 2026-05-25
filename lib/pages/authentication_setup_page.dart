@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/app_body.dart';
+import 'package:spotimmich/pages/app_body.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 import 'package:spotimmich/settings/spotify/spotifypage.dart';
 
