@@ -25,7 +25,7 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
       appBar: AppBar(
         title: const Text('Search lyrics'),
 
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
@@ -52,7 +52,7 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
               child: Column(
                 crossAxisAlignment: .center,
                 mainAxisAlignment: .center,
-                children: [
+                children: <Widget>[
                   Text(
                     '(⁠｡⁠ŏ⁠﹏⁠ŏ⁠)',
                     style: TextStyle(
@@ -106,7 +106,7 @@ class _LyricSearchState extends ConsumerState<LyricSearchPage> {
           child: Column(
             crossAxisAlignment: .center,
             mainAxisAlignment: .center,
-            children: [
+            children: <Widget>[
               Text(
                 '(⁠┛⁠◉⁠Д⁠◉⁠)⁠┛⁠彡⁠┻⁠━⁠┻',
                 style: TextStyle(fontSize: 48, color: Colors.grey),
@@ -147,7 +147,10 @@ class LyricTile extends ConsumerWidget {
     }
 
     return ListTile(
-      title: Text('${lyric['name']} - ${lyric['artistName']}'),
+      title: Text(
+        '${lyric['name']} - ${lyric['artistName']}',
+        style: const TextStyle(fontFamilyFallback: <String>['NotoSansJP']),
+      ),
       onTap: () {
         showDialog(
           context: context,
@@ -157,7 +160,7 @@ class LyricTile extends ConsumerWidget {
       },
       subtitle: Column(
         crossAxisAlignment: .start,
-        children: [
+        children: <Widget>[
           Text("Duration: $minutes:$newSeconds"),
           Text('First lyric at: ${firstTimestamp!.group(0)}'),
         ],
@@ -185,12 +188,12 @@ class ShowLyricDialog extends StatelessWidget {
     return SimpleDialog(
       title: Column(
         crossAxisAlignment: .start,
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
             child: Row(
               mainAxisAlignment: .spaceBetween,
-              children: [
+              children: <Widget>[
                 const Text('Lyrics'),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -202,7 +205,7 @@ class ShowLyricDialog extends StatelessWidget {
           const Divider(),
         ],
       ),
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: Text(lyrics, softWrap: true),
@@ -222,12 +225,12 @@ class LyricSearchFilterDialog extends ConsumerWidget {
     return SimpleDialog(
       title: Column(
         crossAxisAlignment: .start,
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
             child: Row(
               mainAxisAlignment: .spaceBetween,
-              children: [
+              children: <Widget>[
                 const Text('Filter by...'),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -239,11 +242,11 @@ class LyricSearchFilterDialog extends ConsumerWidget {
           const Divider(),
         ],
       ),
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 10),
           child: Column(
-            children: [
+            children: <Widget>[
               ListTile(
                 title: const Text('Album'),
                 trailing: Switch(
