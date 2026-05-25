@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/providers/lyrics_provider.dart';
+import 'package:spotimmich/providers/lyrics/lyrics_provider.dart';
+import 'package:spotimmich/providers/lyrics/search_provider.dart';
 import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
 import 'package:spotimmich/providers/theme/colorscheme.dart';
 import 'package:spotimmich/providers/theme/album_art_provider.dart';

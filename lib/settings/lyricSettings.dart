@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/lyrics_provider.dart';
+import 'package:spotimmich/providers/lyrics/lyrics_provider.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/settings/preferences.dart';
 

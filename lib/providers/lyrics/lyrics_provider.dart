@@ -1,104 +1,12 @@
-import 'dart:convert';
-
 import 'package:chopper/src/response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:http/http.dart' as http;
-import 'package:romanize/romanize.dart';
-import 'package:spotimmich/backend/lyric/lyric_api.dart';
+import 'package:spotimmich/lyrics/backend/lyric_api.dart';
+import 'package:spotimmich/providers/lyrics/lyric_classes.dart';
 import 'package:spotimmich/providers/settings_provider.dart';
 import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
 import 'package:spotimmich/providers/spotify/song_info_provider.dart';
 
 part 'lyrics_provider.g.dart';
-
-class LyricLine {
-  Duration timestamp;
-  String line;
-  LyricLine({required this.line, required this.timestamp});
-
-  static List<LyricLine> fromSyncedLyrics(String lyrics) {
-    final List<String> splitLyrics = const LineSplitter().convert(lyrics);
-    List<LyricLine> lyricsList = <LyricLine>[];
-    for (final String line in splitLyrics) {
-      final RegExp regEx = RegExp(r'\[(\d+):(\d{2}(?:\.\d+)?)\]');
-      final String? unprocesssedTimestamp = regEx.stringMatch(line);
-
-      if (unprocesssedTimestamp == null) {
-        continue;
-      }
-
-      final String bracketlessTimestamp = unprocesssedTimestamp.replaceAll(
-        RegExp(r'\[|\]'),
-        '',
-      );
-      final List<String> splitTimestamp = bracketlessTimestamp.split(':');
-      final int timestampMinute = int.parse(splitTimestamp[0]);
-
-      final List<String> splitSeconds = splitTimestamp[1].split('.');
-      final int timestampSeconds = int.parse(splitSeconds[0]);
-      final int timestampMiliseconds = int.parse(splitSeconds[1]);
-
-      final Duration timestamp = Duration(
-        minutes: timestampMinute,
-        seconds: timestampSeconds,
-        milliseconds: timestampMiliseconds,
-      );
-
-      final String lyricLine = line
-          .replaceAll(unprocesssedTimestamp!, '')
-          .trim();
-
-      lyricsList.add(LyricLine(line: lyricLine, timestamp: timestamp));
-    }
-    return lyricsList;
-  }
-
-  Future<LyricLine> romanize() async {
-    if (line.isEmpty) {
-      return LyricLine(line: line, timestamp: timestamp);
-    }
-
-    final Romanizer analyzedText = TextRomanizer.detectLanguage(line);
-    if (analyzedText.language != 'japanese') {
-      final String romanizedText = analyzedText.romanize(line);
-      return LyricLine(line: romanizedText, timestamp: timestamp);
-    }
-
-    final Map<String, dynamic> romanizedLyrics = await _getRomanizedLyrics();
-
-    return LyricLine(line: romanizedLyrics['converted'], timestamp: timestamp);
-  }
-
-  Future<Map<String, dynamic>> _getRomanizedLyrics() async {
-    final Uri romajiURI = Uri(
-      scheme: 'https',
-      host: 'yomi.onrender.com',
-      path: '/analyze',
-    );
-    final http.Response response = await http.post(
-      romajiURI,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: {
-        'text': line,
-        'to': 'romaji',
-        'romaji_system': 'hepburn',
-        'mode': 'spaced',
-      },
-    );
-
-    // Body is a string so some reason, so we decode twice.
-    final dynamic strippedString = jsonDecode(response.body);
-    final Map<String, dynamic> convertedBody = jsonDecode(strippedString);
-
-    return convertedBody;
-  }
-}
-
-class SearchFilter {
-  bool artist;
-  bool album;
-  SearchFilter({required this.album, required this.artist});
-}
 
 @Riverpod(keepAlive: true)
 class LyricsGetter extends _$LyricsGetter {
@@ -230,53 +138,6 @@ class CurrentLyricIndex extends _$CurrentLyricIndex {
     final int lyricIndex = lyricIndexList[(adjustedPosition / 10).floor()];
 
     return lyricIndex;
-  }
-}
-
-@riverpod
-class LyricSearch extends _$LyricSearch {
-  @override
-  Future<List<dynamic>> build() {
-    return _searchLyrics();
-  }
-
-  Future<List<dynamic>> _searchLyrics() async {
-    final Song currentSong = await ref.read(infoGetterProvider.future);
-    final SearchFilter searchFilters = ref.watch(lyricSearchFilterProvider);
-
-    final LyricService lyricService = LyricService.create();
-    final Response<dynamic> response = await lyricService.searchLyrics(
-      trackName: currentSong.title,
-      artistName: searchFilters.artist == true ? currentSong.artist : null,
-      albumName: searchFilters.album == true ? currentSong.album : null,
-    );
-
-    final List<dynamic> responseBody = response.body;
-    if (responseBody.isEmpty) {
-      return [];
-    }
-
-    final Iterable<dynamic> syncedLyrics = responseBody.where(
-      (dynamic element) => element['syncedLyrics'] != null,
-    );
-
-    return Future.value(syncedLyrics.toList());
-  }
-}
-
-@riverpod
-class LyricSearchFilter extends _$LyricSearchFilter {
-  @override
-  SearchFilter build() {
-    return SearchFilter(album: true, artist: true);
-  }
-
-  void changeFilterSettings({bool? album, bool? artist}) {
-    state = SearchFilter(
-      album: album ?? state.album,
-      artist: artist ?? state.artist,
-    );
-    return;
   }
 }
 

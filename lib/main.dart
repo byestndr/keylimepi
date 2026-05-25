@@ -65,7 +65,7 @@ class AppEntrypoint extends ConsumerWidget {
           skipLoadingOnReload: true,
           data: (ColorScheme appscheme) => appscheme,
           error: (Object error, StackTrace stacktrace) {
-            ColorScheme.fromSeed(
+            return ColorScheme.fromSeed(
               seedColor: Colors.lightGreen,
               brightness: Brightness.dark,
             );
