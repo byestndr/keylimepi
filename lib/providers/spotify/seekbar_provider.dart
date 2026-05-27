@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 
 part 'seekbar_provider.g.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/settings/preferences.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/settings/preferences.dart';
 
 class AppearancePage extends StatelessWidget {
   const AppearancePage({super.key});

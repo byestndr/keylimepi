@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/immich/immichalbumdialog.dart';
-import 'package:spotimmich/settings/immich/immichtokendialog.dart';
-import 'package:spotimmich/settings/immich/immichserverdialog.dart';
+import 'package:key_limepi/settings/immich/immichalbumdialog.dart';
+import 'package:key_limepi/settings/immich/immichtokendialog.dart';
+import 'package:key_limepi/settings/immich/immichserverdialog.dart';
 
 class ImmichPage extends StatelessWidget {
   const ImmichPage({super.key});

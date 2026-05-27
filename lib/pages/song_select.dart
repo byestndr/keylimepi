@@ -2,14 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/widgets/carousels/album_carousel.dart';
-import 'package:spotimmich/widgets/carousels/liked_songs.dart';
-import 'package:spotimmich/widgets/carousels/playlist_carousel.dart';
-import 'package:spotimmich/providers/spotify/album_provider.dart';
-import 'package:spotimmich/providers/spotify/likedSongs_provider.dart';
-import 'package:spotimmich/providers/spotify/playlists_provider.dart';
-import 'package:spotimmich/widgets/info/songimage.dart';
-import 'package:spotimmich/widgets/info/songinfo.dart';
+import 'package:key_limepi/widgets/carousels/album_carousel.dart';
+import 'package:key_limepi/widgets/carousels/liked_songs.dart';
+import 'package:key_limepi/widgets/carousels/playlist_carousel.dart';
+import 'package:key_limepi/providers/spotify/album_provider.dart';
+import 'package:key_limepi/providers/spotify/likedSongs_provider.dart';
+import 'package:key_limepi/providers/spotify/playlists_provider.dart';
+import 'package:key_limepi/widgets/info/songimage.dart';
+import 'package:key_limepi/widgets/info/songinfo.dart';
 
 class SongSelect extends ConsumerStatefulWidget {
   const SongSelect({super.key});

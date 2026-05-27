@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/lyrics/widgets/search_widgets.dart';
-import 'package:spotimmich/providers/lyrics/search_provider.dart';
+import 'package:key_limepi/lyrics/widgets/search_widgets.dart';
+import 'package:key_limepi/providers/lyrics/search_provider.dart';
 
 class LyricSearchPage extends ConsumerStatefulWidget {
   const LyricSearchPage({super.key});

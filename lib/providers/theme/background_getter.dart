@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/settings/immich/immichpreferences.dart';
+import 'package:key_limepi/settings/immich/immichpreferences.dart';
 
 part 'background_getter.g.dart';
 

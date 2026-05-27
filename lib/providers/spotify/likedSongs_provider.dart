@@ -1,6 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/backend/spotify/spotify_api.dart';
+import 'package:key_limepi/backend/spotify/spotify_api.dart';
 
 part 'likedSongs_provider.g.dart';
 

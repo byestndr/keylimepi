@@ -1,8 +1,8 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/backend/spotify/spotify_authentication.dart';
+import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 
 class AccessToken extends StatefulWidget {
   const AccessToken({super.key});

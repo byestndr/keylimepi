@@ -1,14 +1,14 @@
 import 'package:chopper/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/pages/app_body.dart';
+import 'package:key_limepi/pages/app_body.dart';
 import 'package:flutter/gestures.dart';
-import 'package:spotimmich/pages/authentication_setup_page.dart';
-import 'package:spotimmich/backend/spotify/spotify_api.dart';
-import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/providers/theme/colorscheme.dart';
-import 'package:spotimmich/settings/preferences.dart';
+import 'package:key_limepi/pages/authentication_setup_page.dart';
+import 'package:key_limepi/backend/spotify/spotify_api.dart';
+import 'package:key_limepi/backend/spotify/spotify_authentication.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/providers/theme/colorscheme.dart';
+import 'package:key_limepi/settings/preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

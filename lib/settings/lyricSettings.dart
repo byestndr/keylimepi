@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/lyrics/lyrics_provider.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/settings/preferences.dart';
+import 'package:key_limepi/providers/lyrics/lyrics_provider.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/settings/preferences.dart';
 
 class LyricSettings extends ConsumerStatefulWidget {
   const LyricSettings({super.key});

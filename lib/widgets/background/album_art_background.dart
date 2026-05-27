@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/providers/theme/album_art_provider.dart';
-import 'package:spotimmich/providers/theme/background_getter.dart';
-import 'package:spotimmich/settings/preferences.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/providers/theme/album_art_provider.dart';
+import 'package:key_limepi/providers/theme/background_getter.dart';
+import 'package:key_limepi/settings/preferences.dart';
 
 class AlbumArtBackground extends ConsumerWidget {
   const AlbumArtBackground({super.key});

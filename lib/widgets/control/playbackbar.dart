@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/settings/preferences.dart';
-import 'package:spotimmich/widgets/control/controls.dart';
-import 'package:spotimmich/widgets/info/weatherwidget.dart';
-import 'package:spotimmich/widgets/control/seekbar.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/widgets/control/controls.dart';
+import 'package:key_limepi/widgets/info/weatherwidget.dart';
+import 'package:key_limepi/widgets/control/seekbar.dart';
 
 class BottomPlaybar extends ConsumerWidget {
   const BottomPlaybar({super.key});

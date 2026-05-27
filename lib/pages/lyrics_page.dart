@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:spotimmich/lyrics/widgets/delay_info.dart';
-import 'package:spotimmich/lyrics/widgets/lyric_line.dart';
-import 'package:spotimmich/pages/lyrics_search.dart';
-import 'package:spotimmich/providers/lyrics/lyric_classes.dart';
-import 'package:spotimmich/providers/lyrics/lyrics_provider.dart';
-import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/lyrics/widgets/delay_info.dart';
+import 'package:key_limepi/lyrics/widgets/lyric_line.dart';
+import 'package:key_limepi/pages/lyrics_search.dart';
+import 'package:key_limepi/providers/lyrics/lyric_classes.dart';
+import 'package:key_limepi/providers/lyrics/lyrics_provider.dart';
+import 'package:key_limepi/providers/spotify/seekbar_provider.dart';
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 
 class LyricsPage extends ConsumerStatefulWidget {
   const LyricsPage({super.key});

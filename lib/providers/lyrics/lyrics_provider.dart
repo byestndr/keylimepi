@@ -1,10 +1,10 @@
 import 'package:chopper/src/response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/lyrics/backend/lyric_api.dart';
-import 'package:spotimmich/providers/lyrics/lyric_classes.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/providers/spotify/seekbar_provider.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/lyrics/backend/lyric_api.dart';
+import 'package:key_limepi/providers/lyrics/lyric_classes.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/providers/spotify/seekbar_provider.dart';
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 
 part 'lyrics_provider.g.dart';
 

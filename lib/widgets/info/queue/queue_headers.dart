@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
-import 'package:spotimmich/widgets/info/queue/queue_components.dart';
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/widgets/info/queue/queue_components.dart';
 
 class QueueHeader extends SliverPersistentHeaderDelegate {
   @override

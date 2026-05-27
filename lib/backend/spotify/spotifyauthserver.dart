@@ -4,7 +4,7 @@ import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'dart:io';
 import 'package:chopper/chopper.dart' as chopper;
 
-import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
+import 'package:key_limepi/backend/spotify/spotify_authentication.dart';
 
 class Server {
   HttpServer? server;

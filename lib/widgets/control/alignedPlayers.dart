@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/settings/preferences.dart';
-import 'package:spotimmich/widgets/control/controls.dart';
-import 'package:spotimmich/widgets/info/songimage.dart';
-import 'package:spotimmich/widgets/info/songinfo.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/widgets/control/controls.dart';
+import 'package:key_limepi/widgets/info/songimage.dart';
+import 'package:key_limepi/widgets/info/songinfo.dart';
 
 const int _imageBreakpoint = 360;
 const double _imageRadius = 15;

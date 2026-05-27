@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/spotify/queue_provider.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
-import 'package:spotimmich/widgets/info/queue/queue_components.dart';
-import 'package:spotimmich/widgets/info/queue/queue_headers.dart';
+import 'package:key_limepi/providers/spotify/queue_provider.dart';
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/widgets/info/queue/queue_components.dart';
+import 'package:key_limepi/widgets/info/queue/queue_headers.dart';
 
 class BottomSheetQueue extends ConsumerStatefulWidget {
   const BottomSheetQueue({super.key});

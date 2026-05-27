@@ -1,8 +1,8 @@
 import 'package:chopper/src/response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/backend/spotify/spotify_api.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/backend/spotify/spotify_api.dart';
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 
 part 'queue_provider.g.dart';
 

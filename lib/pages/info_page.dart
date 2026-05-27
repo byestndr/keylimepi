@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/pages/lyrics_page.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/providers/theme/background_getter.dart';
-import 'package:spotimmich/widgets/background/album_art_background.dart';
-import 'package:spotimmich/widgets/control/alignedPlayers.dart';
-import 'package:spotimmich/settings/preferences.dart';
-import 'package:spotimmich/widgets/background/immich_background_carousel.dart';
-import 'package:spotimmich/widgets/control/seekbar.dart';
+import 'package:key_limepi/pages/lyrics_page.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/providers/theme/background_getter.dart';
+import 'package:key_limepi/widgets/background/album_art_background.dart';
+import 'package:key_limepi/widgets/control/alignedPlayers.dart';
+import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/widgets/background/immich_background_carousel.dart';
+import 'package:key_limepi/widgets/control/seekbar.dart';
 
 class MediaWidget extends ConsumerWidget {
   const MediaWidget({super.key});

@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 
 part 'album_art_provider.g.dart';
 

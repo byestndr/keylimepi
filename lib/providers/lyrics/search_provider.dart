@@ -1,6 +1,6 @@
 import 'package:chopper/chopper.dart';
-import 'package:spotimmich/lyrics/backend/lyric_api.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/lyrics/backend/lyric_api.dart';
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'search_provider.g.dart';

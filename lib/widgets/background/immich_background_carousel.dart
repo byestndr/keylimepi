@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/providers/theme/background_getter.dart';
+import 'package:key_limepi/providers/theme/background_getter.dart';
 
 class ImmichCarousel extends ConsumerStatefulWidget {
   const ImmichCarousel({super.key});

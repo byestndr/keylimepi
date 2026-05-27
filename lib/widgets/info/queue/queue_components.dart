@@ -3,9 +3,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/backend/spotify/spotify_api.dart';
-import 'package:spotimmich/providers/spotify/song_info_provider.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/backend/spotify/spotify_api.dart';
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 
 class QueueError extends StatelessWidget {
   const QueueError({super.key});

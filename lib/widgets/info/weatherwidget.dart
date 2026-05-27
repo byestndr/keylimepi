@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/weatherdialog.dart';
+import 'package:key_limepi/settings/weatherdialog.dart';
 import 'dart:async';
 
-import 'package:spotimmich/settings/weatherrequest.dart';
+import 'package:key_limepi/settings/weatherrequest.dart';
 
 
 enum WeatherCodeEnum {

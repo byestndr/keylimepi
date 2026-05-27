@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:spotimmich/providers/lyrics/lyrics_provider.dart';
-import 'package:spotimmich/providers/lyrics/search_provider.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
-import 'package:spotimmich/providers/theme/colorscheme.dart';
-import 'package:spotimmich/providers/theme/album_art_provider.dart';
+import 'package:key_limepi/providers/lyrics/lyrics_provider.dart';
+import 'package:key_limepi/providers/lyrics/search_provider.dart';
+import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/providers/theme/colorscheme.dart';
+import 'package:key_limepi/providers/theme/album_art_provider.dart';
 
 part 'song_info_provider.g.dart';
 

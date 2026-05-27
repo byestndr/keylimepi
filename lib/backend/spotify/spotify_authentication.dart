@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:chopper/chopper.dart';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
-import 'package:spotimmich/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences.dart';
 
 part 'spotify_authentication.chopper.dart';
 

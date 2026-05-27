@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/backend/spotify/spotify_authentication.dart';
+import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:spotimmich/settings/spotify/spotifytokendialog.dart';
-import 'package:spotimmich/backend/spotify/spotifyauthserver.dart';
+import 'package:key_limepi/settings/spotify/spotifytokendialog.dart';
+import 'package:key_limepi/backend/spotify/spotifyauthserver.dart';
 
 class SpotifyPage extends StatelessWidget {
   const SpotifyPage({super.key});

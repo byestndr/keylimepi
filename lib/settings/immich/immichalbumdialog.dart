@@ -1,4 +1,4 @@
-import 'package:spotimmich/settings/immich/immichpreferences.dart';
+import 'package:key_limepi/settings/immich/immichpreferences.dart';
 import 'package:flutter/material.dart';
 
 class AlbumID extends StatefulWidget {

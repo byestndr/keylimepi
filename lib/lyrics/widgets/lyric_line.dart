@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/backend/spotify/spotify_api.dart';
-import 'package:spotimmich/providers/lyrics/lyric_classes.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
+import 'package:key_limepi/backend/spotify/spotify_api.dart';
+import 'package:key_limepi/providers/lyrics/lyric_classes.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
 
 class LyricLineWidget extends ConsumerStatefulWidget {
   final bool isCurrentLyric;

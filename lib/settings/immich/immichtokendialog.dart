@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/immich/immichpreferences.dart';
+import 'package:key_limepi/settings/immich/immichpreferences.dart';
 
 class ImmichToken extends StatefulWidget {
   const ImmichToken({super.key});

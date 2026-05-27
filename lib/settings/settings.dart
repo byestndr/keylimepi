@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotimmich/pages/authentication_setup_page.dart';
-import 'package:spotimmich/providers/settings_provider.dart';
-import 'package:spotimmich/providers/spotify/spotify_playbackstate.dart';
-import 'package:spotimmich/settings/appearancepage.dart';
-import 'package:spotimmich/settings/immich/immichpage.dart';
-import 'package:spotimmich/settings/lyricSettings.dart';
-import 'package:spotimmich/settings/preferences.dart';
-import 'package:spotimmich/settings/spotify/spotifypage.dart';
-import 'package:spotimmich/settings/weatherdialog.dart';
+import 'package:key_limepi/pages/authentication_setup_page.dart';
+import 'package:key_limepi/providers/settings_provider.dart';
+import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/settings/appearancepage.dart';
+import 'package:key_limepi/settings/immich/immichpage.dart';
+import 'package:key_limepi/settings/lyricSettings.dart';
+import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/spotify/spotifypage.dart';
+import 'package:key_limepi/settings/weatherdialog.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

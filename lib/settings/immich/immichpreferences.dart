@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:spotimmich/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ImmichPreferences {

@@ -1,7 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'dart:async';
 
-import 'package:spotimmich/backend/spotify/spotify_authentication.dart';
+import 'package:key_limepi/backend/spotify/spotify_authentication.dart';
 
 part 'spotify_api.chopper.dart';
 
