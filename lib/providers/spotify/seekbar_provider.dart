@@ -65,22 +65,32 @@ class SeekbarPosition extends _$SeekbarPosition {
   FutureOr<void> updateSliderPosition() async {
     final bool isPaused = ref.read(seekbarPauseProvider);
 
-    if (state.currentPosition.inMilliseconds == 0 ||
-        isPaused ||
-        state.refreshCount == 25) {
+    // Checks if we need to pull a new state.
+    if (_isNewState()) {
       await _getNewSliderPosition();
+      return;
     }
 
     if (isPaused) {
       return;
     }
 
-    if (state.refreshCount < 25) {
-      _incrementSliderPosition();
-      return;
+    _incrementSliderPosition();
+
+    // If it's the end of the song, we pull the new 
+    // playback state to get the new song.
+    if (state.currentPosition == state.maxPosition) {
+      ref.invalidate(spotifyPlaybackStateProvider);
     }
 
     return;
+  }
+
+  bool _isNewState() {
+    final bool isPaused = ref.read(seekbarPauseProvider);
+    return state.currentPosition.inMilliseconds == 0 ||
+        isPaused ||
+        state.refreshCount == 25;
   }
 
   void _incrementSliderPosition() {
