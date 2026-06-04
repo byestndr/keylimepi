@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 
@@ -74,10 +75,10 @@ class SeekbarPosition extends _$SeekbarPosition {
     if (isPaused) {
       return;
     }
-
+    // print(state.currentPosition);
     _incrementSliderPosition();
 
-    // If it's the end of the song, we pull the new 
+    // If it's the end of the song, we pull the new
     // playback state to get the new song.
     if (state.currentPosition == state.maxPosition) {
       ref.invalidate(spotifyPlaybackStateProvider);
@@ -110,7 +111,7 @@ class SeekbarPosition extends _$SeekbarPosition {
     return;
   }
 
-  FutureOr<void> _getNewSliderPosition() async {
+  FutureOr<SeekbarTime> _getNewSliderPosition() async {
     final dynamic currentPlaybackState = await ref.read(
       spotifyPlaybackStateProvider.future,
     );
@@ -120,8 +121,16 @@ class SeekbarPosition extends _$SeekbarPosition {
         currentPosition: const Duration(milliseconds: 0),
         maxPosition: const Duration(milliseconds: 1),
       );
-      return;
+      return SeekbarTime(
+        currentPosition: const Duration(milliseconds: 0),
+        maxPosition: const Duration(milliseconds: 1),
+      );
     }
+
+    final SeekbarTime errorDuration = SeekbarTime(
+      currentPosition: const Duration(milliseconds: 0),
+      maxPosition: state.maxPosition,
+    );
 
     try {
       final double newMaxPosition =
@@ -132,27 +141,27 @@ class SeekbarPosition extends _$SeekbarPosition {
 
       final bool isPlaying = currentPlaybackState.body['is_playing'];
       ref.read(seekbarPauseProvider.notifier).setValue(!isPlaying);
+      ref.read(songLatencyProvider.notifier).stopStopwatch();
+      final int latency = ref.read(songLatencyProvider).elapsed.inMilliseconds;
 
-      state = SeekbarTime(
-        currentPosition: Duration(milliseconds: newCurrentPosition.toInt()),
+      final SeekbarTime newPositionInfo = SeekbarTime(
+        currentPosition: Duration(
+          milliseconds: newCurrentPosition.toInt() + latency,
+        ),
         maxPosition: Duration(milliseconds: newMaxPosition.toInt()),
         refreshCount: refreshCount,
       );
-      return;
+
+      state = newPositionInfo;
+      return Future.value(newPositionInfo);
     } on NoSuchMethodError {
-      state = SeekbarTime(
-        currentPosition: const Duration(milliseconds: 0),
-        maxPosition: state.maxPosition,
-      );
-      return;
+      state = errorDuration;
+      return errorDuration;
 
       // All other exceptions
     } on Exception {
-      state = SeekbarTime(
-        currentPosition: const Duration(milliseconds: 0),
-        maxPosition: state.maxPosition,
-      );
-      return;
+      state = errorDuration;
+      return errorDuration;
     }
   }
 }
