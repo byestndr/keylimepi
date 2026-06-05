@@ -1,6 +1,7 @@
 import 'package:chopper/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:key_limepi/pages/app_body.dart';
 import 'package:flutter/gestures.dart';
 import 'package:key_limepi/pages/authentication_setup_page.dart';
@@ -22,6 +23,8 @@ void main() async {
   } on NotAuthenticatedException {
     authenticated = false;
   }
+
+  await Hive.initFlutter();
 
   runApp(
     ProviderScope(
