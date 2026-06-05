@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:key_limepi/lyrics/backend/lyric_cache.dart';
 import 'package:key_limepi/lyrics/providers/lyrics_provider.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/settings/preferences.dart';
@@ -95,9 +96,54 @@ class _LyricsettiSgsState extends ConsumerState<LyricSettings> {
               ],
             ),
           ),
+          ListTile(
+            title: const Text('Clear lyric cache'),
+            leading: const Icon(Icons.delete),
+            subtitle: const Text(
+              'Clears the built up lyric cache. Temporarily makes song lyrics load slower.',
+            ),
+            onTap: () => showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const ClearCacheDialog();
+              },
+            ),
+          ),
         ],
       ),
       appBar: AppBar(title: const Text('Lyric Settings')),
+    );
+  }
+}
+
+class ClearCacheDialog extends StatelessWidget {
+  const ClearCacheDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Reset Settings'),
+      content: const Text(
+        'Are you sure you want to clear all lyrics cache? This will make the loading of lyrics slower until the cache is built up again.',
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            await LyricCacheService.clearCache();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Cleared all lyrics from cache')),
+            );
+            Navigator.of(context).pop();
+          },
+          child: const Text('Confirm'),
+        ),
+      ],
     );
   }
 }
