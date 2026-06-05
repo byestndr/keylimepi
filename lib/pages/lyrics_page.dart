@@ -6,8 +6,8 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:key_limepi/lyrics/widgets/delay_info.dart';
 import 'package:key_limepi/lyrics/widgets/lyric_line.dart';
 import 'package:key_limepi/pages/lyrics_search.dart';
-import 'package:key_limepi/providers/lyrics/lyric_classes.dart';
-import 'package:key_limepi/providers/lyrics/lyrics_provider.dart';
+import 'package:key_limepi/lyrics/providers/lyric_classes.dart';
+import 'package:key_limepi/lyrics/providers/lyrics_provider.dart';
 import 'package:key_limepi/providers/spotify/seekbar_provider.dart';
 import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 
@@ -119,6 +119,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
               );
             },
             error: (Object error, StackTrace stackTrace) {
+              print(error.toString());
               return ListView(
                 padding: EdgeInsets.symmetric(
                   vertical: MediaQuery.of(context).size.height / 3,

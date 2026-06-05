@@ -1,7 +1,7 @@
 import 'package:key_limepi/providers/spotify/seekbar_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:key_limepi/providers/lyrics/lyrics_provider.dart';
-import 'package:key_limepi/providers/lyrics/search_provider.dart';
+import 'package:key_limepi/lyrics/providers/lyrics_provider.dart';
+import 'package:key_limepi/lyrics/providers/search_provider.dart';
 import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 import 'package:key_limepi/providers/theme/colorscheme.dart';
 import 'package:key_limepi/providers/theme/album_art_provider.dart';

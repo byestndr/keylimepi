@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/backend/spotify/spotify_api.dart';
-import 'package:key_limepi/providers/lyrics/lyric_classes.dart';
+import 'package:key_limepi/lyrics/providers/lyric_classes.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 
 class LyricLineWidget extends ConsumerStatefulWidget {

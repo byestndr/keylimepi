@@ -1,7 +1,9 @@
 import 'package:chopper/src/response.dart';
+import 'package:key_limepi/lyrics/backend/lyric_cache.dart';
+import 'package:key_limepi/lyrics/providers/cache_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:key_limepi/lyrics/backend/lyric_api.dart';
-import 'package:key_limepi/providers/lyrics/lyric_classes.dart';
+import 'package:key_limepi/lyrics/providers/lyric_classes.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/providers/spotify/seekbar_provider.dart';
 import 'package:key_limepi/providers/spotify/song_info_provider.dart';
@@ -17,6 +19,18 @@ class LyricsGetter extends _$LyricsGetter {
 
   Future<List<LyricLine>> _getNewLyrics() async {
     final Song currentSong = await ref.read(infoGetterProvider.future);
+    final List<LyricLine>? cachedLyrics = await ref.read(
+      lyricCacheProvider.future,
+    );
+    final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
+
+    if (cachedLyrics != null) {
+      if (!romanizationBool) {
+        return cachedLyrics;
+      }
+
+      return await _romanizeLines(cachedLyrics);
+    }
 
     final LyricService lyricService = LyricService.create();
     final Response<dynamic> lyrics = await lyricService.getLyrics(
@@ -41,9 +55,9 @@ class LyricsGetter extends _$LyricsGetter {
 
     // Creates a list of lyric lines from the synced lyrics response
     lyricsList = LyricLine.fromSyncedLyrics(lyrics.body['syncedLyrics']);
+    await LyricCacheService.cacheLyric(currentSong.uri!, lyricsList);
 
     // Checks if romanization is turned on and if it isn't, returns.
-    final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
     if (!romanizationBool) {
       return lyricsList;
     }
@@ -78,7 +92,10 @@ class LyricsGetter extends _$LyricsGetter {
   }
 
   Future<void> overrideLyrics(String lyrics) async {
+    final Song currentSong = await ref.read(infoGetterProvider.future);
+
     List<LyricLine> lyricsList = LyricLine.fromSyncedLyrics(lyrics);
+    await LyricCacheService.cacheLyric(currentSong.uri!, lyricsList);
 
     final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
     if (romanizationBool) {

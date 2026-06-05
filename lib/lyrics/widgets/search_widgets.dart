@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:key_limepi/providers/lyrics/lyrics_provider.dart';
-import 'package:key_limepi/providers/lyrics/search_provider.dart';
+import 'package:key_limepi/lyrics/providers/lyrics_provider.dart';
+import 'package:key_limepi/lyrics/providers/search_provider.dart';
 
 class LyricTile extends ConsumerWidget {
   final dynamic lyric;
