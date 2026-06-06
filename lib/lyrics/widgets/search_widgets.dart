@@ -87,7 +87,11 @@ class ShowLyricDialog extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Text(lyrics, softWrap: true),
+          child: Text(
+            lyrics,
+            softWrap: true,
+            style: const TextStyle(fontFamilyFallback: <String>['NotoSansJP']),
+          ),
         ),
       ],
     );
