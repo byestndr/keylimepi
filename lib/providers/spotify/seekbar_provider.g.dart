@@ -85,7 +85,7 @@ final class GetNewSeekbarPositionProvider
 }
 
 String _$getNewSeekbarPositionHash() =>
-    r'5b25f8796e8054d45186e58861062454e82d49df';
+    r'991cac63418c02409909ac9a319d4901217a49fb';
 
 abstract class _$GetNewSeekbarPosition extends $AsyncNotifier<void> {
   FutureOr<void> build();
@@ -188,4 +188,4 @@ final class SeekbarPauseProvider
   }
 }
 
-String _$seekbarPauseHash() => r'5cf5cbaa836527505ea04a78aa59de6588d5a736';
+String _$seekbarPauseHash() => r'b6206e7c8a1d029c74a0b321598796749fa234b0';

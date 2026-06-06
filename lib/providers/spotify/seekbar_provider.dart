@@ -81,7 +81,9 @@ class GetNewSeekbarPosition extends _$GetNewSeekbarPosition {
         maxPosition: const Duration(milliseconds: 1),
       );
 
-      ref.read(seekbarPositionProvider.notifier).overrideSliderPostition(errorDuration);
+      ref
+          .read(seekbarPositionProvider.notifier)
+          .overrideSliderPostition(errorDuration);
     }
 
     final SeekbarTime existingErrorDuration = SeekbarTime(
@@ -113,7 +115,7 @@ class GetNewSeekbarPosition extends _$GetNewSeekbarPosition {
       ref
           .read(seekbarPositionProvider.notifier)
           .overrideSliderPostition(newPositionInfo);
-    } on NoSuchMethodError {
+    } on Error {
       ref
           .read(seekbarPositionProvider.notifier)
           .overrideSliderPostition(existingErrorDuration);
@@ -191,7 +193,11 @@ Future<bool> seekbarPause(Ref ref) async {
   final Response<dynamic> currentPlaybackState = await ref.watch(
     spotifyPlaybackStateProvider.future,
   );
-
-  final bool isPlaying = currentPlaybackState.body['is_playing'];
+  late bool isPlaying;
+  try {
+    isPlaying = currentPlaybackState.body['is_playing'];
+  } on TypeError {
+    isPlaying = true;
+  }
   return !isPlaying;
 }
