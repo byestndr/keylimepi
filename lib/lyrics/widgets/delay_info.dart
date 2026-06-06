@@ -9,60 +9,27 @@ class DelayInfo extends ConsumerStatefulWidget {
   ConsumerState<DelayInfo> createState() => _DelayInfoState();
 }
 
-class _DelayInfoState extends ConsumerState<DelayInfo>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Offset> _offsetAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-
-    _offsetAnimation =
-        Tween<Offset>(begin: Offset.zero, end: const Offset(0, 1)).animate(
-          CurvedAnimation(
-            parent: _controller,
-            curve: const Cubic(0.2, 0.0, 0, 1.0),
-          ),
-        );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _DelayInfoState extends ConsumerState<DelayInfo> {
   @override
   Widget build(BuildContext context) {
     final int delay = ref.watch(lyricDelayProvider);
 
-    if (delay == 0) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
-
-    return SlideTransition(
-      position: _offsetAnimation,
-      child: Material(
-        type: .button,
-        borderRadius: BorderRadius.circular(12),
-        clipBehavior: .antiAlias,
-        color: Colors.transparent,
-        elevation: delay == 0 ? 0 : 6,
+    return Material(
+      type: .button,
+      borderRadius: BorderRadius.circular(12),
+      clipBehavior: .antiAlias,
+      color: Theme.of(context).colorScheme.primaryContainer,
+      elevation: delay == 0 ? 0 : 6,
+      child: InkWell(
+        onTap: () {
+          ref.read(lyricDelayProvider.notifier).resetDelay();
+        },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          constraints: const BoxConstraints(minWidth: 100),
-          height: 40,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOutCubicEmphasized,
+          width: delay == 0 ? 0 : 100,
+          height: delay == 0 ? 0 : 40,
           alignment: Alignment.center,
-          color: delay == 0
-              ? Colors.black.withAlpha(0)
-              : Theme.of(context).colorScheme.primaryContainer,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(

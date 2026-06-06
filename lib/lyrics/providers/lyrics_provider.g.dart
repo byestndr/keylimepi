@@ -166,7 +166,7 @@ final class LyricDelayProvider extends $NotifierProvider<LyricDelay, int> {
   }
 }
 
-String _$lyricDelayHash() => r'e3464d204c6f5eb79289540b360a8f8bb57510db';
+String _$lyricDelayHash() => r'686a2265cc8ad0877b0a80fb5d8142d80f9c52de';
 
 abstract class _$LyricDelay extends $Notifier<int> {
   int build();

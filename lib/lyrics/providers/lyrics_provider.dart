@@ -175,4 +175,9 @@ class LyricDelay extends _$LyricDelay {
     state = state - delay;
     return;
   }
+
+  void resetDelay() {
+    state = 0;
+    return;
+  }
 }
