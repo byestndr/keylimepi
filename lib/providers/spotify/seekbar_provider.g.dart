@@ -40,7 +40,7 @@ final class SeekbarTimerProvider extends $NotifierProvider<SeekbarTimer, int> {
   }
 }
 
-String _$seekbarTimerHash() => r'0a8cfa86f49f10ad7f308b75d9b24ba386e740d4';
+String _$seekbarTimerHash() => r'a3de5f88a9535f6abe43fc7bf2656a342266ae46';
 
 abstract class _$SeekbarTimer extends $Notifier<int> {
   int build();
@@ -53,6 +53,51 @@ abstract class _$SeekbarTimer extends $Notifier<int> {
             as $ClassProviderElement<
               AnyNotifier<int, int>,
               int,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
+@ProviderFor(GetNewSeekbarPosition)
+final getNewSeekbarPositionProvider = GetNewSeekbarPositionProvider._();
+
+final class GetNewSeekbarPositionProvider
+    extends $AsyncNotifierProvider<GetNewSeekbarPosition, void> {
+  GetNewSeekbarPositionProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getNewSeekbarPositionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getNewSeekbarPositionHash();
+
+  @$internal
+  @override
+  GetNewSeekbarPosition create() => GetNewSeekbarPosition();
+}
+
+String _$getNewSeekbarPositionHash() =>
+    r'5b25f8796e8054d45186e58861062454e82d49df';
+
+abstract class _$GetNewSeekbarPosition extends $AsyncNotifier<void> {
+  FutureOr<void> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<void>, void>,
+              AsyncValue<void>,
               Object?,
               Object?
             >;
@@ -92,7 +137,7 @@ final class SeekbarPositionProvider
   }
 }
 
-String _$seekbarPositionHash() => r'82cbf400ae7104a2ecf5bc072f7c2b219d591cd0';
+String _$seekbarPositionHash() => r'd3fa3cb5ece964d5e22b31c92117eff1dc90a81f';
 
 abstract class _$SeekbarPosition extends $Notifier<SeekbarTime> {
   SeekbarTime build();
@@ -112,17 +157,19 @@ abstract class _$SeekbarPosition extends $Notifier<SeekbarTime> {
   }
 }
 
-@ProviderFor(SeekbarPause)
+@ProviderFor(seekbarPause)
 final seekbarPauseProvider = SeekbarPauseProvider._();
 
-final class SeekbarPauseProvider extends $NotifierProvider<SeekbarPause, bool> {
+final class SeekbarPauseProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
   SeekbarPauseProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'seekbarPauseProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -132,33 +179,13 @@ final class SeekbarPauseProvider extends $NotifierProvider<SeekbarPause, bool> {
 
   @$internal
   @override
-  SeekbarPause create() => SeekbarPause();
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(bool value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<bool>(value),
-    );
-  }
-}
-
-String _$seekbarPauseHash() => r'e2bc5c2dc02a04fc6bf4a2869f380bbb310cec80';
-
-abstract class _$SeekbarPause extends $Notifier<bool> {
-  bool build();
-  @$mustCallSuper
   @override
-  void runBuild() {
-    final ref = this.ref as $Ref<bool, bool>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<bool, bool>,
-              bool,
-              Object?,
-              Object?
-            >;
-    element.handleCreate(ref, build);
+  FutureOr<bool> create(Ref ref) {
+    return seekbarPause(ref);
   }
 }
+
+String _$seekbarPauseHash() => r'5cf5cbaa836527505ea04a78aa59de6588d5a736';

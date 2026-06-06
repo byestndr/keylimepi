@@ -114,17 +114,17 @@ Future<List<int>> lyricSync(Ref ref) async {
   );
   final SeekbarTime songDuration = ref.read(seekbarPositionProvider);
 
-  final int totalTimeAsIndex =
+  final int totalTimePerLine =
       (songDuration.maxPosition.inMilliseconds / 10).ceil() + 1;
 
   // Each index represents a value of 10 ms
-  final List<int> indexList = List.filled(totalTimeAsIndex, 0);
+  final List<int> indexList = List.filled(totalTimePerLine, 0);
 
   // Start at 0 ms
   int currentIndex = 0;
 
   // Iterate over each 10 ms
-  for (int i = 0; i < totalTimeAsIndex; i++) {
+  for (int i = 0; i < totalTimePerLine; i++) {
     // While the current 10 ms is less in length than the total song time
     while (currentIndex + 1 < lyricsList.length &&
         lyricsList[currentIndex + 1].timestamp.inMilliseconds <= i * 10) {
@@ -153,6 +153,7 @@ class CurrentLyricIndex extends _$CurrentLyricIndex {
         seekbarPosition.currentPosition.inMilliseconds + delay;
 
     final int lyricIndex = lyricIndexList[(adjustedPosition / 10).floor()];
+    // print(lyricIndex);
 
     return lyricIndex;
   }

@@ -44,6 +44,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
     ref.watch(infoGetterProvider);
     ref.watch(seekbarTimerProvider);
     ref.watch(lyricSyncProvider);
+    ref.watch(getNewSeekbarPositionProvider);
 
     ref.listen(currentLyricIndexProvider, (
       AsyncValue<int>? previous,
@@ -81,23 +82,17 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                 behavior: ScrollConfiguration.of(
                   context,
                 ).copyWith(scrollbars: false),
-                child: NotificationListener(
-                  onNotification: (Notification notification) {
-                    if (notification is ScrollUpdateNotification) {
-                      setState(() {
-                        _isScrolling = true;
-                      });
-                    } else if (notification is ScrollEndNotification) {
-                      _timer?.cancel();
+                child: Listener(
+                  onPointerDown: (PointerDownEvent event) => _isScrolling = true,
+                  onPointerUp: (PointerUpEvent event) {
+                    _timer?.cancel();
 
-                      _timer = Timer(
-                        const Duration(seconds: 3),
-                        () => setState(() {
-                          _isScrolling = false;
-                        }),
-                      );
-                    }
-                    return false;
+                    _timer = Timer(
+                      const Duration(seconds: 3),
+                      () => setState(() {
+                        _isScrolling = false;
+                      }),
+                    );
                   },
                   child: ScrollablePositionedList.builder(
                     itemScrollController: _listController,
@@ -119,7 +114,6 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
               );
             },
             error: (Object error, StackTrace stackTrace) {
-              print(error.toString());
               return ListView(
                 padding: EdgeInsets.symmetric(
                   vertical: MediaQuery.of(context).size.height / 3,
@@ -171,4 +165,3 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
     );
   }
 }
-

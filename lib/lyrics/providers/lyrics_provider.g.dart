@@ -89,7 +89,7 @@ final class LyricSyncProvider
   }
 }
 
-String _$lyricSyncHash() => r'53df989d0aed9a51fce7a4e701d089c1083d7298';
+String _$lyricSyncHash() => r'c93315b08402b621671fe44e9d5090938db6c5c1';
 
 @ProviderFor(CurrentLyricIndex)
 final currentLyricIndexProvider = CurrentLyricIndexProvider._();
