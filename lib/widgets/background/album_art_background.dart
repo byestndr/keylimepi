@@ -24,7 +24,6 @@ class AlbumArtBackground extends ConsumerWidget {
           duration: const Duration(milliseconds: 400),
           curve: Easing.standard,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
             image: DecorationImage(
               fit: BoxFit.cover,
               colorFilter: .mode(Colors.black.withAlpha(backgroundOpacity), BlendMode.darken),
@@ -45,7 +44,6 @@ class AlbumArtBackground extends ConsumerWidget {
         ),
 
         ClipRRect(
-          borderRadius: BorderRadiusGeometry.circular(28),
           clipBehavior: Clip.hardEdge,
           child: BackdropFilter(
             filter: ImageFilter.blur(
