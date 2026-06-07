@@ -15,6 +15,8 @@ class SpotifyPlaybackState extends _$SpotifyPlaybackState {
   }
 
   Future<Response> getNewPlaybackState() async {
+    ref.read(songLatencyProvider.notifier).resetStopwatch();
+    ref.read(songLatencyProvider.notifier).startStopwatch();
     final SpotifyUserService spotifyAPI = SpotifyUserService.create();
     final Response<dynamic> spotifyResponse = await spotifyAPI.getPlayerState();
 

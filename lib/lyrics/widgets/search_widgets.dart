@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:key_limepi/providers/lyrics/lyrics_provider.dart';
-import 'package:key_limepi/providers/lyrics/search_provider.dart';
+import 'package:key_limepi/lyrics/providers/lyrics_provider.dart';
+import 'package:key_limepi/lyrics/providers/search_provider.dart';
 
 class LyricTile extends ConsumerWidget {
   final dynamic lyric;
@@ -87,7 +87,11 @@ class ShowLyricDialog extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Text(lyrics, softWrap: true),
+          child: Text(
+            lyrics,
+            softWrap: true,
+            style: const TextStyle(fontFamilyFallback: <String>['NotoSansJP']),
+          ),
         ),
       ],
     );

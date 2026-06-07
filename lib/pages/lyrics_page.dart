@@ -6,8 +6,8 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:key_limepi/lyrics/widgets/delay_info.dart';
 import 'package:key_limepi/lyrics/widgets/lyric_line.dart';
 import 'package:key_limepi/pages/lyrics_search.dart';
-import 'package:key_limepi/providers/lyrics/lyric_classes.dart';
-import 'package:key_limepi/providers/lyrics/lyrics_provider.dart';
+import 'package:key_limepi/lyrics/providers/lyric_classes.dart';
+import 'package:key_limepi/lyrics/providers/lyrics_provider.dart';
 import 'package:key_limepi/providers/spotify/seekbar_provider.dart';
 import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 
@@ -44,6 +44,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
     ref.watch(infoGetterProvider);
     ref.watch(seekbarTimerProvider);
     ref.watch(lyricSyncProvider);
+    ref.watch(getNewSeekbarPositionProvider);
 
     ref.listen(currentLyricIndexProvider, (
       AsyncValue<int>? previous,
@@ -81,23 +82,17 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                 behavior: ScrollConfiguration.of(
                   context,
                 ).copyWith(scrollbars: false),
-                child: NotificationListener(
-                  onNotification: (Notification notification) {
-                    if (notification is ScrollUpdateNotification) {
-                      setState(() {
-                        _isScrolling = true;
-                      });
-                    } else if (notification is ScrollEndNotification) {
-                      _timer?.cancel();
+                child: Listener(
+                  onPointerDown: (PointerDownEvent event) => _isScrolling = true,
+                  onPointerUp: (PointerUpEvent event) {
+                    _timer?.cancel();
 
-                      _timer = Timer(
-                        const Duration(seconds: 3),
-                        () => setState(() {
-                          _isScrolling = false;
-                        }),
-                      );
-                    }
-                    return false;
+                    _timer = Timer(
+                      const Duration(seconds: 3),
+                      () => setState(() {
+                        _isScrolling = false;
+                      }),
+                    );
                   },
                   child: ScrollablePositionedList.builder(
                     itemScrollController: _listController,
@@ -170,4 +165,3 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
     );
   }
 }
-

@@ -33,7 +33,7 @@ final class LyricsGetterProvider
   LyricsGetter create() => LyricsGetter();
 }
 
-String _$lyricsGetterHash() => r'488c05fbe2aba100127a5dc9070bab5043e88398';
+String _$lyricsGetterHash() => r'398f52966b3e1e1cd179503df440b44cad12b730';
 
 abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>> {
   FutureOr<List<LyricLine>> build();
@@ -89,7 +89,7 @@ final class LyricSyncProvider
   }
 }
 
-String _$lyricSyncHash() => r'53df989d0aed9a51fce7a4e701d089c1083d7298';
+String _$lyricSyncHash() => r'c93315b08402b621671fe44e9d5090938db6c5c1';
 
 @ProviderFor(CurrentLyricIndex)
 final currentLyricIndexProvider = CurrentLyricIndexProvider._();
@@ -166,7 +166,7 @@ final class LyricDelayProvider extends $NotifierProvider<LyricDelay, int> {
   }
 }
 
-String _$lyricDelayHash() => r'e3464d204c6f5eb79289540b360a8f8bb57510db';
+String _$lyricDelayHash() => r'686a2265cc8ad0877b0a80fb5d8142d80f9c52de';
 
 abstract class _$LyricDelay extends $Notifier<int> {
   int build();

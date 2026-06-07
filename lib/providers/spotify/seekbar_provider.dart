@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:chopper/src/response.dart';
+import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 
@@ -34,13 +36,96 @@ class SeekbarTimer extends _$SeekbarTimer {
 
   void startTimer() async {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 200), (Timer timer) {
+      ref.invalidate(getNewSeekbarPositionProvider);
       ref.read(seekbarPositionProvider.notifier).updateSliderPosition();
     });
   }
 
   void stopTimer() {
     _timer?.cancel();
+  }
+}
+
+@riverpod
+class GetNewSeekbarPosition extends _$GetNewSeekbarPosition {
+  @override
+  FutureOr<void> build() async {
+    ref.watch(spotifyPlaybackStateProvider);
+
+    if (!(await _isNewState())) {
+      return;
+    }
+
+    _getNewSliderPosition();
+    return;
+  }
+
+  Future<bool> _isNewState() async {
+    final bool isPaused = await ref.read(seekbarPauseProvider.future);
+    final SeekbarTime currentPosition = ref.read(seekbarPositionProvider);
+
+    return currentPosition.currentPosition.inMilliseconds == 0 ||
+        isPaused ||
+        currentPosition.refreshCount == 25;
+  }
+
+  FutureOr<void> _getNewSliderPosition() async {
+    final dynamic currentPlaybackState = await ref.read(
+      spotifyPlaybackStateProvider.future,
+    );
+
+    if (currentPlaybackState.statusCode == 204) {
+      final SeekbarTime errorDuration = SeekbarTime(
+        currentPosition: const Duration(milliseconds: 0),
+        maxPosition: const Duration(milliseconds: 1),
+      );
+
+      ref
+          .read(seekbarPositionProvider.notifier)
+          .overrideSliderPostition(errorDuration);
+    }
+
+    final SeekbarTime existingErrorDuration = SeekbarTime(
+      currentPosition: const Duration(milliseconds: 0),
+      maxPosition: ref.read(seekbarPositionProvider).maxPosition,
+    );
+
+    try {
+      // Get current information
+      final double newMaxPosition =
+          (currentPlaybackState.body['item']['duration_ms'] as int).toDouble();
+      final double newCurrentPosition =
+          (currentPlaybackState.body['progress_ms'] as int).toDouble();
+      const int refreshCount = 0;
+
+      // Stop latency stopwatch for use in adding latency offset
+      ref.read(songLatencyProvider.notifier).stopStopwatch();
+      final int latency = ref.read(songLatencyProvider).elapsed.inMilliseconds;
+
+      // Final position info
+      final SeekbarTime newPositionInfo = SeekbarTime(
+        currentPosition: Duration(
+          milliseconds: newCurrentPosition.toInt() + latency,
+        ),
+        maxPosition: Duration(milliseconds: newMaxPosition.toInt()),
+        refreshCount: refreshCount,
+      );
+
+      ref
+          .read(seekbarPositionProvider.notifier)
+          .overrideSliderPostition(newPositionInfo);
+    } on Error {
+      ref
+          .read(seekbarPositionProvider.notifier)
+          .overrideSliderPostition(existingErrorDuration);
+    } on Exception {
+      ref
+          .read(seekbarPositionProvider.notifier)
+          .overrideSliderPostition(existingErrorDuration);
+    }
+
+    return;
   }
 }
 
@@ -63,13 +148,7 @@ class SeekbarPosition extends _$SeekbarPosition {
   }
 
   FutureOr<void> updateSliderPosition() async {
-    final bool isPaused = ref.read(seekbarPauseProvider);
-
-    // Checks if we need to pull a new state.
-    if (_isNewState()) {
-      await _getNewSliderPosition();
-      return;
-    }
+    final bool isPaused = await ref.read(seekbarPauseProvider.future);
 
     if (isPaused) {
       return;
@@ -77,7 +156,7 @@ class SeekbarPosition extends _$SeekbarPosition {
 
     _incrementSliderPosition();
 
-    // If it's the end of the song, we pull the new 
+    // If it's the end of the song, we pull the new
     // playback state to get the new song.
     if (state.currentPosition == state.maxPosition) {
       ref.invalidate(spotifyPlaybackStateProvider);
@@ -86,11 +165,9 @@ class SeekbarPosition extends _$SeekbarPosition {
     return;
   }
 
-  bool _isNewState() {
-    final bool isPaused = ref.read(seekbarPauseProvider);
-    return state.currentPosition.inMilliseconds == 0 ||
-        isPaused ||
-        state.refreshCount == 25;
+  void overrideSliderPostition(SeekbarTime newPosition) {
+    state = newPosition;
+    return;
   }
 
   void _incrementSliderPosition() {
@@ -109,63 +186,18 @@ class SeekbarPosition extends _$SeekbarPosition {
     );
     return;
   }
-
-  FutureOr<void> _getNewSliderPosition() async {
-    final dynamic currentPlaybackState = await ref.read(
-      spotifyPlaybackStateProvider.future,
-    );
-
-    if (currentPlaybackState.statusCode == 204) {
-      state = SeekbarTime(
-        currentPosition: const Duration(milliseconds: 0),
-        maxPosition: const Duration(milliseconds: 1),
-      );
-      return;
-    }
-
-    try {
-      final double newMaxPosition =
-          (currentPlaybackState.body['item']['duration_ms'] as int).toDouble();
-      final double newCurrentPosition =
-          (currentPlaybackState.body['progress_ms'] as int).toDouble();
-      const int refreshCount = 0;
-
-      final bool isPlaying = currentPlaybackState.body['is_playing'];
-      ref.read(seekbarPauseProvider.notifier).setValue(!isPlaying);
-
-      state = SeekbarTime(
-        currentPosition: Duration(milliseconds: newCurrentPosition.toInt()),
-        maxPosition: Duration(milliseconds: newMaxPosition.toInt()),
-        refreshCount: refreshCount,
-      );
-      return;
-    } on NoSuchMethodError {
-      state = SeekbarTime(
-        currentPosition: const Duration(milliseconds: 0),
-        maxPosition: state.maxPosition,
-      );
-      return;
-
-      // All other exceptions
-    } on Exception {
-      state = SeekbarTime(
-        currentPosition: const Duration(milliseconds: 0),
-        maxPosition: state.maxPosition,
-      );
-      return;
-    }
-  }
 }
 
-@Riverpod(keepAlive: true)
-class SeekbarPause extends _$SeekbarPause {
-  @override
-  bool build() {
-    return true;
+@riverpod
+Future<bool> seekbarPause(Ref ref) async {
+  final Response<dynamic> currentPlaybackState = await ref.watch(
+    spotifyPlaybackStateProvider.future,
+  );
+  late bool isPlaying;
+  try {
+    isPlaying = currentPlaybackState.body['is_playing'];
+  } on TypeError {
+    isPlaying = true;
   }
-
-  void setValue(bool value) {
-    state = value;
-    return;
-  }
+  return !isPlaying;
 }

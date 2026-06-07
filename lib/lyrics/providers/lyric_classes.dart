@@ -1,10 +1,16 @@
 import 'dart:convert';
 
+import 'package:hive_ce/hive_ce.dart';
 import 'package:http/http.dart' as http;
 import 'package:romanize/romanize.dart';
 
+part 'lyric_classes.g.dart';
+
+@HiveType(typeId: 1)
 class LyricLine {
+  @HiveField(0)
   Duration timestamp;
+  @HiveField(1)
   String line;
   LyricLine({required this.line, required this.timestamp});
 

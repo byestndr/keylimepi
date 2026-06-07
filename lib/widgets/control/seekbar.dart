@@ -12,6 +12,7 @@ class ProgressSlider extends ConsumerWidget {
       seekbarPositionProvider,
     );
     ref.watch(seekbarTimerProvider);
+    ref.watch(getNewSeekbarPositionProvider);
 
     return SliderTheme(
       data: const SliderThemeData(year2023: false),

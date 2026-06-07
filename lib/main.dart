@@ -1,6 +1,8 @@
 import 'package:chopper/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
+import 'package:key_limepi/lyrics/providers/lyric_classes.dart';
 import 'package:key_limepi/pages/app_body.dart';
 import 'package:flutter/gestures.dart';
 import 'package:key_limepi/pages/authentication_setup_page.dart';
@@ -13,6 +15,8 @@ import 'package:key_limepi/settings/preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final UserValues userPreferences = await UserValues().getUpdatedValues();
+  await Hive.initFlutter();
+  Hive.registerAdapter(LyricLineAdapter());
   final SpotifyUserService service = SpotifyUserService.create();
 
   late bool authenticated;

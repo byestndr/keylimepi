@@ -66,7 +66,7 @@ final class InfoGetterProvider
   InfoGetter create() => InfoGetter();
 }
 
-String _$infoGetterHash() => r'6a13c356d2ab5bfd321f55d079689cc48d0927f4';
+String _$infoGetterHash() => r'97860cd51d6bb057f41344ab15489a6c1fc3711a';
 
 abstract class _$InfoGetter extends $AsyncNotifier<Song> {
   FutureOr<Song> build();
@@ -131,6 +131,58 @@ abstract class _$isQueueExpanded extends $Notifier<bool> {
             as $ClassProviderElement<
               AnyNotifier<bool, bool>,
               bool,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
+@ProviderFor(SongLatency)
+final songLatencyProvider = SongLatencyProvider._();
+
+final class SongLatencyProvider
+    extends $NotifierProvider<SongLatency, Stopwatch> {
+  SongLatencyProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'songLatencyProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$songLatencyHash();
+
+  @$internal
+  @override
+  SongLatency create() => SongLatency();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Stopwatch value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Stopwatch>(value),
+    );
+  }
+}
+
+String _$songLatencyHash() => r'814c9c979ba848b393e25228fc05070f7bf2203d';
+
+abstract class _$SongLatency extends $Notifier<Stopwatch> {
+  Stopwatch build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<Stopwatch, Stopwatch>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Stopwatch, Stopwatch>,
+              Stopwatch,
               Object?,
               Object?
             >;

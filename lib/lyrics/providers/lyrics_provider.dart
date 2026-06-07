@@ -1,7 +1,9 @@
 import 'package:chopper/src/response.dart';
+import 'package:key_limepi/lyrics/backend/lyric_cache.dart';
+import 'package:key_limepi/lyrics/providers/cache_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:key_limepi/lyrics/backend/lyric_api.dart';
-import 'package:key_limepi/providers/lyrics/lyric_classes.dart';
+import 'package:key_limepi/lyrics/providers/lyric_classes.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/providers/spotify/seekbar_provider.dart';
 import 'package:key_limepi/providers/spotify/song_info_provider.dart';
@@ -17,6 +19,18 @@ class LyricsGetter extends _$LyricsGetter {
 
   Future<List<LyricLine>> _getNewLyrics() async {
     final Song currentSong = await ref.read(infoGetterProvider.future);
+    final List<LyricLine>? cachedLyrics = await ref.read(
+      lyricCacheProvider.future,
+    );
+    final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
+
+    if (cachedLyrics != null) {
+      if (!romanizationBool) {
+        return cachedLyrics;
+      }
+
+      return await _romanizeLines(cachedLyrics);
+    }
 
     final LyricService lyricService = LyricService.create();
     final Response<dynamic> lyrics = await lyricService.getLyrics(
@@ -41,9 +55,9 @@ class LyricsGetter extends _$LyricsGetter {
 
     // Creates a list of lyric lines from the synced lyrics response
     lyricsList = LyricLine.fromSyncedLyrics(lyrics.body['syncedLyrics']);
+    await LyricCacheService.cacheLyric(currentSong.uri!, lyricsList);
 
     // Checks if romanization is turned on and if it isn't, returns.
-    final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
     if (!romanizationBool) {
       return lyricsList;
     }
@@ -78,7 +92,10 @@ class LyricsGetter extends _$LyricsGetter {
   }
 
   Future<void> overrideLyrics(String lyrics) async {
+    final Song currentSong = await ref.read(infoGetterProvider.future);
+
     List<LyricLine> lyricsList = LyricLine.fromSyncedLyrics(lyrics);
+    await LyricCacheService.cacheLyric(currentSong.uri!, lyricsList);
 
     final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
     if (romanizationBool) {
@@ -97,17 +114,17 @@ Future<List<int>> lyricSync(Ref ref) async {
   );
   final SeekbarTime songDuration = ref.read(seekbarPositionProvider);
 
-  final int totalTimeAsIndex =
+  final int totalTimePerLine =
       (songDuration.maxPosition.inMilliseconds / 10).ceil() + 1;
 
   // Each index represents a value of 10 ms
-  final List<int> indexList = List.filled(totalTimeAsIndex, 0);
+  final List<int> indexList = List.filled(totalTimePerLine, 0);
 
   // Start at 0 ms
   int currentIndex = 0;
 
   // Iterate over each 10 ms
-  for (int i = 0; i < totalTimeAsIndex; i++) {
+  for (int i = 0; i < totalTimePerLine; i++) {
     // While the current 10 ms is less in length than the total song time
     while (currentIndex + 1 < lyricsList.length &&
         lyricsList[currentIndex + 1].timestamp.inMilliseconds <= i * 10) {
@@ -136,6 +153,7 @@ class CurrentLyricIndex extends _$CurrentLyricIndex {
         seekbarPosition.currentPosition.inMilliseconds + delay;
 
     final int lyricIndex = lyricIndexList[(adjustedPosition / 10).floor()];
+    // print(lyricIndex);
 
     return lyricIndex;
   }
@@ -155,6 +173,11 @@ class LyricDelay extends _$LyricDelay {
 
   void decreaseDelay(int delay) {
     state = state - delay;
+    return;
+  }
+
+  void resetDelay() {
+    state = 0;
     return;
   }
 }

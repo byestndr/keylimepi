@@ -34,7 +34,7 @@ final class SpotifyPlaybackStateProvider
 }
 
 String _$spotifyPlaybackStateHash() =>
-    r'76b38d43456a02e3d061e0a53ee10452d61f278b';
+    r'e75aef40d6e9f3f82ae6c81ddbbc8f5452da4245';
 
 abstract class _$SpotifyPlaybackState
     extends $AsyncNotifier<Response<dynamic>> {
