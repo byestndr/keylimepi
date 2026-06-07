@@ -19,15 +19,15 @@ class CarouselItem extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: EdgeInsetsGeometry.directional(
-            top: artist == null ? 150 : 135,
-            start: 15,
+            top: artist == null ? 110 : 95,
+            start: 12,
           ),
           child: Text(
             title,
             style: const TextStyle(
               fontFamily: 'Roboto Flex',
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
             overflow: TextOverflow.fade,
@@ -38,8 +38,8 @@ class CarouselItem extends StatelessWidget {
         artist != null
             ? Padding(
                 padding: const EdgeInsetsGeometry.directional(
-                  top: 162,
-                  start: 15,
+                  top: 115,
+                  start: 12,
                 ),
                 child: Text(
                   artist!,
@@ -47,7 +47,7 @@ class CarouselItem extends StatelessWidget {
                   maxLines: 1,
                   softWrap: false,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 12,
                     fontFamily: 'Roboto Flex',
                     fontWeight: FontWeight.w500,
                   ),

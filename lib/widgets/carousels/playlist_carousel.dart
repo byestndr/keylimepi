@@ -26,7 +26,8 @@ class _PlaylistCarouselState extends ConsumerState<PlaylistCarousel> {
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         await spotifyAPI.startFromContext(playlists[index]['uri']);
       },
-      itemExtent: 200,
+      itemExtent: 150,
+      itemSnapping: true,
       children: List<Widget>.generate(
         playlists.when(
           data: (List data) => data.length,

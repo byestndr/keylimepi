@@ -26,7 +26,8 @@ class _AlbumCarouselState extends ConsumerState<SongCarousel> {
           tracks[index]['track']['uri'],
         ]);
       },
-      itemExtent: 200,
+      itemExtent: 150,
+      itemSnapping: true,
       children: List<Widget>.generate(
         songList.when(
           data: (List data) => data.length,

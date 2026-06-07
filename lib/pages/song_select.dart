@@ -19,6 +19,8 @@ class SongSelect extends ConsumerStatefulWidget {
 }
 
 class _SongSelectState extends ConsumerState<SongSelect> {
+  static const double carouselHeight = 150;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,36 +38,36 @@ class _SongSelectState extends ConsumerState<SongSelect> {
                 'Your Playlists',
                 style: TextStyle(
                   fontFamily: 'Roboto Flex',
-                  fontSize: 30,
+                  fontSize: 25,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-            const SizedBox(height: 200, child: PlaylistCarousel()),
+            const SizedBox(height: carouselHeight, child: PlaylistCarousel()),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
                 'Saved Albums',
                 style: TextStyle(
                   fontFamily: 'Roboto Flex',
-                  fontSize: 30,
+                  fontSize: 25,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-            const SizedBox(height: 200, child: AlbumCarousel()),
+            const SizedBox(height: carouselHeight, child: AlbumCarousel()),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
                 'Liked Songs',
                 style: TextStyle(
                   fontFamily: 'Roboto Flex',
-                  fontSize: 30,
+                  fontSize: 25,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-            const SizedBox(height: 200, child: SongCarousel()),
+            const SizedBox(height: carouselHeight, child: SongCarousel()),
           ],
         ),
         onRefresh: () async {
