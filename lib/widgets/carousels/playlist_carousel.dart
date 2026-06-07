@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/backend/spotify/spotify_api.dart';
 import 'package:key_limepi/providers/spotify/playlists_provider.dart';
+import 'package:key_limepi/song_select/carousel_item.dart';
 
 class PlaylistCarousel extends ConsumerStatefulWidget {
   const PlaylistCarousel({super.key});
@@ -35,47 +35,9 @@ class _PlaylistCarouselState extends ConsumerState<PlaylistCarousel> {
         ),
         (int index) => playlists.when(
           data: (List data) {
-            return Stack(
-              fit: StackFit.passthrough,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsetsGeometry.directional(
-                    top: 155,
-                    start: 15,
-                  ),
-                  child: Text(
-                    data[index]['name'],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    softWrap: false,
-                  ),
-                ),
-                FittedBox(
-                  fit: BoxFit.cover,
-                  child: ShaderMask(
-                    shaderCallback: (Rect bounds) {
-                      return const LinearGradient(
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomCenter,
-                        colors: <Color>[Colors.black12, Colors.black],
-                      ).createShader(bounds);
-                    },
-                    blendMode: BlendMode.dstOut,
-                    child: CachedNetworkImage(
-                      imageUrl: data[index]['images'][0]['url'],
-                      fadeInCurve: const Cubic(0.05, 0.7, 0.1, 1.0),
-                      fadeInDuration: const Duration(milliseconds: 400),
-                      fadeOutCurve: const Cubic(0.3, 0.0, 0.8, 0.15),
-                      fadeOutDuration: const Duration(milliseconds: 200),
-                    ),
-                  ),
-                ),
-              ],
+            return CarouselItem(
+              title: data[index]['name'],
+              image: data[index]['images'][0]['url'],
             );
           },
           error: (Object error, StackTrace stack) {
