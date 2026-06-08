@@ -51,91 +51,105 @@ class ViewItem extends ConsumerWidget {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-              flexibleSpace: Stack(
-                fit: .passthrough,
+              expandedHeight: MediaQuery.of(context).size.height / 1.5,
+              pinned: true,
+              titleSpacing: 0,
+              title: Row(
+                spacing: 5,
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: image,
-                    fit: .cover,
-                    color: Colors.black.withAlpha(100),
-                    colorBlendMode: .darken,
-                  ),
-                  ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                      child: Container(color: Colors.transparent),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: .bottomStart,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Row(
-                        crossAxisAlignment: .end,
-                        children: [
-                          SizedBox.square(
-                            dimension: MediaQuery.of(context).size.height / 3,
-                            child: ClipRRect(
-                              borderRadius: BorderRadiusGeometry.circular(12),
-                              child: CachedNetworkImage(imageUrl: image),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Column(
-                                crossAxisAlignment: .start,
-                                mainAxisAlignment: .end,
-                                children: [
-                                  Transform.translate(
-                                    offset: const Offset(0, 4),
-                                    child: Text(
-                                      name,
-                                      overflow: .ellipsis,
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto Flex',
-                                        fontFamilyFallback: <String>[
-                                          'NotoSansJP',
-                                        ],
-                                        fontWeight: .w800,
-                                        fontSize:
-                                            (MediaQuery.of(context).size.width /
-                                                    15)
-                                                .clamp(0, 48),
-                                      ),
-                                    ),
-                                  ),
-                                  !isPlaylist
-                                      ? Text(
-                                          "$artist",
-                                          overflow: .ellipsis,
-                                          style: TextStyle(
-                                            fontFamily: 'Roboto Flex',
-                                            fontFamilyFallback: <String>[
-                                              'NotoSansJP',
-                                            ],
-                                            fontWeight: .w400,
-                                            fontSize:
-                                                (MediaQuery.of(
-                                                          context,
-                                                        ).size.width /
-                                                        15)
-                                                    .clamp(0, 18),
-                                          ),
-                                        )
-                                      : const Padding(padding: .zero),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  Icon(isPlaylist ? Icons.playlist_play_rounded : Icons.album),
+                  Text(name),
                 ],
               ),
-              expandedHeight: MediaQuery.of(context).size.height / 1.5,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: .pin,
+                background: Stack(
+                  fit: .passthrough,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: image,
+                      fit: .cover,
+                      color: Colors.black.withAlpha(100),
+                      colorBlendMode: .darken,
+                    ),
+                    ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                        child: Container(color: Colors.transparent),
+                      ),
+                    ),
+
+                    Align(
+                      alignment: .bottomStart,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Row(
+                          crossAxisAlignment: .end,
+                          children: [
+                            SizedBox.square(
+                              dimension: 125,
+                              child: ClipRRect(
+                                borderRadius: BorderRadiusGeometry.circular(12),
+                                child: CachedNetworkImage(imageUrl: image),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Column(
+                                  crossAxisAlignment: .start,
+                                  mainAxisAlignment: .end,
+                                  children: [
+                                    Transform.translate(
+                                      offset: const Offset(0, 4),
+                                      child: Text(
+                                        name,
+                                        overflow: .ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Roboto Flex',
+                                          fontFamilyFallback: <String>[
+                                            'NotoSansJP',
+                                          ],
+                                          fontWeight: .w800,
+                                          fontSize:
+                                              (MediaQuery.of(
+                                                        context,
+                                                      ).size.width /
+                                                      15)
+                                                  .clamp(0, 48),
+                                        ),
+                                      ),
+                                    ),
+                                    !isPlaylist
+                                        ? Text(
+                                            "$artist",
+                                            overflow: .ellipsis,
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto Flex',
+                                              fontFamilyFallback: <String>[
+                                                'NotoSansJP',
+                                              ],
+                                              fontWeight: .w400,
+                                              fontSize:
+                                                  (MediaQuery.of(
+                                                            context,
+                                                          ).size.width /
+                                                          15)
+                                                      .clamp(0, 18),
+                                            ),
+                                          )
+                                        : const Padding(padding: .zero),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
 
             songs.when(
@@ -158,7 +172,6 @@ class ViewItem extends ConsumerWidget {
                         artists.add(artist['name']);
                       }
                     }
-
                     return ListTile(
                       onTap: () {},
                       title: Text(
@@ -189,6 +202,13 @@ class ViewItem extends ConsumerWidget {
                                 )
                               : Text(index.toString()),
                         ],
+                      ),
+                      trailing: Text(
+                        Duration(
+                          milliseconds: isPlaylist
+                              ? data.body['items'][index]['item']['duration_ms']
+                              : data.body['items'][index]['duration_ms'],
+                        ).toString().replaceFirst(RegExp(r'0:'), '').replaceFirst(RegExp(r'\..*'), ''),
                       ),
                     );
                   },
