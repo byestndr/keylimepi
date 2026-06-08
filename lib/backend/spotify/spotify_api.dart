@@ -13,9 +13,6 @@ abstract class SpotifyUserService extends ChopperService {
   @GET(path: "/playlists")
   Future<Response> getPlaylists();
 
-  @GET(path: "/playlists/{id}/items")
-  Future<Response> getPlaylistItems(@Path() String id);
-
   @GET(path: '/albums')
   Future<Response> getAlbums();
 
@@ -68,7 +65,7 @@ abstract class SpotifyUserService extends ChopperService {
     } else {
       await _resumePlayback();
     }
-    
+
     return playbackState;
   }
 
@@ -81,5 +78,25 @@ abstract class SpotifyUserService extends ChopperService {
       interceptors: <Interceptor>[SpotifyChopperAuthInterceptor()],
     );
     return _$SpotifyUserService(client);
+  }
+}
+
+@ChopperApi(baseUrl: '/v1/')
+abstract class SpotifyGetService extends ChopperService {
+  @GET(path: "/playlists/{id}/items")
+  Future<Response> getPlaylistItems(@Path() String id);
+
+  @GET(path: "albums/{id}/tracks")
+  Future<Response> getAlbumItems(@Path() String id);
+
+  static SpotifyGetService create() {
+    final ChopperClient client = ChopperClient(
+      baseUrl: Uri.parse('https://api.spotify.com'),
+      services: <ChopperService>[_$SpotifyUserService()],
+      converter: const JsonConverter(),
+      authenticator: SpotifyChopperReauthentication(),
+      interceptors: <Interceptor>[SpotifyChopperAuthInterceptor()],
+    );
+    return _$SpotifyGetService(client);
   }
 }

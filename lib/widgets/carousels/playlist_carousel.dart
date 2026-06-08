@@ -32,7 +32,8 @@ class _PlaylistCarouselState extends ConsumerState<PlaylistCarousel> {
             return CarouselItem(
               title: data[index]['name'],
               image: data[index]['images'][0]['url'],
-              id: data[index]['uri'],
+              id: data[index]['id'],
+              uri: data[index]['uri'],
             );
           },
           error: (Object error, StackTrace stack) {

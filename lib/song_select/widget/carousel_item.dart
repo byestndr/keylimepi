@@ -8,11 +8,13 @@ class CarouselItem extends StatelessWidget {
   final String title;
   final String image;
   final String id;
+  final String uri;
   const CarouselItem({
     super.key,
     required this.title,
     required this.image,
     required this.id,
+    required this.uri,
     this.artist,
   });
 
@@ -24,7 +26,7 @@ class CarouselItem extends StatelessWidget {
       child: InkWell(
         onLongPress: () {
           final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-          spotifyAPI.startFromContext(id);
+          spotifyAPI.startFromContext(uri);
         },
         onTap: () {
           Navigator.of(context).push(

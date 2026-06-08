@@ -33,7 +33,8 @@ class _AlbumCarouselState extends ConsumerState<AlbumCarousel> {
               title: data[index]['album']['name'],
               artist: data[index]['album']['artists'][0]['name'],
               image: data[index]['album']['images'][0]['url'],
-              id: data[index]['album']['uri'],
+              id: data[index]['album']['id'],
+              uri: data[index]['album']['uri'],
             );
           },
           error: (Object error, StackTrace stack) {

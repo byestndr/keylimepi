@@ -10,45 +10,91 @@ part of 'get_info_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(GetPlaylistItems)
-final getPlaylistItemsProvider = GetPlaylistItemsProvider._();
+final getPlaylistItemsProvider = GetPlaylistItemsFamily._();
 
 final class GetPlaylistItemsProvider
-    extends $AsyncNotifierProvider<GetPlaylistItems, dynamic> {
-  GetPlaylistItemsProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'getPlaylistItemsProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+    extends
+        $FunctionalProvider<
+          AsyncValue<Response<dynamic>>,
+          Response<dynamic>,
+          FutureOr<Response<dynamic>>
+        >
+    with
+        $FutureModifier<Response<dynamic>>,
+        $FutureProvider<Response<dynamic>> {
+  GetPlaylistItemsProvider._({
+    required GetPlaylistItemsFamily super.from,
+    required ({bool isPlaylist, String id}) super.argument,
+  }) : super(
+         retry: null,
+         name: r'getPlaylistItemsProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$getPlaylistItemsHash();
 
+  @override
+  String toString() {
+    return r'getPlaylistItemsProvider'
+        ''
+        '$argument';
+  }
+
   @$internal
   @override
-  GetPlaylistItems create() => GetPlaylistItems();
+  $FutureProviderElement<Response<dynamic>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Response<dynamic>> create(Ref ref) {
+    final argument = this.argument as ({bool isPlaylist, String id});
+    return GetPlaylistItems(
+      ref,
+      isPlaylist: argument.isPlaylist,
+      id: argument.id,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetPlaylistItemsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
 }
 
-String _$getPlaylistItemsHash() => r'8d813916ef328df3233a5a792ecdf9a3e1f23be7';
+String _$getPlaylistItemsHash() => r'0727e64e60fa0a948e76da8778f0021569c08a01';
 
-abstract class _$GetPlaylistItems extends $AsyncNotifier<dynamic> {
-  FutureOr<dynamic> build();
-  @$mustCallSuper
+final class GetPlaylistItemsFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<Response<dynamic>>,
+          ({bool isPlaylist, String id})
+        > {
+  GetPlaylistItemsFamily._()
+    : super(
+        retry: null,
+        name: r'getPlaylistItemsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  GetPlaylistItemsProvider call({
+    required bool isPlaylist,
+    required String id,
+  }) => GetPlaylistItemsProvider._(
+    argument: (isPlaylist: isPlaylist, id: id),
+    from: this,
+  );
+
   @override
-  void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<dynamic>, dynamic>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<dynamic>, dynamic>,
-              AsyncValue<dynamic>,
-              Object?,
-              Object?
-            >;
-    element.handleCreate(ref, build);
-  }
+  String toString() => r'getPlaylistItemsProvider';
 }
