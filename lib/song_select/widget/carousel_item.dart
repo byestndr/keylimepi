@@ -31,8 +31,13 @@ class CarouselItem extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  ViewItem(id: id, name: title, artist: artist, image: image),
+              builder: (BuildContext context) => ViewItem(
+                id: id,
+                uri: uri,
+                name: title,
+                artist: artist,
+                image: image,
+              ),
             ),
           );
         },

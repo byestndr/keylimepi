@@ -1,20 +1,22 @@
-import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chopper/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:key_limepi/backend/spotify/spotify_api.dart';
 import 'package:key_limepi/providers/spotify/get_info_provider.dart';
 import 'package:key_limepi/providers/theme/colorscheme.dart';
+import 'package:key_limepi/song_select/widget/song_tile.dart';
+import 'package:key_limepi/view_item_header.dart';
 
 class ViewItem extends ConsumerWidget {
   final String id;
+  final String uri;
   final String name;
   final String? artist;
   final String image;
   const ViewItem({
     super.key,
     required this.id,
+    required this.uri,
     required this.name,
     required this.image,
     this.artist,
@@ -27,7 +29,7 @@ class ViewItem extends ConsumerWidget {
       generateColorSchemeProvider(image),
     );
     final AsyncValue<Response<dynamic>> songs = ref.read(
-      getPlaylistItemsProvider(id: id, isPlaylist: isPlaylist),
+      getSongItemsProvider(id: id, isPlaylist: isPlaylist),
     );
 
     return Theme(
@@ -44,7 +46,10 @@ class ViewItem extends ConsumerWidget {
       ),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+            spotifyAPI.startFromContext(uri);
+          },
           tooltip: 'Play',
           child: const Icon(Icons.play_arrow),
         ),
@@ -58,97 +63,14 @@ class ViewItem extends ConsumerWidget {
                 spacing: 5,
                 children: [
                   Icon(isPlaylist ? Icons.playlist_play_rounded : Icons.album),
-                  Text(name),
+                  Expanded(child: Text(name, overflow: .fade)),
                 ],
               ),
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: .pin,
-                background: Stack(
-                  fit: .passthrough,
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: image,
-                      fit: .cover,
-                      color: Colors.black.withAlpha(100),
-                      colorBlendMode: .darken,
-                    ),
-                    ClipRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                        child: Container(color: Colors.transparent),
-                      ),
-                    ),
-
-                    Align(
-                      alignment: .bottomStart,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          crossAxisAlignment: .end,
-                          children: [
-                            SizedBox.square(
-                              dimension: 125,
-                              child: ClipRRect(
-                                borderRadius: BorderRadiusGeometry.circular(12),
-                                child: CachedNetworkImage(imageUrl: image),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Column(
-                                  crossAxisAlignment: .start,
-                                  mainAxisAlignment: .end,
-                                  children: [
-                                    Transform.translate(
-                                      offset: const Offset(0, 4),
-                                      child: Text(
-                                        name,
-                                        overflow: .ellipsis,
-                                        style: TextStyle(
-                                          fontFamily: 'Roboto Flex',
-                                          fontFamilyFallback: <String>[
-                                            'NotoSansJP',
-                                          ],
-                                          fontWeight: .w800,
-                                          fontSize:
-                                              (MediaQuery.of(
-                                                        context,
-                                                      ).size.width /
-                                                      15)
-                                                  .clamp(0, 48),
-                                        ),
-                                      ),
-                                    ),
-                                    !isPlaylist
-                                        ? Text(
-                                            "$artist",
-                                            overflow: .ellipsis,
-                                            style: TextStyle(
-                                              fontFamily: 'Roboto Flex',
-                                              fontFamilyFallback: <String>[
-                                                'NotoSansJP',
-                                              ],
-                                              fontWeight: .w400,
-                                              fontSize:
-                                                  (MediaQuery.of(
-                                                            context,
-                                                          ).size.width /
-                                                          15)
-                                                      .clamp(0, 18),
-                                            ),
-                                          )
-                                        : const Padding(padding: .zero),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              flexibleSpace: ViewItemHeader(
+                image: image,
+                name: name,
+                isPlaylist: isPlaylist,
+                artist: artist,
               ),
             ),
 
@@ -172,44 +94,25 @@ class ViewItem extends ConsumerWidget {
                         artists.add(artist['name']);
                       }
                     }
-                    return ListTile(
-                      onTap: () {},
-                      title: Text(
-                        isPlaylist
-                            ? data.body['items'][index]['item']['name']
-                            : data.body['items'][index]['name'],
-                      ),
-                      subtitle: Text(
-                        (artists.toString()).replaceAll(RegExp(r'\[|\]'), ''),
-                      ),
 
-                      leading: Row(
-                        mainAxisSize: .min,
-                        children: [
-                          isPlaylist
-                              ? ClipRRect(
-                                  borderRadius: BorderRadiusGeometry.circular(
-                                    4,
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        (data.body['items'][index]['item']['album']['images']
-                                                as List<dynamic>)
-                                            .last['url'],
-                                    height: 40,
-                                    width: 40,
-                                  ),
-                                )
-                              : Text(index.toString()),
-                        ],
+                    return SongTile(
+                      title: isPlaylist
+                          ? data.body['items'][index]['item']['name']
+                          : data.body['items'][index]['name'],
+                      artist: (artists.toString()).replaceAll(
+                        RegExp(r'\[|\]'),
+                        '',
                       ),
-                      trailing: Text(
-                        Duration(
-                          milliseconds: isPlaylist
-                              ? data.body['items'][index]['item']['duration_ms']
-                              : data.body['items'][index]['duration_ms'],
-                        ).toString().replaceFirst(RegExp(r'0:'), '').replaceFirst(RegExp(r'\..*'), ''),
+                      duration: Duration(
+                        milliseconds: isPlaylist
+                            ? data.body['items'][index]['item']['duration_ms']
+                            : data.body['items'][index]['duration_ms'],
                       ),
+                      image:
+                          (data.body['items'][index]['item']['album']['images']
+                                  as List<dynamic>)
+                              .last['url'],
+                      index: index,
                     );
                   },
                 );

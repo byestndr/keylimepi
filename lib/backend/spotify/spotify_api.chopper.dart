@@ -145,9 +145,15 @@ final class _$SpotifyGetService extends SpotifyGetService {
   final Type definitionType = SpotifyGetService;
 
   @override
-  Future<Response<dynamic>> getPlaylistItems(String id) {
+  Future<Response<dynamic>> getPlaylistItems(String id, int offset) {
     final Uri $url = Uri.parse('/v1/playlists/${id}/items');
-    final Request $request = Request('GET', $url, client.baseUrl);
+    final Map<String, dynamic> $params = <String, dynamic>{'offset': offset};
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
     return client.send<dynamic, dynamic>($request);
   }
 
