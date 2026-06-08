@@ -13,6 +13,9 @@ abstract class SpotifyUserService extends ChopperService {
   @GET(path: "/playlists")
   Future<Response> getPlaylists();
 
+  @GET(path: "/playlists/{id}/items")
+  Future<Response> getPlaylistItems(@Path() String id);
+
   @GET(path: '/albums')
   Future<Response> getAlbums();
 

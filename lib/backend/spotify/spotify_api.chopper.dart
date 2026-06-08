@@ -33,6 +33,13 @@ final class _$SpotifyUserService extends SpotifyUserService {
   }
 
   @override
+  Future<Response<dynamic>> getPlaylistItems(String id) {
+    final Uri $url = Uri.parse('/v1/me/playlists/${id}/items');
+    final Request $request = Request('GET', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> getAlbums() {
     final Uri $url = Uri.parse('/v1/me/albums');
     final Request $request = Request('GET', $url, client.baseUrl);

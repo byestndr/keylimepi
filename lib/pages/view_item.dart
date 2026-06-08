@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,15 +8,19 @@ class ViewItem extends ConsumerWidget {
   final String id;
   final String name;
   final String? artist;
+  final String image;
   const ViewItem({
     super.key,
     required this.id,
     required this.name,
+    required this.image,
     this.artist,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bool isPlaylist = artist == null;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -23,7 +28,12 @@ class ViewItem extends ConsumerWidget {
             flexibleSpace: Stack(
               fit: .passthrough,
               children: [
-                Image.asset('assets/imagePlaceholder.png', fit: .cover),
+                CachedNetworkImage(
+                  imageUrl: image,
+                  fit: .cover,
+                  color: Colors.black.withAlpha(100),
+                  colorBlendMode: .darken,
+                ),
                 ClipRect(
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
@@ -42,20 +52,55 @@ class ViewItem extends ConsumerWidget {
                           dimension: MediaQuery.of(context).size.height / 3,
                           child: ClipRRect(
                             borderRadius: BorderRadiusGeometry.circular(12),
-                            child: Image.asset('assets/imagePlaceholder.png'),
+                            child: CachedNetworkImage(imageUrl: image),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Column(
-                            crossAxisAlignment: .start,
-                            mainAxisAlignment: .end,
-                            children: [
-                              Text(name),
-                              artist != null
-                                  ? Text("$artist")
-                                  : const Padding(padding: .zero),
-                            ],
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Column(
+                              crossAxisAlignment: .start,
+                              mainAxisAlignment: .end,
+                              children: [
+                                Transform.translate(
+                                  offset: const Offset(0, 4),
+                                  child: Text(
+                                    name,
+                                    overflow: .ellipsis,
+                                    style: TextStyle(
+                                      fontFamily: 'Roboto Flex',
+                                      fontFamilyFallback: <String>[
+                                        'NotoSansJP',
+                                      ],
+                                      fontWeight: .w800,
+                                      fontSize:
+                                          (MediaQuery.of(context).size.width /
+                                                  15)
+                                              .clamp(0, 48),
+                                    ),
+                                  ),
+                                ),
+                                !isPlaylist
+                                    ? Text(
+                                        "$artist",
+                                        overflow: .ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Roboto Flex',
+                                          fontFamilyFallback: <String>[
+                                            'NotoSansJP',
+                                          ],
+                                          fontWeight: .w400,
+                                          fontSize:
+                                              (MediaQuery.of(
+                                                        context,
+                                                      ).size.width /
+                                                      15)
+                                                  .clamp(0, 18),
+                                        ),
+                                      )
+                                    : const Padding(padding: .zero),
+                              ],
+                            ),
                           ),
                         ),
                       ],
