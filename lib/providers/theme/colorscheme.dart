@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
@@ -46,4 +47,12 @@ class appColorScheme extends _$appColorScheme {
   void refreshColorscheme() {
     ref.invalidateSelf();
   }
+}
+
+@Riverpod(keepAlive: true)
+Future<ColorScheme> generateColorScheme(Ref ref, String image) async {
+  return await ColorScheme.fromImageProvider(
+    brightness: .dark,
+    provider: CachedNetworkImageProvider(image),
+  );
 }

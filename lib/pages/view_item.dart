@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:key_limepi/providers/theme/colorscheme.dart';
 
 class ViewItem extends ConsumerWidget {
   final String id;
@@ -20,8 +21,17 @@ class ViewItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isPlaylist = artist == null;
+    final AsyncValue<ColorScheme> itemColorscheme = ref.read(
+      generateColorSchemeProvider(image),
+    );
 
     return Scaffold(
+      backgroundColor: itemColorscheme.when(
+        data: (ColorScheme data) => data.surface,
+        error: (Object error, StackTrace stackTrace) =>
+            Theme.of(context).colorScheme.surface,
+        loading: () => Theme.of(context).colorScheme.surface,
+      ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
