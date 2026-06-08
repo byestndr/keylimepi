@@ -169,7 +169,27 @@ class ViewItem extends ConsumerWidget {
                       subtitle: Text(
                         (artists.toString()).replaceAll(RegExp(r'\[|\]'), ''),
                       ),
-                      leading: Text(index.toString()),
+
+                      leading: Row(
+                        mainAxisSize: .min,
+                        children: [
+                          isPlaylist
+                              ? ClipRRect(
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    4,
+                                  ),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        (data.body['items'][index]['item']['album']['images']
+                                                as List<dynamic>)
+                                            .last['url'],
+                                    height: 40,
+                                    width: 40,
+                                  ),
+                                )
+                              : Text(index.toString()),
+                        ],
+                      ),
                     );
                   },
                 );
