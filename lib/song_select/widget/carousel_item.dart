@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:key_limepi/backend/spotify/spotify_api.dart';
+import 'package:key_limepi/pages/view_item.dart';
 
 class CarouselItem extends StatelessWidget {
   final String? artist;
@@ -21,9 +22,16 @@ class CarouselItem extends StatelessWidget {
       type: .canvas,
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {
+        onLongPress: () {
           final SpotifyUserService spotifyAPI = SpotifyUserService.create();
           spotifyAPI.startFromContext(id);
+        },
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => ViewItem(id: id, name: title, artist: artist,),
+            ),
+          );
         },
         child: Stack(
           fit: StackFit.passthrough,
