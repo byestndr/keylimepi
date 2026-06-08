@@ -142,13 +142,36 @@ class ViewItem extends ConsumerWidget {
               data: (Response<dynamic> data) {
                 return SliverList.builder(
                   itemCount: (data.body['items'] as List<dynamic>).length,
-                  itemBuilder: (BuildContext context, int index) => ListTile(
-                    title: Text(
-                      isPlaylist
-                          ? data.body['items'][index]['item']['name']
-                          : data.body['items'][index]['name'],
-                    ),
-                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    List<String> artists = [];
+                    if (isPlaylist) {
+                      final List<dynamic> artistList =
+                          data.body['items'][index]['item']['artists'];
+
+                      for (final Map<String, dynamic> artist in artistList) {
+                        artists.add(artist['name']);
+                      }
+                    } else {
+                      final List<dynamic> artistList =
+                          data.body['items'][index]['artists'];
+                      for (final Map<String, dynamic> artist in artistList) {
+                        artists.add(artist['name']);
+                      }
+                    }
+
+                    return ListTile(
+                      onTap: () {},
+                      title: Text(
+                        isPlaylist
+                            ? data.body['items'][index]['item']['name']
+                            : data.body['items'][index]['name'],
+                      ),
+                      subtitle: Text(
+                        (artists.toString()).replaceAll(RegExp(r'\[|\]'), ''),
+                      ),
+                      leading: Text(index.toString()),
+                    );
+                  },
                 );
               },
               error: (Object error, StackTrace stackTrace) =>
