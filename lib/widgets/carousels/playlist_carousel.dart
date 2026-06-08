@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:key_limepi/backend/spotify/spotify_api.dart';
 import 'package:key_limepi/providers/spotify/playlists_provider.dart';
-import 'package:key_limepi/song_select/carousel_item.dart';
+import 'package:key_limepi/song_select/widget/carousel_item.dart';
 
 class PlaylistCarousel extends ConsumerStatefulWidget {
   const PlaylistCarousel({super.key});
@@ -19,13 +18,7 @@ class _PlaylistCarouselState extends ConsumerState<PlaylistCarousel> {
     );
 
     return CarouselView(
-      onTap: (int index) async {
-        final List<dynamic> playlists = await ref.read(
-          playlistsProviderProvider.future,
-        );
-        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-        await spotifyAPI.startFromContext(playlists[index]['uri']);
-      },
+      enableSplash: false,
       itemExtent: 150,
       itemSnapping: true,
       children: List<Widget>.generate(
@@ -39,6 +32,7 @@ class _PlaylistCarouselState extends ConsumerState<PlaylistCarousel> {
             return CarouselItem(
               title: data[index]['name'],
               image: data[index]['images'][0]['url'],
+              id: data[index]['uri'],
             );
           },
           error: (Object error, StackTrace stack) {
