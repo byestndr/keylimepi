@@ -1,4 +1,3 @@
-import 'package:chopper/src/response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/backend/spotify/spotify_api.dart';
@@ -67,6 +66,7 @@ class ViewItem extends ConsumerWidget {
                 ],
               ),
               flexibleSpace: ViewItemHeader(
+                key: key,
                 image: image,
                 name: name,
                 isPlaylist: isPlaylist,

@@ -22,9 +22,13 @@ class ItemViewInfoWidget extends StatelessWidget {
       children: [
         SizedBox.square(
           dimension: 125,
-          child: ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(12),
-            child: CachedNetworkImage(imageUrl: image),
+          child: Hero(
+            tag: key!,
+            child: Material(
+              clipBehavior: .antiAlias,
+              borderRadius: BorderRadiusGeometry.circular(20),
+              child: CachedNetworkImage(imageUrl: image),
+            ),
           ),
         ),
         Expanded(

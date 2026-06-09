@@ -42,6 +42,7 @@ class ViewItemHeader extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: ItemViewInfoWidget(
+                key: key,
                 image: image,
                 name: name,
                 isPlaylist: isPlaylist,
