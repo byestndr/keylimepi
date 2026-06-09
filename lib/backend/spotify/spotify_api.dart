@@ -87,7 +87,7 @@ abstract class SpotifyGetService extends ChopperService {
   Future<Response> getPlaylistItems(@Path() String id, @Query() int offset);
 
   @GET(path: "albums/{id}/tracks")
-  Future<Response> getAlbumItems(@Path() String id);
+  Future<Response> getAlbumItems(@Path() String id, @Query() int offset);
 
   static SpotifyGetService create() {
     final ChopperClient client = ChopperClient(

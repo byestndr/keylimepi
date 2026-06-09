@@ -9,61 +9,53 @@ part of 'get_info_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(GetSongItems)
-final getSongItemsProvider = GetSongItemsFamily._();
+@ProviderFor(getItemSongs)
+final getItemSongsProvider = GetItemSongsFamily._();
 
-final class GetSongItemsProvider
+final class GetItemSongsProvider
     extends
         $FunctionalProvider<
-          AsyncValue<Response<dynamic>>,
-          Response<dynamic>,
-          FutureOr<Response<dynamic>>
+          AsyncValue<List<dynamic>>,
+          List<dynamic>,
+          FutureOr<List<dynamic>>
         >
-    with
-        $FutureModifier<Response<dynamic>>,
-        $FutureProvider<Response<dynamic>> {
-  GetSongItemsProvider._({
-    required GetSongItemsFamily super.from,
-    required ({bool isPlaylist, String id, int offset}) super.argument,
+    with $FutureModifier<List<dynamic>>, $FutureProvider<List<dynamic>> {
+  GetItemSongsProvider._({
+    required GetItemSongsFamily super.from,
+    required ({String id, bool isPlaylist}) super.argument,
   }) : super(
          retry: null,
-         name: r'getSongItemsProvider',
+         name: r'getItemSongsProvider',
          isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$getSongItemsHash();
+  String debugGetCreateSourceHash() => _$getItemSongsHash();
 
   @override
   String toString() {
-    return r'getSongItemsProvider'
+    return r'getItemSongsProvider'
         ''
         '$argument';
   }
 
   @$internal
   @override
-  $FutureProviderElement<Response<dynamic>> $createElement(
+  $FutureProviderElement<List<dynamic>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<Response<dynamic>> create(Ref ref) {
-    final argument =
-        this.argument as ({bool isPlaylist, String id, int offset});
-    return GetSongItems(
-      ref,
-      isPlaylist: argument.isPlaylist,
-      id: argument.id,
-      offset: argument.offset,
-    );
+  FutureOr<List<dynamic>> create(Ref ref) {
+    final argument = this.argument as ({String id, bool isPlaylist});
+    return getItemSongs(ref, id: argument.id, isPlaylist: argument.isPlaylist);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GetSongItemsProvider && other.argument == argument;
+    return other is GetItemSongsProvider && other.argument == argument;
   }
 
   @override
@@ -72,32 +64,29 @@ final class GetSongItemsProvider
   }
 }
 
-String _$getSongItemsHash() => r'ddc4363cb5d25163248c24b9236c2d006b140d6c';
+String _$getItemSongsHash() => r'ed7696940331752e979798daa6e4672d76d0bb59';
 
-final class GetSongItemsFamily extends $Family
+final class GetItemSongsFamily extends $Family
     with
         $FunctionalFamilyOverride<
-          FutureOr<Response<dynamic>>,
-          ({bool isPlaylist, String id, int offset})
+          FutureOr<List<dynamic>>,
+          ({String id, bool isPlaylist})
         > {
-  GetSongItemsFamily._()
+  GetItemSongsFamily._()
     : super(
         retry: null,
-        name: r'getSongItemsProvider',
+        name: r'getItemSongsProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: false,
       );
 
-  GetSongItemsProvider call({
-    required bool isPlaylist,
-    required String id,
-    int offset = 0,
-  }) => GetSongItemsProvider._(
-    argument: (isPlaylist: isPlaylist, id: id, offset: offset),
-    from: this,
-  );
+  GetItemSongsProvider call({required String id, required bool isPlaylist}) =>
+      GetItemSongsProvider._(
+        argument: (id: id, isPlaylist: isPlaylist),
+        from: this,
+      );
 
   @override
-  String toString() => r'getSongItemsProvider';
+  String toString() => r'getItemSongsProvider';
 }

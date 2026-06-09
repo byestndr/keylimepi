@@ -28,8 +28,8 @@ class ViewItem extends ConsumerWidget {
     final AsyncValue<ColorScheme> itemColorscheme = ref.read(
       generateColorSchemeProvider(image),
     );
-    final AsyncValue<Response<dynamic>> songs = ref.read(
-      getSongItemsProvider(id: id, isPlaylist: isPlaylist),
+    final AsyncValue<List<dynamic>> songs = ref.read(
+      getItemSongsProvider(id: id, isPlaylist: isPlaylist),
     );
 
     return Theme(
@@ -75,21 +75,20 @@ class ViewItem extends ConsumerWidget {
             ),
 
             songs.when(
-              data: (Response<dynamic> data) {
+              data: (List<dynamic> data) {
                 return SliverList.builder(
-                  itemCount: (data.body['items'] as List<dynamic>).length,
+                  itemCount: data.length,
                   itemBuilder: (BuildContext context, int index) {
                     List<String> artists = [];
                     if (isPlaylist) {
                       final List<dynamic> artistList =
-                          data.body['items'][index]['item']['artists'];
+                          data[index]['item']['artists'];
 
                       for (final Map<String, dynamic> artist in artistList) {
                         artists.add(artist['name']);
                       }
                     } else {
-                      final List<dynamic> artistList =
-                          data.body['items'][index]['artists'];
+                      final List<dynamic> artistList = data[index]['artists'];
                       for (final Map<String, dynamic> artist in artistList) {
                         artists.add(artist['name']);
                       }
@@ -97,30 +96,33 @@ class ViewItem extends ConsumerWidget {
 
                     return SongTile(
                       title: isPlaylist
-                          ? data.body['items'][index]['item']['name']
-                          : data.body['items'][index]['name'],
+                          ? data[index]['item']['name']
+                          : data[index]['name'],
                       artist: (artists.toString()).replaceAll(
                         RegExp(r'\[|\]'),
                         '',
                       ),
                       duration: Duration(
                         milliseconds: isPlaylist
-                            ? data.body['items'][index]['item']['duration_ms']
-                            : data.body['items'][index]['duration_ms'],
+                            ? data[index]['item']['duration_ms']
+                            : data[index]['duration_ms'],
                       ),
-                      image:
-                          (data.body['items'][index]['item']['album']['images']
-                                  as List<dynamic>)
-                              .last['url'],
-                      index: index,
+                      image: isPlaylist
+                          ? (data[index]['item']['album']['images']
+                                    as List<dynamic>)
+                                .last['url']
+                          : null,
+                      index: isPlaylist == true ? index + 1: index + 1,
                     );
                   },
                 );
               },
-              error: (Object error, StackTrace stackTrace) =>
-                  const SliverToBoxAdapter(
-                    child: Text('There was an error fetching songs.'),
-                  ),
+              error: (Object error, StackTrace stackTrace) {
+                return const SliverToBoxAdapter(
+                  child: Text('There was an error fetching songs.'),
+                );
+              },
+
               loading: () =>
                   const SliverToBoxAdapter(child: LinearProgressIndicator()),
             ),
