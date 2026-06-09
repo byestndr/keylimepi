@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:key_limepi/backend/spotify/spotify_api.dart';
 import 'package:key_limepi/pages/view_item.dart';
@@ -18,29 +19,34 @@ class CarouselItem extends StatelessWidget {
     this.artist,
   });
 
+  void _navigateToPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => ViewItem(
+          id: id,
+          uri: uri,
+          name: title,
+          artist: artist,
+          image: image,
+        ),
+      ),
+    );
+  }
+
+  void _startItem() {
+    final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+    spotifyAPI.startFromContext(uri.contains('track') ? [uri] : uri);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
       type: .canvas,
       color: Colors.transparent,
       child: InkWell(
-        onLongPress: () {
-          final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-          spotifyAPI.startFromContext(uri);
-        },
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) => ViewItem(
-                id: id,
-                uri: uri,
-                name: title,
-                artist: artist,
-                image: image,
-              ),
-            ),
-          );
-        },
+        onLongPress: () => uri.contains('track') ? {} : _startItem(),
+        onTap: () =>
+            uri.contains('track') ? _startItem() : _navigateToPage(context),
         child: Stack(
           fit: StackFit.passthrough,
           children: <Widget>[
