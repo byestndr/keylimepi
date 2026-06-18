@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:key_limepi/backend/spotify/spotify_api.dart';
 
 class SongTile extends StatelessWidget {
   final String title;
@@ -7,11 +8,15 @@ class SongTile extends StatelessWidget {
   final Duration duration;
   final String? image;
   final int? index;
+  final String playlistID;
+  final String songID;
   const SongTile({
     super.key,
     required this.title,
     required this.artist,
     required this.duration,
+    required this.playlistID,
+    required this.songID,
     this.image,
     this.index,
   });
@@ -24,9 +29,27 @@ class SongTile extends StatelessWidget {
         .replaceFirst(RegExp(r'\..*'), '');
 
     return ListTile(
-      onTap: () {},
-      title: Text(title),
-      subtitle: Text(artist),
+      onTap: () {
+        final SpotifyUserService spotifyAPI = SpotifyUserService.create();
+        spotifyAPI.startFromContext(
+          contextUri: playlistID,
+          offsetTrack: songID,
+        );
+      },
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontFamily: 'Roboto Flex',
+          fontFamilyFallback: <String>['NotoSansJP'],
+        ),
+      ),
+      subtitle: Text(
+        artist,
+        style: const TextStyle(
+          fontFamily: 'Roboto Flex',
+          fontFamilyFallback: <String>['NotoSansJP'],
+        ),
+      ),
 
       leading: Row(
         mainAxisSize: .min,
@@ -40,7 +63,13 @@ class SongTile extends StatelessWidget {
                     width: 40,
                   ),
                 )
-              : Text(index.toString()),
+              : Text(
+                  index.toString(),
+                  style: const TextStyle(
+                    fontFamily: 'Roboto Flex',
+                    fontFamilyFallback: <String>['NotoSansJP'],
+                  ),
+                ),
         ],
       ),
       trailing: Text(durationAsString),

@@ -35,7 +35,9 @@ class CarouselItem extends StatelessWidget {
 
   void _startItem() {
     final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-    spotifyAPI.startFromContext(uri.contains('track') ? [uri] : uri);
+    spotifyAPI.startFromContext(
+      contextUri: uri.contains('track') ? [uri] : uri,
+    );
   }
 
   @override

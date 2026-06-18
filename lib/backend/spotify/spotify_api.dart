@@ -46,9 +46,15 @@ abstract class SpotifyUserService extends ChopperService {
   @PUT(path: '/player/play')
   Future<Response> _startFromContext(@Body() Map<String, dynamic> body);
 
-  Future<Response>? startFromContext(dynamic contextUri) {
-    if (contextUri.runtimeType is String) {
-      return _startFromContext(<String, dynamic>{'context_uri': contextUri});
+  Future<Response>? startFromContext({
+    required dynamic contextUri,
+    String? offsetTrack,
+  }) {
+    if (contextUri is String) {
+      return _startFromContext(<String, dynamic>{
+        'context_uri': contextUri,
+        'offset': {'uri': offsetTrack},
+      });
     } else if (contextUri is List<dynamic>) {
       return _startFromContext(<String, dynamic>{'uris': contextUri});
     }

@@ -109,7 +109,7 @@ final class GenerateColorSchemeProvider
 }
 
 String _$generateColorSchemeHash() =>
-    r'd2ca08aa0a4583df8dc2a6623b09efe29fb3d5e3';
+    r'7bd18df92f91539a5b96a1c405c8bc5c789780fa';
 
 final class GenerateColorSchemeFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<ColorScheme>, String> {

@@ -47,7 +47,7 @@ class ViewItem extends ConsumerWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-            spotifyAPI.startFromContext(uri);
+            spotifyAPI.startFromContext(contextUri: uri);
           },
           tooltip: 'Play',
           child: const Icon(Icons.play_arrow),
@@ -112,7 +112,9 @@ class ViewItem extends ConsumerWidget {
                                     as List<dynamic>)
                                 .last['url']
                           : null,
-                      index: isPlaylist == true ? index + 1: index + 1,
+                      index: isPlaylist == true ? null : index + 1,
+                      songID: data[index]['item']['uri'],
+                      playlistID: uri,
                     );
                   },
                 );

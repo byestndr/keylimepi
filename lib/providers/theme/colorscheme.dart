@@ -51,8 +51,9 @@ class appColorScheme extends _$appColorScheme {
 
 @Riverpod(keepAlive: true)
 Future<ColorScheme> generateColorScheme(Ref ref, String image) async {
-  return await ColorScheme.fromImageProvider(
+  final Future<ColorScheme> generatedScheme = ColorScheme.fromImageProvider(
     brightness: .dark,
     provider: CachedNetworkImageProvider(image),
   );
+  return generatedScheme;
 }
