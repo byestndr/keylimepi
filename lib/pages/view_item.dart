@@ -112,8 +112,10 @@ class ViewItem extends ConsumerWidget {
                                     as List<dynamic>)
                                 .last['url']
                           : null,
-                      index: isPlaylist == true ? null : index + 1,
-                      songID: data[index]['item']['uri'],
+                      index: isPlaylist ? null : index + 1,
+                      songID: isPlaylist
+                          ? data[index]['item']['uri']
+                          : data[index]['uri'],
                       playlistID: uri,
                     );
                   },
