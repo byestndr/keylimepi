@@ -19,164 +19,159 @@ class SongSelect extends ConsumerStatefulWidget {
 }
 
 class _SongSelectState extends ConsumerState<SongSelect> {
+  static const double carouselHeight = 150;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: RefreshIndicator(
+        child: ListView(
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(top: 10.0),
+              child: SongSelectHeader(),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Your Playlists',
+                style: TextStyle(
+                  fontFamily: 'Roboto Flex',
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: carouselHeight, child: PlaylistCarousel()),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Saved Albums',
+                style: TextStyle(
+                  fontFamily: 'Roboto Flex',
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: carouselHeight, child: AlbumCarousel()),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Liked Songs',
+                style: TextStyle(
+                  fontFamily: 'Roboto Flex',
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: carouselHeight, child: SongCarousel()),
+          ],
+        ),
+        onRefresh: () async {
+          final Future<List<dynamic>> refreshAlbums = ref.read(
+            albumProviderProvider.future,
+          );
+          final Future<List<dynamic>> refreshSongs = ref.read(
+            songProviderProvider.future,
+          );
+          final Future<List<dynamic>> refreshPlaylists = ref.refresh(
+            playlistsProviderProvider.future,
+          );
+
+          await Future.wait(<Future<void>>[
+            refreshAlbums,
+            refreshSongs,
+            refreshPlaylists,
+          ]);
+        },
+      ),
+    );
+  }
+}
+
+class SongSelectHeader extends StatelessWidget {
+  const SongSelectHeader({super.key});
   static const double imageRadius = 28;
   static const int imageBreakpoint = 600;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsGeometry.all(6),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
-          color: Theme.of(context).colorScheme.surfaceContainerHigh,
-        ),
-        child: RefreshIndicator(
-          child: ListView(
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxHeight: 200),
+      child: CarouselView.weighted(
+        flexWeights: <int>[2],
+        children: <Widget>[
+          Stack(
+            fit: StackFit.passthrough,
             children: <Widget>[
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 200),
-                child: CarouselView.weighted(
-                  flexWeights: <int>[2],
-                  children: <Widget>[
-                    Stack(
-                      fit: StackFit.passthrough,
-                      children: <Widget>[
-                        ShaderMask(
-                          shaderCallback: (Rect bounds) {
-                            return const LinearGradient(
-                              begin: FractionalOffset.centerLeft,
-                              end: FractionalOffset.centerRight,
-                              colors: <Color>[Colors.black12, Colors.black87],
-                            ).createShader(bounds);
-                          },
-                          blendMode: BlendMode.dstIn,
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: ImageFiltered(
-                              imageFilter: ImageFilter.blur(
-                                sigmaX: 10,
-                                sigmaY: 10,
+              ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    begin: FractionalOffset.centerLeft,
+                    end: FractionalOffset.centerRight,
+                    colors: <Color>[Colors.black12, Colors.black87],
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.dstIn,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: const SongImage(),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  MediaQuery.of(context).size.width >= imageBreakpoint
+                      ? Padding(
+                          padding: const EdgeInsetsGeometry.all(16),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(imageRadius),
+                              ),
+                              color: Colors.transparent,
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: Colors.black38,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+
+                            child: ClipRRect(
+                              borderRadius: BorderRadiusGeometry.circular(
+                                imageRadius,
                               ),
                               child: const SongImage(),
                             ),
                           ),
+                        )
+                      : const Padding(
+                          padding: EdgeInsetsGeometry.directional(start: 20),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            MediaQuery.of(context).size.width >= imageBreakpoint
-                                ? Padding(
-                                    padding: const EdgeInsetsGeometry.all(16),
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(imageRadius),
-                                        ),
-                                        color: Colors.transparent,
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                            color: Colors.black38,
-                                            blurRadius: 2,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadiusGeometry.circular(
-                                              imageRadius,
-                                            ),
-                                        child: const SongImage(),
-                                      ),
-                                    ),
-                                  )
-                                : const Padding(
-                                    padding: EdgeInsetsGeometry.directional(
-                                      start: 20,
-                                    ),
-                                  ),
-                            const Expanded(
-                              child: Padding(
-                                padding: EdgeInsetsGeometry.directional(
-                                  bottom: 10,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    SongTitleInfo(),
-                                    SongArtistInfo(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                  const Expanded(
+                    child: Padding(
+                      padding: EdgeInsetsGeometry.directional(bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[SongTitleInfo(), SongArtistInfo()],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Your Playlists',
-                  style: TextStyle(
-                    fontFamily: 'Roboto Flex',
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
                   ),
-                ),
+                ],
               ),
-              const SizedBox(height: 200, child: PlaylistCarousel()),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Saved Albums',
-                  style: TextStyle(
-                    fontFamily: 'Roboto Flex',
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 200, child: AlbumCarousel()),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Liked Songs',
-                  style: TextStyle(
-                    fontFamily: 'Roboto Flex',
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 200, child: SongCarousel()),
             ],
           ),
-          onRefresh: () async {
-            final Future<List<dynamic>> refreshAlbums = ref.read(
-              albumProviderProvider.future,
-            );
-            final Future<List<dynamic>> refreshSongs = ref.read(
-              songProviderProvider.future,
-            );
-            final Future<List<dynamic>> refreshPlaylists = ref.refresh(
-              playlistsProviderProvider.future,
-            );
-
-            await Future.wait(<Future<void>>[
-              refreshAlbums,
-              refreshSongs,
-              refreshPlaylists,
-            ]);
-          },
-        ),
+        ],
       ),
     );
   }

@@ -52,3 +52,79 @@ abstract class _$appColorScheme extends $AsyncNotifier<ColorScheme> {
     element.handleCreate(ref, build);
   }
 }
+
+@ProviderFor(generateColorScheme)
+final generateColorSchemeProvider = GenerateColorSchemeFamily._();
+
+final class GenerateColorSchemeProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ColorScheme>,
+          ColorScheme,
+          FutureOr<ColorScheme>
+        >
+    with $FutureModifier<ColorScheme>, $FutureProvider<ColorScheme> {
+  GenerateColorSchemeProvider._({
+    required GenerateColorSchemeFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'generateColorSchemeProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$generateColorSchemeHash();
+
+  @override
+  String toString() {
+    return r'generateColorSchemeProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<ColorScheme> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<ColorScheme> create(Ref ref) {
+    final argument = this.argument as String;
+    return generateColorScheme(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GenerateColorSchemeProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$generateColorSchemeHash() =>
+    r'7bd18df92f91539a5b96a1c405c8bc5c789780fa';
+
+final class GenerateColorSchemeFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<ColorScheme>, String> {
+  GenerateColorSchemeFamily._()
+    : super(
+        retry: null,
+        name: r'generateColorSchemeProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  GenerateColorSchemeProvider call(String image) =>
+      GenerateColorSchemeProvider._(argument: image, from: this);
+
+  @override
+  String toString() => r'generateColorSchemeProvider';
+}

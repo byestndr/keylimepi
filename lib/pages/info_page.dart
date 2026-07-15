@@ -47,51 +47,48 @@ class _InfoPageState extends ConsumerState<InfoPage> {
   Widget build(BuildContext context) {
     final UserValues preferences = ref.watch(userSettingsProvider);
 
-    return Padding(
-      padding: const EdgeInsets.all(6.0),
-      child: Stack(
-        children: [
-          preferences.immichBackgroundImage
-              ? const ImmichCarousel()
-              : const AlbumArtBackground(),
+    return Stack(
+      children: [
+        preferences.immichBackgroundImage
+            ? const ImmichCarousel()
+            : const AlbumArtBackground(),
 
-          PageView(
-            scrollDirection: .vertical,
-            controller: _pageController,
-            onPageChanged: (int value) {
-              if (value == 0) {
-                ref.read(backgroundOpacityProvider.notifier).setOpacity(100);
-                return;
-              }
-
-              ref.read(backgroundOpacityProvider.notifier).setOpacity(5);
+        PageView(
+          scrollDirection: .vertical,
+          controller: _pageController,
+          onPageChanged: (int value) {
+            if (value == 0) {
+              ref.read(backgroundOpacityProvider.notifier).setOpacity(100);
               return;
-            },
-            children: [
-              const LyricsPage(),
-              Column(
-                crossAxisAlignment: preferences.albumInfoCentered
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.start,
-                mainAxisAlignment: preferences.albumInfoCentered
-                    ? MainAxisAlignment.center
-                    : MainAxisAlignment.end,
-                children: <Widget>[
-                  const MediaWidget(),
+            }
 
-                  // If the playback bar is set to show on page
-                  preferences.playbackBarPosition == 1
-                      ? const Padding(
-                          padding: EdgeInsetsDirectional.only(bottom: 5),
-                          child: SizedBox(width: 800, child: ProgressSlider()),
-                        )
-                      : const Padding(padding: EdgeInsetsGeometry.zero),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+            ref.read(backgroundOpacityProvider.notifier).setOpacity(5);
+            return;
+          },
+          children: [
+            const LyricsPage(),
+            Column(
+              crossAxisAlignment: preferences.albumInfoCentered
+                  ? CrossAxisAlignment.center
+                  : CrossAxisAlignment.start,
+              mainAxisAlignment: preferences.albumInfoCentered
+                  ? MainAxisAlignment.center
+                  : MainAxisAlignment.end,
+              children: <Widget>[
+                const MediaWidget(),
+
+                // If the playback bar is set to show on page
+                preferences.playbackBarPosition == 1
+                    ? const Padding(
+                        padding: EdgeInsetsDirectional.only(bottom: 5),
+                        child: SizedBox(width: 800, child: ProgressSlider()),
+                      )
+                    : const Padding(padding: EdgeInsetsGeometry.zero),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

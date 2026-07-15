@@ -46,10 +46,16 @@ abstract class SpotifyUserService extends ChopperService {
   @PUT(path: '/player/play')
   Future<Response> _startFromContext(@Body() Map<String, dynamic> body);
 
-  Future<Response>? startFromContext(dynamic contextUri) {
-    if (contextUri.runtimeType == String) {
-      return _startFromContext(<String, dynamic>{'context_uri': contextUri});
-    } else if (contextUri.runtimeType == List<dynamic>) {
+  Future<Response>? startFromContext({
+    required dynamic contextUri,
+    String? offsetTrack,
+  }) {
+    if (contextUri is String) {
+      return _startFromContext(<String, dynamic>{
+        'context_uri': contextUri,
+        'offset': {'uri': offsetTrack},
+      });
+    } else if (contextUri is List<dynamic>) {
       return _startFromContext(<String, dynamic>{'uris': contextUri});
     }
 
@@ -65,7 +71,7 @@ abstract class SpotifyUserService extends ChopperService {
     } else {
       await _resumePlayback();
     }
-    
+
     return playbackState;
   }
 
@@ -78,5 +84,25 @@ abstract class SpotifyUserService extends ChopperService {
       interceptors: <Interceptor>[SpotifyChopperAuthInterceptor()],
     );
     return _$SpotifyUserService(client);
+  }
+}
+
+@ChopperApi(baseUrl: '/v1/')
+abstract class SpotifyGetService extends ChopperService {
+  @GET(path: "/playlists/{id}/items")
+  Future<Response> getPlaylistItems(@Path() String id, @Query() int offset);
+
+  @GET(path: "albums/{id}/tracks")
+  Future<Response> getAlbumItems(@Path() String id, @Query() int offset);
+
+  static SpotifyGetService create() {
+    final ChopperClient client = ChopperClient(
+      baseUrl: Uri.parse('https://api.spotify.com'),
+      services: <ChopperService>[_$SpotifyUserService()],
+      converter: const JsonConverter(),
+      authenticator: SpotifyChopperReauthentication(),
+      interceptors: <Interceptor>[SpotifyChopperAuthInterceptor()],
+    );
+    return _$SpotifyGetService(client);
   }
 }
