@@ -32,23 +32,10 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   @override
   void initState() {
     super.initState();
-    getBackgroundToggle();
     getBarTransparency();
     isBarOn();
     getInfoAlignment();
     getBackgroundBlur();
-  }
-
-  void getBackgroundToggle() {
-    final bool background_bool = ref
-        .read(userSettingsProvider)
-        .immichBackgroundImage;
-
-    setState(() {
-      backgroundState = background_bool;
-    });
-
-    return;
   }
 
   void isBarOn() {
@@ -97,23 +84,6 @@ class _SettingsListState extends ConsumerState<SettingsList> {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        ListTile(
-          title: const Text('Immich background image'),
-          leading: const Icon(Icons.image),
-          subtitle: const Text(
-            'Turn on and off the Immich background. When off, the background will be replaced by the cover art.',
-          ),
-          trailing: Switch(
-            value: backgroundState,
-            onChanged: (bool value) async {
-              AsyncPreferences.setBoolValue('immich_background', value);
-              await ref.read(userSettingsProvider.notifier).getNewState();
-              setState(() {
-                backgroundState = value;
-              });
-            },
-          ),
-        ),
         ListTile(
           title: const Text('Background blur'),
           leading: const Icon(Icons.blur_on_rounded),

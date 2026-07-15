@@ -4,7 +4,6 @@ import 'package:key_limepi/pages/authentication_setup_page.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 import 'package:key_limepi/settings/appearancepage.dart';
-import 'package:key_limepi/settings/immich/immichpage.dart';
 import 'package:key_limepi/settings/lyricSettings.dart';
 import 'package:key_limepi/settings/preferences.dart';
 import 'package:key_limepi/settings/spotify/spotifypage.dart';
@@ -65,19 +64,6 @@ class SettingsList extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) => const LyricSettings(),
-              ),
-            );
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.image),
-          title: const Text('Immich Settings'),
-          subtitle: const Text('Authorize and configure Immich settings.'),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const ImmichPage(),
               ),
             );
           },

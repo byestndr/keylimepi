@@ -6,7 +6,6 @@ import 'package:key_limepi/providers/theme/background_getter.dart';
 import 'package:key_limepi/widgets/background/album_art_background.dart';
 import 'package:key_limepi/widgets/control/alignedPlayers.dart';
 import 'package:key_limepi/settings/preferences.dart';
-import 'package:key_limepi/widgets/background/immich_background_carousel.dart';
 import 'package:key_limepi/widgets/control/seekbar.dart';
 
 class MediaWidget extends ConsumerWidget {
@@ -49,9 +48,7 @@ class _InfoPageState extends ConsumerState<InfoPage> {
 
     return Stack(
       children: [
-        preferences.immichBackgroundImage
-            ? const ImmichCarousel()
-            : const AlbumArtBackground(),
+        const AlbumArtBackground(),
 
         PageView(
           scrollDirection: .vertical,
