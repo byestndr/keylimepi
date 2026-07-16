@@ -8,8 +8,8 @@ import 'package:key_limepi/widgets/info/songinfo.dart';
 
 const int _imageBreakpoint = 360;
 
-class BottomLeftInfo extends ConsumerWidget {
-  const BottomLeftInfo({super.key});
+class MediaWidget extends ConsumerWidget {
+  const MediaWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

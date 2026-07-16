@@ -4,18 +4,9 @@ import 'package:key_limepi/pages/lyrics_page.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/providers/theme/background_getter.dart';
 import 'package:key_limepi/widgets/background/album_art_background.dart';
-import 'package:key_limepi/widgets/control/alignedPlayers.dart';
+import 'package:key_limepi/widgets/control/media_widget.dart';
 import 'package:key_limepi/settings/preferences.dart';
 import 'package:key_limepi/widgets/control/seekbar.dart';
-
-class MediaWidget extends ConsumerWidget {
-  const MediaWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const BottomLeftInfo();
-  }
-}
 
 class InfoPage extends ConsumerStatefulWidget {
   const InfoPage({super.key});
@@ -46,7 +37,6 @@ class _InfoPageState extends ConsumerState<InfoPage> {
     return Stack(
       children: [
         const AlbumArtBackground(),
-
         PageView(
           scrollDirection: .vertical,
           controller: _pageController,
