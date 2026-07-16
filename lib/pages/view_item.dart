@@ -4,7 +4,7 @@ import 'package:key_limepi/backend/spotify/spotify_api.dart';
 import 'package:key_limepi/providers/spotify/get_info_provider.dart';
 import 'package:key_limepi/providers/theme/colorscheme.dart';
 import 'package:key_limepi/song_select/widget/song_tile.dart';
-import 'package:key_limepi/view_item_header.dart';
+import 'package:key_limepi/song_select/widget/view_item_header.dart';
 
 class ViewItem extends ConsumerWidget {
   final String id;

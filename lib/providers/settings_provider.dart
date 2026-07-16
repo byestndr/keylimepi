@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences_backend.dart';
 
 part 'settings_provider.g.dart';
 

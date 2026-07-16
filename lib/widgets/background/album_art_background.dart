@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/providers/theme/album_art_provider.dart';
 import 'package:key_limepi/providers/theme/background_getter.dart';
-import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences_backend.dart';
 
 class AlbumArtBackground extends ConsumerWidget {
   const AlbumArtBackground({super.key});

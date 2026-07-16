@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/lyrics/backend/lyric_cache.dart';
 import 'package:key_limepi/lyrics/providers/lyrics_provider.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
-import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences_backend.dart';
 
 class LyricSettings extends ConsumerStatefulWidget {
   const LyricSettings({super.key});

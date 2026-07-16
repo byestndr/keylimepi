@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/pages/info_page.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
-import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences_backend.dart';
 import 'package:key_limepi/settings/settings.dart';
-import 'package:key_limepi/pages/song_select.dart';
+import 'package:key_limepi/song_select/song_select_page.dart';
 import 'package:key_limepi/widgets/control/playbackbar.dart';
 
 class AppBody extends ConsumerStatefulWidget {

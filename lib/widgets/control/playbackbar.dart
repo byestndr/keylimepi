@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
-import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences_backend.dart';
 import 'package:key_limepi/widgets/control/controls.dart';
 import 'package:key_limepi/widgets/control/seekbar.dart';
 

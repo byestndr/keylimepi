@@ -5,7 +5,7 @@ import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/providers/theme/background_getter.dart';
 import 'package:key_limepi/widgets/background/album_art_background.dart';
 import 'package:key_limepi/widgets/control/media_widget.dart';
-import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences_backend.dart';
 import 'package:key_limepi/widgets/control/seekbar.dart';
 
 class InfoPage extends ConsumerStatefulWidget {

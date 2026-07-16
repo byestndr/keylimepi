@@ -5,7 +5,7 @@ import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
 import 'package:key_limepi/settings/appearancepage.dart';
 import 'package:key_limepi/settings/lyricSettings.dart';
-import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences_backend.dart';
 import 'package:key_limepi/settings/spotify/spotifypage.dart';
 
 class SettingsPage extends StatelessWidget {

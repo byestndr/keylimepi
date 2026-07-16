@@ -10,7 +10,7 @@ import 'package:key_limepi/backend/spotify/spotify_api.dart';
 import 'package:key_limepi/backend/spotify/spotify_authentication.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/providers/theme/colorscheme.dart';
-import 'package:key_limepi/settings/preferences.dart';
+import 'package:key_limepi/settings/preferences_backend.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
