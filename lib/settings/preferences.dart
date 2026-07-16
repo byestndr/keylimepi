@@ -58,12 +58,10 @@ class UserValues {
   double lyricFontSize;
   bool navigationBarOn;
   bool navigationBarTransparent;
-  bool albumInfoCentered;
   bool isRomanized;
   int playbackBarPosition;
 
   UserValues({
-    this.albumInfoCentered = false,
     this.backgroundBlur = 12.0,
     this.lyricFontSize = 30,
     this.navigationBarOn = true,
@@ -76,7 +74,6 @@ class UserValues {
     'background_blur_radius': backgroundBlur,
     'navibar_on': navigationBarOn,
     'playback_bar_position': playbackBarPosition,
-    'centered_info': albumInfoCentered,
     'transparent_navibar': navigationBarTransparent,
     'romanization_on': isRomanized,
     "lyric_font_size": lyricFontSize,
@@ -89,8 +86,6 @@ class UserValues {
         await AsyncPreferences.getBoolValue('navibar_on') ?? true;
     final int playbackBarPosition =
         await AsyncPreferences.getIntValue('playback_bar_position') ?? 0;
-    final bool centeredInfo =
-        await AsyncPreferences.getBoolValue('centered_info') ?? false;
     final bool navigationBarTransparent =
         await AsyncPreferences.getBoolValue('transparent_navibar') ?? false;
     final bool romanizationOn =
@@ -99,7 +94,6 @@ class UserValues {
         await AsyncPreferences.getDoubleValue('lyric_font_size') ?? 30;
 
     return UserValues(
-      albumInfoCentered: centeredInfo,
       backgroundBlur: backgroundBlur,
       lyricFontSize: lyricFontSize,
       navigationBarOn: navigationBarOn,

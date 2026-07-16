@@ -24,7 +24,6 @@ class SettingsList extends ConsumerStatefulWidget {
 
 class _SettingsListState extends ConsumerState<SettingsList> {
   bool backgroundState = false;
-  int? _currentAlignment = 1;
   double sliderValue = 0;
   bool isNavbarTransparent = false;
   bool navbarShown = false;
@@ -34,7 +33,6 @@ class _SettingsListState extends ConsumerState<SettingsList> {
     super.initState();
     getBarTransparency();
     isBarOn();
-    getInfoAlignment();
     getBackgroundBlur();
   }
 
@@ -55,16 +53,6 @@ class _SettingsListState extends ConsumerState<SettingsList> {
 
     setState(() {
       navbarShown = naviState;
-    });
-
-    return;
-  }
-
-  void getInfoAlignment() {
-    final bool alignment = ref.read(userSettingsProvider).albumInfoCentered;
-
-    setState(() {
-      _currentAlignment = alignment ? 1 : 0;
     });
 
     return;
@@ -152,62 +140,6 @@ class _SettingsListState extends ConsumerState<SettingsList> {
                   }
                 : null,
           ),
-        ),
-        ListTile(
-          title: const Text('Album info position'),
-          leading: const Icon(Icons.album_rounded),
-          subtitle: const Text(
-            'Choose where the album info on the player page should be.',
-          ),
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Album info position'),
-                  content: StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      return RadioGroup<int>(
-                        groupValue: _currentAlignment,
-                        onChanged: (int? value) async {
-                          await AsyncPreferences.setIntValue(
-                            'player_alignment',
-                            value!,
-                          );
-                          await ref.read(userSettingsProvider.notifier).getNewState();
-                          setState(() {
-                            _currentAlignment = value;
-                          });
-                        },
-                        child: const Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              title: Text('Bottom Left'),
-                              leading: Radio<int>(value: 0),
-                            ),
-                            ListTile(
-                              title: Text('Centered'),
-                              leading: Radio<int>(value: 1),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Cancel'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
         ),
         const BarPositionTile(),
       ],

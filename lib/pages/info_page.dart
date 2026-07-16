@@ -13,10 +13,7 @@ class MediaWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final UserValues preferences = ref.watch(userSettingsProvider);
-    return preferences.albumInfoCentered
-        ? const CenteredInfo()
-        : const BottomLeftInfo();
+    return const BottomLeftInfo();
   }
 }
 
@@ -65,12 +62,8 @@ class _InfoPageState extends ConsumerState<InfoPage> {
           children: [
             const LyricsPage(),
             Column(
-              crossAxisAlignment: preferences.albumInfoCentered
-                  ? CrossAxisAlignment.center
-                  : CrossAxisAlignment.start,
-              mainAxisAlignment: preferences.albumInfoCentered
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 const MediaWidget(),
 
