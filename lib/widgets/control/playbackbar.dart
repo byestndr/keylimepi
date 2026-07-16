@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/providers/settings_provider.dart';
 import 'package:key_limepi/settings/preferences.dart';
 import 'package:key_limepi/widgets/control/controls.dart';
-import 'package:key_limepi/widgets/info/weatherwidget.dart';
 import 'package:key_limepi/widgets/control/seekbar.dart';
 
 class BottomPlaybar extends ConsumerWidget {
@@ -13,7 +12,6 @@ class BottomPlaybar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final double currentScreenSize = MediaQuery.of(context).size.width;
     const double sliderWidthBreakpoint = 600;
-    const double weatherWidthBreakpoint = 530;
     final UserValues preferences = ref.watch(userSettingsProvider);
 
     return switch (preferences.playbackBarPosition) {
@@ -26,10 +24,6 @@ class BottomPlaybar extends ConsumerWidget {
                 : const Padding(
                     padding: EdgeInsetsGeometry.directional(start: 12),
                   ),
-
-            currentScreenSize > weatherWidthBreakpoint
-                ? const FittedBox(child: Weatherwidget())
-                : const SizedBox.shrink(),
           ],
         ),
       ),

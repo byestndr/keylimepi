@@ -7,7 +7,6 @@ import 'package:key_limepi/settings/appearancepage.dart';
 import 'package:key_limepi/settings/lyricSettings.dart';
 import 'package:key_limepi/settings/preferences.dart';
 import 'package:key_limepi/settings/spotify/spotifypage.dart';
-import 'package:key_limepi/settings/weatherdialog.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -64,21 +63,6 @@ class SettingsList extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) => const LyricSettings(),
-              ),
-            );
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.sunny),
-          title: const Text('Weather Location'),
-          subtitle: const Text(
-            'Choose a weather location to show in the player',
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const WeatherLocation(),
               ),
             );
           },
