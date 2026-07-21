@@ -55,7 +55,7 @@ abstract class SpotifyAuthenticationService extends ChopperService {
     final ChopperClient client = ChopperClient(
       baseUrl: Uri.parse('https://accounts.spotify.com'),
       services: <ChopperService>[_$SpotifyAuthenticationService()],
-      converter: const JsonConverter()
+      converter: const JsonConverter(),
     );
     return _$SpotifyAuthenticationService(client);
   }
@@ -145,7 +145,10 @@ class SpotifyChopperReauthentication extends Authenticator {
 
       final String accessToken = await _getNewAccessToken(refreshToken);
       return request.copyWith(
-        headers: <String, String>{...request.headers, 'Authorization': 'Bearer $accessToken'},
+        headers: <String, String>{
+          ...request.headers,
+          'Authorization': 'Bearer $accessToken',
+        },
       );
     }
     return null;
@@ -165,28 +168,21 @@ class SpotifyChopperReauthentication extends Authenticator {
       'client_id': 'c92fab18b6924cf7872ed2965644cb25',
     };
 
-    final Response<dynamic> apiResponse = await spotifyAuthentication._getAuthToken(
-      body,
-    );
+    final Response<dynamic> apiResponse = await spotifyAuthentication
+        ._getAuthToken(body);
 
     if (!apiResponse.isSuccessful) {
       throw NotAuthenticatedException('Unable to refresh token');
     }
 
     final String newAccessToken = apiResponse.body['access_token'];
-    final String newRefreshToken = apiResponse.body['refresh_token'];
-
-    await _storeNewToken(newRefreshToken, newAccessToken);
+    await _storeNewAccessToken(newAccessToken);
 
     return newAccessToken;
   }
 
-  static Future<void> _storeNewToken(
-    String refreshToken,
-    String accessToken,
-  ) async {
+  static Future<void> _storeNewAccessToken(String accessToken) async {
     await _storage.setAuthToken(accessToken);
-    await _storage.setRefreshToken(refreshToken);
   }
 }
 
@@ -200,7 +196,10 @@ class SpotifyChopperAuthInterceptor implements Interceptor {
 
     if (token != null) {
       final Request request = chain.request.copyWith(
-        headers: <String, String>{...chain.request.headers, 'Authorization': 'Bearer $token'},
+        headers: <String, String>{
+          ...chain.request.headers,
+          'Authorization': 'Bearer $token',
+        },
       );
       return chain.proceed(request);
     }
