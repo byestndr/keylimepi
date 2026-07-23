@@ -1,29 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:key_limepi/backend/spotify/spotify_api.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 
 class SongTile extends StatelessWidget {
-  final String title;
-  final String artist;
-  final Duration duration;
-  final String? image;
+  final SpotifySong song;
+  final SpotifyCollection collection;
   final int? index;
-  final String playlistID;
-  final String songID;
+
   const SongTile({
     super.key,
-    required this.title,
-    required this.artist,
-    required this.duration,
-    required this.playlistID,
-    required this.songID,
-    this.image,
+    required this.song,
+    required this.collection,
     this.index,
   });
 
   @override
   Widget build(BuildContext context) {
-    final String durationAsString = duration
+    final String durationAsString = song.duration
         .toString()
         .replaceFirst(RegExp(r'0:'), '')
         .replaceFirst(RegExp(r'\..*'), '');
@@ -32,19 +26,19 @@ class SongTile extends StatelessWidget {
       onTap: () {
         final SpotifyUserService spotifyAPI = SpotifyUserService.create();
         spotifyAPI.startFromContext(
-          contextUri: playlistID,
-          offsetTrack: songID,
+          contextUri: collection.uri,
+          offsetTrack: song.uri,
         );
       },
       title: Text(
-        title,
+        song.name,
         style: const TextStyle(
           fontFamily: 'Roboto Flex',
           fontFamilyFallback: <String>['NotoSansJP'],
         ),
       ),
       subtitle: Text(
-        artist,
+        song.artist,
         style: const TextStyle(
           fontFamily: 'Roboto Flex',
           fontFamilyFallback: <String>['NotoSansJP'],
@@ -58,7 +52,7 @@ class SongTile extends StatelessWidget {
               ? ClipRRect(
                   borderRadius: BorderRadiusGeometry.circular(4),
                   child: CachedNetworkImage(
-                    imageUrl: image!,
+                    imageUrl: song.image.toString(),
                     height: 40,
                     width: 40,
                   ),

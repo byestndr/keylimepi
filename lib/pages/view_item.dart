@@ -3,32 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/backend/spotify/spotify_api.dart';
 import 'package:key_limepi/providers/spotify/get_info_provider.dart';
 import 'package:key_limepi/providers/theme/colorscheme.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 import 'package:key_limepi/song_select/widget/song_tile.dart';
 import 'package:key_limepi/song_select/widget/view_item_header.dart';
 
 class ViewItem extends ConsumerWidget {
-  final String id;
-  final String uri;
-  final String name;
-  final String? artist;
-  final String image;
-  const ViewItem({
-    super.key,
-    required this.id,
-    required this.uri,
-    required this.name,
-    required this.image,
-    this.artist,
-  });
+  final SpotifyCollection item;
+
+  const ViewItem({super.key, required this.item});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool isPlaylist = artist == null;
+    final bool isPlaylist = item is SpotifyPlaylist;
+
     final AsyncValue<ColorScheme> itemColorscheme = ref.read(
-      generateColorSchemeProvider(image),
+      generateColorSchemeProvider(item.image.toString()),
     );
     final AsyncValue<List<dynamic>> songs = ref.read(
-      getItemSongsProvider(id: id, isPlaylist: isPlaylist),
+      getItemSongsProvider(id: item.id, isPlaylist: isPlaylist),
     );
 
     return Theme(
@@ -47,7 +39,7 @@ class ViewItem extends ConsumerWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             final SpotifyUserService spotifyAPI = SpotifyUserService.create();
-            spotifyAPI.startFromContext(contextUri: uri);
+            spotifyAPI.startFromContext(contextUri: item.uri);
           },
           tooltip: 'Play',
           child: const Icon(Icons.play_arrow),
@@ -62,16 +54,10 @@ class ViewItem extends ConsumerWidget {
                 spacing: 5,
                 children: [
                   Icon(isPlaylist ? Icons.playlist_play_rounded : Icons.album),
-                  Expanded(child: Text(name, overflow: .fade)),
+                  Expanded(child: Text(item.name, overflow: .fade)),
                 ],
               ),
-              flexibleSpace: ViewItemHeader(
-                key: key,
-                image: image,
-                name: name,
-                isPlaylist: isPlaylist,
-                artist: artist,
-              ),
+              flexibleSpace: ViewItemHeader(key: key, item: item),
             ),
 
             songs.when(
@@ -95,28 +81,37 @@ class ViewItem extends ConsumerWidget {
                     }
 
                     return SongTile(
-                      title: isPlaylist
-                          ? data[index]['item']['name']
-                          : data[index]['name'],
-                      artist: (artists.toString()).replaceAll(
-                        RegExp(r'\[|\]'),
-                        '',
+                      song: SpotifySong(
+                        name: isPlaylist
+                            ? data[index]['item']['name']
+                            : data[index]['name'],
+                        id: isPlaylist
+                            ? data[index]['item']['id']
+                            : data[index]['id'],
+                        uri: isPlaylist
+                            ? data[index]['item']['uri']
+                            : data[index]['uri'],
+                        image: isPlaylist
+                            ? Uri.tryParse(
+                                    (data[index]['item']['album']['images']
+                                            as List<dynamic>)
+                                        .last['url'],
+                                  ) ??
+                                  Uri()
+                            : item.image,
+                        artist: (artists.toString()).replaceAll(
+                          RegExp(r'\[|\]'),
+                          '',
+                        ),
+                        duration: Duration(
+                          milliseconds: isPlaylist
+                              ? data[index]['item']['duration_ms']
+                              : data[index]['duration_ms'],
+                        ),
                       ),
-                      duration: Duration(
-                        milliseconds: isPlaylist
-                            ? data[index]['item']['duration_ms']
-                            : data[index]['duration_ms'],
-                      ),
-                      image: isPlaylist
-                          ? (data[index]['item']['album']['images']
-                                    as List<dynamic>)
-                                .last['url']
-                          : null,
+
                       index: isPlaylist ? null : index + 1,
-                      songID: isPlaylist
-                          ? data[index]['item']['uri']
-                          : data[index]['uri'],
-                      playlistID: uri,
+                      collection: item,
                     );
                   },
                 );

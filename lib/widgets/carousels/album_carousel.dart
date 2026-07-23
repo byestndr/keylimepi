@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/providers/spotify/album_provider.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 import 'package:key_limepi/song_select/widget/carousel_item.dart';
 
 class AlbumCarousel extends ConsumerStatefulWidget {
@@ -30,11 +31,13 @@ class _AlbumCarouselState extends ConsumerState<AlbumCarousel> {
         (int index) => albumList.when(
           data: (List data) {
             return CarouselItem(
-              title: data[index]['album']['name'],
-              artist: data[index]['album']['artists'][0]['name'],
-              image: data[index]['album']['images'][0]['url'],
-              id: data[index]['album']['id'],
-              uri: data[index]['album']['uri'],
+              item: SpotifyAlbum(
+                name: data[index]['album']['name'],
+                id: data[index]['album']['id'],
+                uri: data[index]['album']['uri'],
+                image: data[index]['album']['images'][0]['url'],
+                artist: data[index]['album']['artists'][0]['name'],
+              ),
             );
           },
           error: (Object error, StackTrace stack) {

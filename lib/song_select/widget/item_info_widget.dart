@@ -1,19 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 
 class ItemViewInfoWidget extends StatelessWidget {
-  const ItemViewInfoWidget({
-    super.key,
-    required this.image,
-    required this.name,
-    required this.isPlaylist,
-    required this.artist,
-  });
-
-  final String image;
-  final String name;
-  final bool isPlaylist;
-  final String? artist;
+  final SpotifyItem item;
+  const ItemViewInfoWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +18,7 @@ class ItemViewInfoWidget extends StatelessWidget {
             child: Material(
               clipBehavior: .antiAlias,
               borderRadius: BorderRadiusGeometry.circular(20),
-              child: CachedNetworkImage(imageUrl: image),
+              child: CachedNetworkImage(imageUrl: item.image.toString()),
             ),
           ),
         ),
@@ -41,7 +32,7 @@ class ItemViewInfoWidget extends StatelessWidget {
                 Transform.translate(
                   offset: const Offset(0, 4),
                   child: Text(
-                    name,
+                    item.name,
                     overflow: .ellipsis,
                     style: TextStyle(
                       fontFamily: 'Roboto Flex',
@@ -54,24 +45,37 @@ class ItemViewInfoWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                !isPlaylist
-                    ? Text(
-                        "$artist",
-                        overflow: .ellipsis,
-                        style: TextStyle(
-                          fontFamily: 'Roboto Flex',
-                          fontFamilyFallback: <String>['NotoSansJP'],
-                          fontWeight: .w400,
-                          fontSize: (MediaQuery.of(context).size.width / 15)
-                              .clamp(0, 18),
-                        ),
-                      )
-                    : const Padding(padding: .zero),
+
+                switch (item) {
+                  SpotifySong song => _ArtistText(artist: song.artist),
+                  SpotifyAlbum album => _ArtistText(artist: album.artist),
+                  _ => const Padding(padding: .zero),
+                },
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ArtistText extends StatelessWidget {
+  const _ArtistText({super.key, required this.artist});
+
+  final String artist;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      artist,
+      overflow: .ellipsis,
+      style: TextStyle(
+        fontFamily: 'Roboto Flex',
+        fontFamilyFallback: <String>['NotoSansJP'],
+        fontWeight: .w400,
+        fontSize: (MediaQuery.of(context).size.width / 15).clamp(0, 18),
+      ),
     );
   }
 }
