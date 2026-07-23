@@ -35,7 +35,7 @@ class _AlbumCarouselState extends ConsumerState<AlbumCarousel> {
                 name: data[index]['album']['name'],
                 id: data[index]['album']['id'],
                 uri: data[index]['album']['uri'],
-                image: data[index]['album']['images'][0]['url'],
+                image: Uri.parse(data[index]['album']['images'][0]['url']),
                 artist: data[index]['album']['artists'][0]['name'],
               ),
             );

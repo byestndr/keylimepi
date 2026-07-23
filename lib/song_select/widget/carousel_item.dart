@@ -44,7 +44,7 @@ class CarouselItem extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: EdgeInsetsGeometry.directional(
-                  top: item.runtimeType != SpotifyPlaylist ? 110 : 95,
+                  top: item is SpotifyPlaylist ? 110 : 95,
                   start: 12,
                 ),
                 child: Text(
