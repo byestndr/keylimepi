@@ -16,47 +16,6 @@ Stream<void> refreshTimer(Ref ref) {
   );
 }
 
-class Song {
-  String title;
-  String artist;
-  String? album;
-  String? uri;
-  String? image;
-  int? queuePosition;
-
-  Song({
-    this.title = 'Nothing currently playing...',
-    this.artist = 'Start playing a song to control playback',
-    this.album,
-    this.uri,
-    this.image,
-    this.queuePosition,
-  });
-
-  factory Song.fromMap(Map<String, dynamic> song, int index) {
-    final List<dynamic> images = song['album']['images'];
-
-    return Song(
-      title: song['name'],
-      artist: song['artists'][0]['name'],
-      album: song['album']['name'],
-      uri: song['uri'],
-      image: images.last['url'],
-      queuePosition: index,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Song && other.uri == uri;
-  }
-
-  @override
-  int get hashCode => uri.hashCode;
-}
-
 @Riverpod(keepAlive: true)
 class InfoGetter extends _$InfoGetter {
   @override

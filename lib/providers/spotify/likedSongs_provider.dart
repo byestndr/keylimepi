@@ -4,7 +4,7 @@ import 'package:key_limepi/backend/spotify/spotify_api.dart';
 
 part 'likedSongs_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class SongProvider extends _$SongProvider {
   final SpotifyUserService _spotifyAPI = SpotifyUserService.create();
 
