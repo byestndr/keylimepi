@@ -76,7 +76,7 @@ class InfoGetter extends _$InfoGetter {
   }
 
   bool _isNewSong(SpotifySong newSong) {
-    return state.value == newSong;
+    return state.value != newSong;
   }
 
   void _onNewSong() {
