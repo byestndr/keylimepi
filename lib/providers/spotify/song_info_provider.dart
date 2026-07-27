@@ -1,4 +1,5 @@
 import 'package:key_limepi/providers/spotify/seekbar_provider.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:key_limepi/lyrics/providers/lyrics_provider.dart';
 import 'package:key_limepi/lyrics/providers/search_provider.dart';
@@ -19,31 +20,50 @@ Stream<void> refreshTimer(Ref ref) {
 @Riverpod(keepAlive: true)
 class InfoGetter extends _$InfoGetter {
   @override
-  Future<Song> build() async {
+  Future<SpotifySong?> build() async {
     final dynamic currentPlaybackState = await ref.watch(
       spotifyPlaybackStateProvider.future,
     );
 
     if (currentPlaybackState.statusCode == 204) {
-      return Song();
+      return null;
     }
 
     return getCurrentSong(currentPlaybackState.body);
   }
 
-  Future<Song> getCurrentSong(dynamic currentPlaybackState) async {
-    Song currentSong = Song(
-      title: currentPlaybackState['item']['name'],
-      artist: currentPlaybackState['item']['album']['artists'][0]['name'],
-      album: currentPlaybackState['item']['album']['name'],
-      uri: currentPlaybackState['item']['uri'],
-      image: currentPlaybackState['item']['album']['images'][0]['url'],
+  Future<SpotifySong> getCurrentSong(dynamic currentPlaybackState) async {
+    final Uri albumCover = Uri.parse(
+      currentPlaybackState['item']['album']['images'][0]['url'],
     );
 
-    final Song? oldSong = state.value;
+    final String albumArtist =
+        currentPlaybackState['item']['album']['artists'][0]['name'];
 
-    if (oldSong != null) {
-      isNewSong(currentSong.uri);
+    final SpotifyAlbum songAlbum = SpotifyAlbum(
+      name: currentPlaybackState['item']['album']['name'],
+      id: currentPlaybackState['item']['album']['id'],
+      uri: currentPlaybackState['item']['uri'],
+      image: albumCover,
+      artist: albumArtist,
+    );
+
+    final SpotifySong currentSong = SpotifySong(
+      album: songAlbum,
+      name: currentPlaybackState['item']['name'],
+      artist: albumArtist,
+      uri: currentPlaybackState['item']['uri'],
+      id: currentPlaybackState['item']['id'],
+      duration: Duration(
+        milliseconds: currentPlaybackState['item']['duration_ms'],
+      ),
+      image: albumCover,
+    );
+
+    final SpotifySong? oldSong = state.value;
+
+    if (oldSong != null && _isNewSong(currentSong)) {
+      _onNewSong();
     }
 
     // If no previous song is found, it should still refresh colorscheme and images.
@@ -55,11 +75,11 @@ class InfoGetter extends _$InfoGetter {
     return currentSong;
   }
 
-  void isNewSong(String? newURI) {
-    if (state.value!.uri == newURI) {
-      return;
-    }
+  bool _isNewSong(SpotifySong newSong) {
+    return state.value == newSong;
+  }
 
+  void _onNewSong() {
     ref.read(albumImageProvider.notifier).refreshImage();
     ref.read(appColorSchemeProvider.notifier).refreshColorscheme();
     ref.invalidate(lyricsGetterProvider);
@@ -68,10 +88,6 @@ class InfoGetter extends _$InfoGetter {
     if (ref.exists(lyricSearchProvider)) {
       ref.invalidate(lyricSearchProvider);
     }
-  }
-
-  void getNewSong() async {
-    ref.invalidateSelf();
   }
 }
 

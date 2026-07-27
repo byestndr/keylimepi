@@ -1,6 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'package:key_limepi/lyrics/backend/lyric_api.dart';
 import 'package:key_limepi/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'search_provider.g.dart';
@@ -19,14 +20,18 @@ class LyricSearch extends _$LyricSearch {
   }
 
   Future<List<dynamic>> _searchLyrics() async {
-    final Song currentSong = await ref.read(infoGetterProvider.future);
+    final SpotifySong? currentSong = await ref.read(infoGetterProvider.future);
     final SearchFilter searchFilters = ref.watch(lyricSearchFilterProvider);
+
+    if (currentSong == null) {
+      return [];
+    }
 
     final LyricService lyricService = LyricService.create();
     final Response<dynamic> response = await lyricService.searchLyrics(
-      trackName: currentSong.title,
+      trackName: currentSong.name,
       artistName: searchFilters.artist == true ? currentSong.artist : null,
-      albumName: searchFilters.album == true ? currentSong.album : null,
+      albumName: searchFilters.album == true ? currentSong.album?.name : null,
     );
 
     final List<dynamic> responseBody = response.body;

@@ -33,7 +33,7 @@ final class LyricSearchProvider
   LyricSearch create() => LyricSearch();
 }
 
-String _$lyricSearchHash() => r'9c9e79da889e99d25a120877fb1421f84f1689fa';
+String _$lyricSearchHash() => r'a11eb434b837dfb5b2ab67ce4793fdd48e2a3d65';
 
 abstract class _$LyricSearch extends $AsyncNotifier<List<dynamic>> {
   FutureOr<List<dynamic>> build();

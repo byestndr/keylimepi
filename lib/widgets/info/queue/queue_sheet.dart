@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/providers/spotify/queue_provider.dart';
 import 'package:key_limepi/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 import 'package:key_limepi/widgets/info/queue/queue_components.dart';
 import 'package:key_limepi/widgets/info/queue/queue_headers.dart';
 
@@ -16,21 +17,26 @@ class BottomSheetQueue extends ConsumerStatefulWidget {
 class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
   final GlobalKey<SliverAnimatedListState> _animatedListKey =
       GlobalKey<SliverAnimatedListState>();
-  List<Song>? _currentSongQueue;
+  List<SpotifyQueueItem>? _currentSongQueue;
 
-  void _diffSongQueue(List<Song> newQueue) {
-    Set<Song> newQueueAsSet = newQueue.toSet();
-    final Set<Song> currentQueueAsSet = _currentSongQueue?.toSet() ?? <Song>{};
+  void _diffSongQueue(List<SpotifyQueueItem> newQueue) {
+    Set<SpotifyQueueItem> newQueueAsSet = newQueue.toSet();
+    final Set<SpotifyQueueItem> currentQueueAsSet =
+        _currentSongQueue?.toSet() ?? <SpotifyQueueItem>{};
 
-    final Set<Song> removedSongs = currentQueueAsSet.difference(newQueueAsSet);
-    final Set<Song> newSongs = newQueueAsSet.difference(currentQueueAsSet);
+    final Set<SpotifyQueueItem> removedSongs = currentQueueAsSet.difference(
+      newQueueAsSet,
+    );
+    final Set<SpotifyQueueItem> newSongs = newQueueAsSet.difference(
+      currentQueueAsSet,
+    );
 
     final SliverAnimatedListState? animatedListState =
         _animatedListKey.currentState;
 
     if (!mounted) return;
 
-    for (final Song songToRemove in removedSongs) {
+    for (final SpotifyQueueItem songToRemove in removedSongs) {
       if (animatedListState == null) {
         return;
       }
@@ -53,15 +59,15 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
           slideAnimation: slideAnimation,
           sizeAnimation: animation,
           song: songToRemove,
-          index: songToRemove.queuePosition!,
+          index: songToRemove.queuePosition,
         );
       });
     }
 
-    for (final Song songToAdd in newSongs) {
+    for (final SpotifyQueueItem songToAdd in newSongs) {
       if (animatedListState != null) {
-        _currentSongQueue!.insert(songToAdd.queuePosition!, songToAdd);
-        animatedListState.insertItem(songToAdd.queuePosition!);
+        _currentSongQueue!.insert(songToAdd.queuePosition, songToAdd);
+        animatedListState.insertItem(songToAdd.queuePosition);
       }
     }
 
@@ -70,8 +76,10 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<Song>> queue = ref.watch(spotifyQueueProvider);
-    final AsyncValue<Song> currentSong = ref.watch(infoGetterProvider);
+    final AsyncValue<List<SpotifyQueueItem>> queue = ref.watch(
+      spotifyQueueProvider,
+    );
+    final AsyncValue<SpotifySong?> currentSong = ref.watch(infoGetterProvider);
     return DraggableScrollableSheet(
       snap: true,
       expand: false,
@@ -92,8 +100,8 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
               skipLoadingOnRefresh: true,
               skipLoadingOnReload: true,
               skipError: true,
-              data: (Song data) {
-                if (data.image == null) {
+              data: (SpotifySong? data) {
+                if (data?.image.toString() == null || data == null) {
                   return SliverToBoxAdapter(child: Container());
                 }
 
@@ -110,7 +118,7 @@ class _BottomSheetQueueState extends ConsumerState<BottomSheetQueue> {
               skipLoadingOnRefresh: true,
               skipLoadingOnReload: true,
               skipError: true,
-              data: (List<Song> data) {
+              data: (List<SpotifyQueueItem> data) {
                 _currentSongQueue ??= data;
 
                 if (_currentSongQueue != null) {

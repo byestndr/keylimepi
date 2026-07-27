@@ -13,7 +13,7 @@ part of 'lyrics_provider.dart';
 final lyricsGetterProvider = LyricsGetterProvider._();
 
 final class LyricsGetterProvider
-    extends $AsyncNotifierProvider<LyricsGetter, List<LyricLine>> {
+    extends $AsyncNotifierProvider<LyricsGetter, List<LyricLine>?> {
   LyricsGetterProvider._()
     : super(
         from: null,
@@ -33,19 +33,20 @@ final class LyricsGetterProvider
   LyricsGetter create() => LyricsGetter();
 }
 
-String _$lyricsGetterHash() => r'398f52966b3e1e1cd179503df440b44cad12b730';
+String _$lyricsGetterHash() => r'd6091a6dec1ccfd6a6179a49e0fa52f936cde31f';
 
-abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>> {
-  FutureOr<List<LyricLine>> build();
+abstract class _$LyricsGetter extends $AsyncNotifier<List<LyricLine>?> {
+  FutureOr<List<LyricLine>?> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<List<LyricLine>>, List<LyricLine>>;
+    final ref =
+        this.ref as $Ref<AsyncValue<List<LyricLine>?>, List<LyricLine>?>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<LyricLine>>, List<LyricLine>>,
-              AsyncValue<List<LyricLine>>,
+              AnyNotifier<AsyncValue<List<LyricLine>?>, List<LyricLine>?>,
+              AsyncValue<List<LyricLine>?>,
               Object?,
               Object?
             >;
@@ -89,7 +90,7 @@ final class LyricSyncProvider
   }
 }
 
-String _$lyricSyncHash() => r'c93315b08402b621671fe44e9d5090938db6c5c1';
+String _$lyricSyncHash() => r'ce61147926b0125dee0524985f1664db0e37354f';
 
 @ProviderFor(CurrentLyricIndex)
 final currentLyricIndexProvider = CurrentLyricIndexProvider._();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:key_limepi/providers/spotify/song_info_provider.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 import 'package:key_limepi/widgets/info/queue/queue_components.dart';
 
 class QueueHeader extends SliverPersistentHeaderDelegate {
@@ -40,7 +40,7 @@ class QueueHeader extends SliverPersistentHeaderDelegate {
 }
 
 class CurrentQueueSong extends SliverPersistentHeaderDelegate {
-  final Song data;
+  final SpotifySong data;
   const CurrentQueueSong({required this.data});
 
   @override

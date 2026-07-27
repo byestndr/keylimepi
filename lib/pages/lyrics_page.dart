@@ -38,7 +38,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<LyricLine>> lyrics = ref.watch(lyricsGetterProvider);
+    final AsyncValue<List<LyricLine>?> lyrics = ref.watch(lyricsGetterProvider);
 
     // DO NOT REMOVE: Must be watched in order for the lyrics to update
     ref.watch(infoGetterProvider);
@@ -77,13 +77,14 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
           child: lyrics.when(
             skipLoadingOnRefresh: false,
             skipLoadingOnReload: false,
-            data: (List<LyricLine> data) {
+            data: (List<LyricLine>? data) {
               return ScrollConfiguration(
                 behavior: ScrollConfiguration.of(
                   context,
                 ).copyWith(scrollbars: false),
                 child: Listener(
-                  onPointerDown: (PointerDownEvent event) => _isScrolling = true,
+                  onPointerDown: (PointerDownEvent event) =>
+                      _isScrolling = true,
                   onPointerUp: (PointerUpEvent event) {
                     _timer?.cancel();
 
@@ -96,7 +97,7 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
                   },
                   child: ScrollablePositionedList.builder(
                     itemScrollController: _listController,
-                    itemCount: data.length,
+                    itemCount: data?.length ?? 1,
                     padding: EdgeInsets.symmetric(
                       vertical: MediaQuery.of(context).size.height / 3,
                     ),
@@ -106,7 +107,13 @@ class _LyricsPageState extends ConsumerState<LyricsPage> {
 
                       return LyricLineWidget(
                         isCurrentLyric: isCurrentLyric,
-                        lyric: data[lineIndex],
+                        lyric:
+                            data?[lineIndex] ??
+                            LyricLine(
+                              line:
+                                  'There is currently nothing playing, play a song to see lyrics',
+                              timestamp: const Duration(milliseconds: 0),
+                            ),
                       );
                     },
                   ),

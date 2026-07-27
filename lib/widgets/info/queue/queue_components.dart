@@ -4,8 +4,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:key_limepi/backend/spotify/spotify_api.dart';
-import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 import 'package:key_limepi/providers/spotify/spotify_playbackstate.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 
 class QueueError extends StatelessWidget {
   const QueueError({super.key});
@@ -71,7 +71,7 @@ class QueueEmpty extends StatelessWidget {
 }
 
 class QueueItem extends ConsumerWidget {
-  final Song song;
+  final SpotifySong song;
   final int index;
   final bool isTappable;
   const QueueItem({
@@ -87,7 +87,7 @@ class QueueItem extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: ListTile(
         title: Text(
-          song.title,
+          song.name,
           style: const TextStyle(
             fontFamilyFallback: <String>['NotoSansJP'],
             fontWeight: .w600,
@@ -102,7 +102,7 @@ class QueueItem extends ConsumerWidget {
         ),
         leading: ClipRRect(
           borderRadius: BorderRadiusGeometry.circular(5),
-          child: Image.network(song.image!),
+          child: Image.network(song.image.toString()),
         ),
         dense: true,
         onTap: isTappable
@@ -123,7 +123,7 @@ class QueueItem extends ConsumerWidget {
 class QueueItemAnimated extends StatelessWidget {
   final Animation<Offset> slideAnimation;
   final Animation<double> sizeAnimation;
-  final Song song;
+  final SpotifySong song;
   final int index;
   final bool isTappable;
   const QueueItemAnimated({

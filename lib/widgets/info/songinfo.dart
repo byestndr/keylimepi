@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 import 'package:marquee/marquee.dart';
 import 'package:key_limepi/providers/spotify/song_info_provider.dart';
 
@@ -8,7 +9,9 @@ class SongTitleInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<Song> currentSongInfo = ref.watch(infoGetterProvider);
+    final AsyncValue<SpotifySong?> currentSongInfo = ref.watch(
+      infoGetterProvider,
+    );
 
     return Column(
       spacing: 0.0,
@@ -19,8 +22,8 @@ class SongTitleInfo extends ConsumerWidget {
             text: currentSongInfo.when(
               skipLoadingOnRefresh: true,
               skipLoadingOnReload: true,
-              data: (Song data) {
-                return data.title;
+              data: (SpotifySong? data) {
+                return data?.name ?? "Nothing currently playing...";
               },
               error: (Object error, StackTrace trace) {
                 if (error.runtimeType == NoSuchMethodError) {
@@ -30,7 +33,6 @@ class SongTitleInfo extends ConsumerWidget {
                 if (error.runtimeType == FormatException) {
                   return "Nothing currently playing...";
                 } else {
-                  print(error.toString());
                   return 'An error has occured...';
                 }
               },
@@ -72,14 +74,16 @@ class SongArtistInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<Song> currentSongInfo = ref.watch(infoGetterProvider);
+    final AsyncValue<SpotifySong?> currentSongInfo = ref.watch(
+      infoGetterProvider,
+    );
 
     return Text(
       currentSongInfo.when(
         skipLoadingOnRefresh: true,
         skipLoadingOnReload: true,
-        data: (Song data) {
-          return data.artist;
+        data: (SpotifySong? data) {
+          return data?.artist ?? "Start playing a song to control playback";
         },
         error: (Object error, StackTrace trace) {
           if (error.runtimeType == NoSuchMethodError) {

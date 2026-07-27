@@ -46,4 +46,4 @@ final class LyricCacheProvider
   }
 }
 
-String _$lyricCacheHash() => r'27d992eb858f41ae9bfdc48506b796365866d57e';
+String _$lyricCacheHash() => r'bd71eca385c800aec8fe871e9dffc5a63eb89e20';

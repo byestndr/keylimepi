@@ -1,6 +1,7 @@
 import 'package:chopper/src/response.dart';
 import 'package:key_limepi/lyrics/backend/lyric_cache.dart';
 import 'package:key_limepi/lyrics/providers/cache_provider.dart';
+import 'package:key_limepi/song_select/song_select_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:key_limepi/lyrics/backend/lyric_api.dart';
 import 'package:key_limepi/lyrics/providers/lyric_classes.dart';
@@ -13,12 +14,17 @@ part 'lyrics_provider.g.dart';
 @Riverpod(keepAlive: true)
 class LyricsGetter extends _$LyricsGetter {
   @override
-  Future<List<LyricLine>> build() async {
+  Future<List<LyricLine>?> build() async {
     return _getNewLyrics();
   }
 
-  Future<List<LyricLine>> _getNewLyrics() async {
-    final Song currentSong = await ref.read(infoGetterProvider.future);
+  Future<List<LyricLine>?> _getNewLyrics() async {
+    final SpotifySong? currentSong = await ref.read(infoGetterProvider.future);
+
+    if (currentSong == null) {
+      return null;
+    }
+
     final List<LyricLine>? cachedLyrics = await ref.read(
       lyricCacheProvider.future,
     );
@@ -34,7 +40,7 @@ class LyricsGetter extends _$LyricsGetter {
 
     final LyricService lyricService = LyricService.create();
     final Response<dynamic> lyrics = await lyricService.getLyrics(
-      trackName: currentSong.title,
+      trackName: currentSong.name,
       artistName: currentSong.artist,
       albumName: currentSong.album.toString(),
     );
@@ -55,7 +61,7 @@ class LyricsGetter extends _$LyricsGetter {
 
     // Creates a list of lyric lines from the synced lyrics response
     lyricsList = LyricLine.fromSyncedLyrics(lyrics.body['syncedLyrics']);
-    await LyricCacheService.cacheLyric(currentSong.uri!, lyricsList);
+    await LyricCacheService.cacheLyric(currentSong.uri, lyricsList);
 
     // Checks if romanization is turned on and if it isn't, returns.
     if (!romanizationBool) {
@@ -92,10 +98,10 @@ class LyricsGetter extends _$LyricsGetter {
   }
 
   Future<void> overrideLyrics(String lyrics) async {
-    final Song currentSong = await ref.read(infoGetterProvider.future);
+    final SpotifySong? currentSong = await ref.read(infoGetterProvider.future);
 
     List<LyricLine> lyricsList = LyricLine.fromSyncedLyrics(lyrics);
-    await LyricCacheService.cacheLyric(currentSong.uri!, lyricsList);
+    await LyricCacheService.cacheLyric(currentSong!.uri, lyricsList);
 
     final bool romanizationBool = ref.read(userSettingsProvider).isRomanized;
     if (romanizationBool) {
@@ -109,9 +115,14 @@ class LyricsGetter extends _$LyricsGetter {
 
 @riverpod
 Future<List<int>> lyricSync(Ref ref) async {
-  final List<LyricLine> lyricsList = await ref.watch(
+  final List<LyricLine>? lyricsList = await ref.watch(
     lyricsGetterProvider.future,
   );
+  
+  if (lyricsList == null) {
+    return [];
+  }
+
   final SeekbarTime songDuration = ref.read(seekbarPositionProvider);
 
   final int totalTimePerLine =

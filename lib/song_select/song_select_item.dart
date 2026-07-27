@@ -15,6 +15,7 @@ abstract class SpotifyItem {
 class SpotifySong implements SpotifyItem {
   String artist;
   Duration duration;
+  SpotifyAlbum? album;
 
   @override
   String name;
@@ -35,6 +36,7 @@ class SpotifySong implements SpotifyItem {
     required this.uri,
     required this.image,
     required this.duration,
+    this.album,
   });
 
   @override
@@ -57,10 +59,17 @@ class SpotifyQueueItem extends SpotifySong {
     return SpotifyQueueItem(
       name: song['name'],
       artist: song['artists'][0]['name'],
+      album: SpotifyAlbum(
+        name: song['album']['name'],
+        id: song['album']['id'],
+        uri: song['album']['uri'],
+        image: Uri.parse(images.last['url']),
+        artist: song['album']['artists'][0]['name'],
+      ),
       duration: Duration(milliseconds: song['duration_ms']),
       uri: song['uri'],
       id: song['id'],
-      image: images.last['url'],
+      image: Uri.parse(images.last['url']),
       queuePosition: index,
     );
   }
@@ -69,24 +78,11 @@ class SpotifyQueueItem extends SpotifySong {
     required super.name,
     required super.artist,
     required super.id,
+    required super.album,
     required super.uri,
     required super.image,
     required super.duration,
     required this.queuePosition,
-  });
-}
-
-class SpotifyLyricItem extends SpotifySong {
-  SpotifyAlbum album;
-
-  SpotifyLyricItem({
-    required super.name,
-    required super.artist,
-    required super.id,
-    required super.uri,
-    required super.image,
-    required super.duration,
-    required this.album,
   });
 }
 
